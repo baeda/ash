@@ -21,6 +21,7 @@ package org.ashlang.ash;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.ashlang.ash.AshParser.FileContext;
+import org.ashlang.ash.ast.ASTNode;
 
 public final class AshMain {
 
@@ -33,6 +34,10 @@ public final class AshMain {
         FileContext file = parser.file();
 
         System.out.println(file.toString(parser));
+
+        ASTNode rootNode = new ASTBuilder(null).visit(file);
+
+        System.out.println(rootNode);
     }
 
 }
