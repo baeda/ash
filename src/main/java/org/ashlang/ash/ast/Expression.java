@@ -16,28 +16,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash;
+package org.ashlang.ash.ast;
 
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.ashlang.ash.AshParser.FileContext;
-import org.ashlang.ash.ast.ASTNode;
+public abstract class Expression extends ASTNode {
 
-public final class AshMain {
-
-    private AshMain() { /**/ }
-
-    public static void main(String[] args) {
-        AshLexer lexer = new AshLexer(CharStreams.fromString("1"));
-        AshParser parser = new AshParser(new CommonTokenStream(lexer));
-
-        FileContext file = parser.file();
-
-        System.out.println(file.toString(parser));
-
-        ASTNode rootNode = new ASTBuilder(null).visit(file);
-
-        System.out.println(rootNode);
+    public Expression(Token startToken, Token stopToken) {
+        super(startToken, stopToken);
     }
 
 }

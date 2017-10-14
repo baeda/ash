@@ -19,5 +19,12 @@
 grammar Ash;
 
 file
-    : '1' '+' '2'
+    : expression
     ;
+
+expression
+    : value=Integer #IntExpression
+    ;
+
+Integer    : [0-9]+                        ;
+Whitespace : [ \t\r\n]+ -> channel(HIDDEN) ;

@@ -1,14 +1,13 @@
 package org.ashlang.ash;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.ashlang.ash.ast.ASTNode;
-import org.ashlang.ash.ast.FileNode;
-import org.ashlang.ash.ast.Token;
+import org.ashlang.ash.ast.*;
 
 import java.nio.file.Path;
 import java.util.Objects;
 
 import static org.ashlang.ash.AshParser.FileContext;
+import static org.ashlang.ash.AshParser.IntExpressionContext;
 
 public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
@@ -20,8 +19,18 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     @Override
     public FileNode visitFile(FileContext ctx) {
-        return new FileNode(createToken(ctx.start), createToken(ctx.stop));
+        Expression expression = (Expression) visit(ctx.expression());
+        return new FileNode(expression);
     }
+
+    //region Expression nodes
+
+    @Override
+    public IntExpression visitIntExpression(IntExpressionContext ctx) {
+        return new IntExpression(createToken(ctx.value));
+    }
+
+    //endregion Expression nodes
 
     private Token createToken(org.antlr.v4.runtime.Token token) {
         return new Token(
