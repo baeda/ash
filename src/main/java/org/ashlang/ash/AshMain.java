@@ -22,6 +22,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.ashlang.ash.AshParser.FileContext;
 import org.ashlang.ash.ast.ASTNode;
+import org.ashlang.ash.ast.ASTPrinter;
 
 public final class AshMain {
 
@@ -37,7 +38,7 @@ public final class AshMain {
 
         ASTNode rootNode = new ASTBuilder(null).visit(file);
 
-        System.out.println(rootNode);
+        ASTPrinter.print(rootNode);
     }
 
 }

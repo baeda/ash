@@ -3,6 +3,7 @@ package org.ashlang.ash.ast;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.nio.file.Path;
 
@@ -68,7 +69,7 @@ public class Token {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
+        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
             .append("file", file)
             .append("line", line)
             .append("column", column)
