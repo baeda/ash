@@ -19,15 +19,15 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     @Override
     public FileNode visitFile(FileContext ctx) {
-        Expression expression = (Expression) visit(ctx.expression());
+        ExpressionNode expression = (ExpressionNode) visit(ctx.expression());
         return new FileNode(expression);
     }
 
     //region Expression nodes
 
     @Override
-    public IntExpression visitIntExpression(IntExpressionContext ctx) {
-        return new IntExpression(createToken(ctx.value));
+    public IntExpressionNode visitIntExpression(IntExpressionContext ctx) {
+        return new IntExpressionNode(createToken(ctx.value));
     }
 
     //endregion Expression nodes

@@ -2,9 +2,9 @@ package org.ashlang.ash.ast;
 
 public class FileNode extends ASTNode {
 
-    private final Expression expression;
+    private final ExpressionNode expression;
 
-    public FileNode(Expression expression) {
+    public FileNode(ExpressionNode expression) {
         super(expression.getStartToken(), expression.getStopToken());
 
         this.expression = expression;

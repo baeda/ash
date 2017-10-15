@@ -18,10 +18,14 @@
 
 package org.ashlang.ash.ast;
 
-public class IntExpression extends Expression {
+public class IntExpressionNode extends ExpressionNode {
 
-    public IntExpression(Token value) {
+    public IntExpressionNode(Token value) {
         super(value, value);
+    }
+
+    public Token getValue() {
+        return getStartToken();
     }
 
 }

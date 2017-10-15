@@ -18,9 +18,9 @@
 
 package org.ashlang.ash.ast;
 
-public abstract class Expression extends ASTNode {
+public abstract class ExpressionNode extends ASTNode {
 
-    public Expression(Token startToken, Token stopToken) {
+    public ExpressionNode(Token startToken, Token stopToken) {
         super(startToken, stopToken);
     }
 
