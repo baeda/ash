@@ -18,4 +18,6 @@ public abstract class ASTNode {
         return stopToken;
     }
 
+    public abstract <T, A> T accept(ASTVisitor<T, A> visitor, A argument);
+
 }

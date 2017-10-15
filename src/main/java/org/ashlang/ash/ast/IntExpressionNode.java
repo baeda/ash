@@ -28,4 +28,9 @@ public class IntExpressionNode extends ExpressionNode {
         return getStartToken();
     }
 
+    @Override
+    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+        return visitor.visitIntExpressionNode(this, argument);
+    }
+
 }

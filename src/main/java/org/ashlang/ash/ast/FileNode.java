@@ -10,4 +10,9 @@ public class FileNode extends ASTNode {
         this.expression = expression;
     }
 
+    @Override
+    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+        return visitor.visitFileNode(this, argument);
+    }
+
 }
