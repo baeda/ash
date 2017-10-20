@@ -26,6 +26,13 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     //region Expression nodes
 
     @Override
+    public AddExpressionNode visitAddExpression(AshParser.AddExpressionContext ctx) {
+        ExpressionNode lhs = (ExpressionNode) visit(ctx.lhs);
+        ExpressionNode rhs = (ExpressionNode) visit(ctx.rhs);
+        return new AddExpressionNode(lhs, rhs);
+    }
+
+    @Override
     public IntExpressionNode visitIntExpression(IntExpressionContext ctx) {
         return new IntExpressionNode(createToken(ctx.value));
     }

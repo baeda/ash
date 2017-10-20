@@ -32,7 +32,7 @@ public final class AshMain {
     private AshMain() { /**/ }
 
     public static void main(String[] args) {
-        ASTNode rootNode = buildAST("1");
+        ASTNode rootNode = buildAST("1+2");
         ASTPrinter.print(rootNode);
     }
 

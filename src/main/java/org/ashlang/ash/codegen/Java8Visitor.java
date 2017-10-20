@@ -19,6 +19,7 @@
 package org.ashlang.ash.codegen;
 
 import org.ashlang.ash.ast.ASTVisitor;
+import org.ashlang.ash.ast.AddExpressionNode;
 import org.ashlang.ash.ast.FileNode;
 import org.ashlang.ash.ast.IntExpressionNode;
 
@@ -49,6 +50,13 @@ class Java8Visitor implements ASTVisitor<String, Object> {
             "    System.out.print(" + visitChildren(node, argument) + ");",
             "  }",
             "}");
+    }
+
+    @Override
+    public String visitAddExpressionNode(AddExpressionNode node, Object argument) {
+        String lhs = visit(node.getLhs(), argument);
+        String rhs = visit(node.getRhs(), argument);
+        return lhs + "+" + rhs;
     }
 
     @Override

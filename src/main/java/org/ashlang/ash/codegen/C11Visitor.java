@@ -19,6 +19,7 @@
 package org.ashlang.ash.codegen;
 
 import org.ashlang.ash.ast.ASTVisitor;
+import org.ashlang.ash.ast.AddExpressionNode;
 import org.ashlang.ash.ast.FileNode;
 import org.ashlang.ash.ast.IntExpressionNode;
 
@@ -47,9 +48,16 @@ class C11Visitor implements ASTVisitor<String, Object> {
             "#include <stdio.h>",
             "#include <stdint.h>",
             "int main(int argc, char **argv) {",
-            "  printf(\"%d\", (int32_t) " + visitChildren(node, argument) + ");",
+            "  printf(\"%d\", (int32_t) " + visitChildren(node, null) + ");",
             "  return 0;",
             "}");
+    }
+
+    @Override
+    public String visitAddExpressionNode(AddExpressionNode node, Object argument) {
+        String lhs = visit(node.getLhs(), argument);
+        String rhs = visit(node.getRhs(), argument);
+        return lhs + "+" + rhs;
     }
 
     @Override
