@@ -3,15 +3,14 @@ package org.ashlang.ash;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.ashlang.ash.ast.*;
 import org.ashlang.gen.AshBaseVisitor;
-import org.ashlang.gen.AshParser.AddExpressionContext;
+import org.ashlang.gen.AshParser.ArithmeticExpressionContext;
 import org.ashlang.gen.AshParser.FileContext;
 import org.ashlang.gen.AshParser.IntExpressionContext;
 
 import java.nio.file.Path;
 import java.util.Objects;
 
-import static org.ashlang.gen.AshLexer.Minus;
-import static org.ashlang.gen.AshLexer.Plus;
+import static org.ashlang.gen.AshLexer.*;
 
 public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
@@ -30,7 +29,7 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     //region Expression nodes
 
     @Override
-    public ExpressionNode visitAddExpression(AddExpressionContext ctx) {
+    public ExpressionNode visitArithmeticExpression(ArithmeticExpressionContext ctx) {
         ExpressionNode lhs = (ExpressionNode) visit(ctx.lhs);
         ExpressionNode rhs = (ExpressionNode) visit(ctx.rhs);
         switch (ctx.op.getType()) {
@@ -38,6 +37,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
                 return new AddExpressionNode(lhs, rhs);
             case Minus:
                 return new SubExpressionNode(lhs, rhs);
+            case Asterisk:
+                return new MulExpressionNode(lhs, rhs);
         }
 
         throw new IllegalStateException();
