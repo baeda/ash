@@ -10,6 +10,9 @@ import org.ashlang.gen.AshParser.IntExpressionContext;
 import java.nio.file.Path;
 import java.util.Objects;
 
+import static org.ashlang.gen.AshLexer.Minus;
+import static org.ashlang.gen.AshLexer.Plus;
+
 public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     private final Path file;
@@ -27,10 +30,17 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     //region Expression nodes
 
     @Override
-    public AddExpressionNode visitAddExpression(AddExpressionContext ctx) {
+    public ExpressionNode visitAddExpression(AddExpressionContext ctx) {
         ExpressionNode lhs = (ExpressionNode) visit(ctx.lhs);
         ExpressionNode rhs = (ExpressionNode) visit(ctx.rhs);
-        return new AddExpressionNode(lhs, rhs);
+        switch (ctx.op.getType()) {
+            case Plus:
+                return new AddExpressionNode(lhs, rhs);
+            case Minus:
+                return new SubExpressionNode(lhs, rhs);
+        }
+
+        throw new IllegalStateException();
     }
 
     @Override
