@@ -55,6 +55,13 @@ class Java8Visitor implements ASTVisitor<String, Object> {
     }
 
     @Override
+    public String visitDivExpressionNode(DivExpressionNode node, Object argument) {
+        String lhs = visit(node.getLhs(), argument);
+        String rhs = visit(node.getRhs(), argument);
+        return lhs + "/" + rhs;
+    }
+
+    @Override
     public String visitIntExpressionNode(IntExpressionNode node, Object argument) {
         return node.getValue().getText();
     }

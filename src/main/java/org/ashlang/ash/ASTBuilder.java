@@ -39,6 +39,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
                 return new SubExpressionNode(lhs, rhs);
             case Asterisk:
                 return new MulExpressionNode(lhs, rhs);
+            case Slash:
+                return new DivExpressionNode(lhs, rhs);
         }
 
         throw new IllegalStateException();

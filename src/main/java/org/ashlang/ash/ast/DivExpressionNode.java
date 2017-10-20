@@ -16,22 +16,31 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-grammar Ash;
+package org.ashlang.ash.ast;
 
-file
-    : expression
-    ;
+public class DivExpressionNode extends ExpressionNode {
 
-expression
-    : lhs=expression op=('/'|'*') rhs=expression #ArithmeticExpression
-    | lhs=expression op=('-'|'+') rhs=expression #ArithmeticExpression
-    | value=Integer                              #IntExpression
-    ;
+    private final ExpressionNode lhs;
+    private final ExpressionNode rhs;
 
-Plus     : '+' ;
-Minus    : '-' ;
-Asterisk : '*' ;
-Slash    : '/' ;
+    public DivExpressionNode(ExpressionNode lhs, ExpressionNode rhs) {
+        super(lhs.getStartToken(), rhs.getStopToken());
 
-Integer    : [0-9]+                        ;
-Whitespace : [ \t\r\n]+ -> channel(HIDDEN) ;
+        this.lhs = lhs;
+        this.rhs = rhs;
+    }
+
+    public ExpressionNode getLhs() {
+        return lhs;
+    }
+
+    public ExpressionNode getRhs() {
+        return rhs;
+    }
+
+    @Override
+    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+        return visitor.visitDivExpressionNode(this, argument);
+    }
+
+}
