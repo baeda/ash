@@ -24,7 +24,7 @@ public class Java8CodeGenerator implements CodeGenerator<String> {
 
     @Override
     public String generate(ASTNode root) {
-        return Java8Visitor.getInstance().visit(root, null);
+        return new Java8Visitor().visit(root, null);
     }
 
 }

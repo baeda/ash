@@ -46,8 +46,8 @@ public final class IOUtil {
         try {
             process = Runtime.getRuntime().exec(cmd);
             int exitCode = process.waitFor();
-            String out = IOUtil.exhaustiveReadStream(process.getInputStream());
-            String err = IOUtil.exhaustiveReadStream(process.getErrorStream());
+            String out = IOUtil.exhaustiveReadStreamUTF8(process.getInputStream());
+            String err = IOUtil.exhaustiveReadStreamUTF8(process.getErrorStream());
             return new ExecResult(exitCode, out, err);
         } catch (InterruptedException | IOException e) {
             StringWriter writer = new StringWriter();
@@ -71,8 +71,8 @@ public final class IOUtil {
         try {
             process = Runtime.getRuntime().exec(cmd);
             int exitCode = process.waitFor();
-            String out = IOUtil.exhaustiveReadStream(process.getInputStream());
-            String err = IOUtil.exhaustiveReadStream(process.getErrorStream());
+            String out = IOUtil.exhaustiveReadStreamUTF8(process.getInputStream());
+            String err = IOUtil.exhaustiveReadStreamUTF8(process.getErrorStream());
             return new ExecResult(exitCode, out, err);
         } catch (InterruptedException | IOException e) {
             StringWriter writer = new StringWriter();
@@ -100,8 +100,8 @@ public final class IOUtil {
         }
     }
 
-    public static String exhaustiveReadStream(InputStream in) {
-        Scanner scanner = new Scanner(in).useDelimiter("\\A+");
+    public static String exhaustiveReadStreamUTF8(InputStream in) {
+        Scanner scanner = new Scanner(in, "UTF-8").useDelimiter("\\A+");
         return scanner.hasNext()
             ? scanner.next()
             : "";

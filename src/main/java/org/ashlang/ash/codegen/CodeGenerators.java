@@ -20,33 +20,14 @@ package org.ashlang.ash.codegen;
 
 public final class CodeGenerators {
 
-    private static CodeGenerator<String> JAVA8;
-    private static CodeGenerator<String> C11;
-
     private CodeGenerators() { /**/ }
 
     public static CodeGenerator<String> java8() {
-        if (JAVA8 == null) {
-            synchronized (CodeGenerators.class) {
-                if (JAVA8 == null) {
-                    JAVA8 = new Java8CodeGenerator();
-                }
-            }
-        }
-
-        return JAVA8;
+        return new Java8CodeGenerator();
     }
 
     public static CodeGenerator<String> c11() {
-        if (C11 == null) {
-            synchronized (CodeGenerators.class) {
-                if (C11 == null) {
-                    C11 = new C11CodeGenerator();
-                }
-            }
-        }
-
-        return C11;
+        return new C11CodeGenerator();
     }
 
 }

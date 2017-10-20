@@ -65,6 +65,11 @@ public final class AshMain {
     static void compileToNative(ASTNode rootNode, Path outFile) {
         String c11Src = CodeGenerators.c11().generate(rootNode);
         Path outDir = outFile.getParent();
+        if (outDir == null) {
+            throw new IllegalArgumentException(String.format(
+                "Could not get parent directory of file %s",
+                outFile.toAbsolutePath()));
+        }
         Path tmpFile = outDir.resolve("main.c");
         IOUtil.writeUTF8(tmpFile, c11Src);
 

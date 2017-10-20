@@ -25,22 +25,6 @@ import org.ashlang.ash.ast.IntExpressionNode;
 
 class Java8Visitor implements ASTVisitor<String, Object> {
 
-    private static Java8Visitor INSTANCE;
-
-    static Java8Visitor getInstance() {
-        if (INSTANCE == null) {
-            synchronized (Java8Visitor.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new Java8Visitor();
-                }
-            }
-        }
-
-        return INSTANCE;
-    }
-
-    private Java8Visitor() { /**/ }
-
     @Override
     public String visitFileNode(FileNode node, Object argument) {
         return String.join(

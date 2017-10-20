@@ -25,22 +25,6 @@ import org.ashlang.ash.ast.IntExpressionNode;
 
 class C11Visitor implements ASTVisitor<String, Object> {
 
-    private static C11Visitor INSTANCE;
-
-    static C11Visitor getInstance() {
-        if (INSTANCE == null) {
-            synchronized (C11Visitor.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new C11Visitor();
-                }
-            }
-        }
-
-        return INSTANCE;
-    }
-
-    private C11Visitor() { /**/ }
-
     @Override
     public String visitFileNode(FileNode node, Object argument) {
         return String.join(

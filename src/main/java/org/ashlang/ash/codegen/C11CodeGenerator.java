@@ -24,7 +24,7 @@ public class C11CodeGenerator implements CodeGenerator<String> {
 
     @Override
     public String generate(ASTNode root) {
-        return C11Visitor.getInstance().visit(root, null);
+        return new C11Visitor().visit(root, null);
     }
 
 }
