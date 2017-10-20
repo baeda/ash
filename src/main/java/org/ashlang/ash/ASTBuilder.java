@@ -2,12 +2,13 @@ package org.ashlang.ash;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.ashlang.ash.ast.*;
+import org.ashlang.gen.AshBaseVisitor;
+import org.ashlang.gen.AshParser.AddExpressionContext;
+import org.ashlang.gen.AshParser.FileContext;
+import org.ashlang.gen.AshParser.IntExpressionContext;
 
 import java.nio.file.Path;
 import java.util.Objects;
-
-import static org.ashlang.ash.AshParser.FileContext;
-import static org.ashlang.ash.AshParser.IntExpressionContext;
 
 public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
@@ -26,7 +27,7 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     //region Expression nodes
 
     @Override
-    public AddExpressionNode visitAddExpression(AshParser.AddExpressionContext ctx) {
+    public AddExpressionNode visitAddExpression(AddExpressionContext ctx) {
         ExpressionNode lhs = (ExpressionNode) visit(ctx.lhs);
         ExpressionNode rhs = (ExpressionNode) visit(ctx.rhs);
         return new AddExpressionNode(lhs, rhs);

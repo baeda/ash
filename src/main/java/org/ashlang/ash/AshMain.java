@@ -20,10 +20,12 @@ package org.ashlang.ash;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.ashlang.ash.AshParser.FileContext;
 import org.ashlang.ash.ast.ASTNode;
 import org.ashlang.ash.ast.ASTPrinter;
 import org.ashlang.ash.codegen.CodeGenerators;
+import org.ashlang.gen.AshLexer;
+import org.ashlang.gen.AshParser;
+import org.ashlang.gen.AshParser.FileContext;
 
 import java.nio.file.Path;
 
