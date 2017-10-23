@@ -41,6 +41,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
                 return new MulExpressionNode(lhs, rhs);
             case Slash:
                 return new DivExpressionNode(lhs, rhs);
+            case Percent:
+                return new ModExpressionNode(lhs, rhs);
         }
 
         throw new IllegalStateException();
