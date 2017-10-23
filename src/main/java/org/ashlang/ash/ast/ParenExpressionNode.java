@@ -16,26 +16,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-grammar Ash;
+package org.ashlang.ash.ast;
 
-file
-    : expression
-    ;
+public class ParenExpressionNode extends ExpressionNode {
 
-expression
-    : '(' expr=expression ')'                        #ParenExpression
-    | lhs=expression op=('/'|'*'|'%') rhs=expression #ArithmeticExpression
-    | lhs=expression op=('-'|'+')     rhs=expression #ArithmeticExpression
-    | value=INTEGER                                  #IntExpression
-    ;
+    private final ExpressionNode expression;
 
-PLUS     : '+' ;
-MINUS    : '-' ;
-ASTERISK : '*' ;
-SLASH    : '/' ;
-PERCENT  : '%' ;
-L_PAREN  : '(' ;
-R_PAREN  : ')' ;
+    public ParenExpressionNode(Token leftParenToken, Token rightParenToken,
+                               ExpressionNode expression) {
+        super(leftParenToken, rightParenToken);
 
-INTEGER    : [0-9]+                        ;
-WHITESPACE : [ \t\r\n]+ -> channel(HIDDEN) ;
+        this.expression = expression;
+    }
+
+    @Override
+    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+        return visitor.visitParenExpressionNode(this, argument);
+    }
+
+}

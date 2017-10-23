@@ -35,38 +35,43 @@ class C11Visitor implements ASTVisitor<String, Object> {
     }
 
     @Override
+    public String visitParenExpressionNode(ParenExpressionNode node, Object argument) {
+        return "(" + visitChildren(node, argument) + ")";
+    }
+
+    @Override
     public String visitAddExpressionNode(AddExpressionNode node, Object argument) {
         String lhs = visit(node.getLhs(), argument);
         String rhs = visit(node.getRhs(), argument);
-        return lhs + "+" + rhs;
+        return "(" + lhs + "+" + rhs + ")";
     }
 
     @Override
     public String visitSubExpressionNode(SubExpressionNode node, Object argument) {
         String lhs = visit(node.getLhs(), argument);
         String rhs = visit(node.getRhs(), argument);
-        return lhs + "-" + rhs;
+        return "(" + lhs + "-" + rhs + ")";
     }
 
     @Override
     public String visitMulExpressionNode(MulExpressionNode node, Object argument) {
         String lhs = visit(node.getLhs(), argument);
         String rhs = visit(node.getRhs(), argument);
-        return lhs + "*" + rhs;
+        return "(" + lhs + "*" + rhs + ")";
     }
 
     @Override
     public String visitDivExpressionNode(DivExpressionNode node, Object argument) {
         String lhs = visit(node.getLhs(), argument);
         String rhs = visit(node.getRhs(), argument);
-        return lhs + "/" + rhs;
+        return "(" + lhs + "/" + rhs + ")";
     }
 
     @Override
     public String visitModExpressionNode(ModExpressionNode node, Object argument) {
         String lhs = visit(node.getLhs(), argument);
         String rhs = visit(node.getRhs(), argument);
-        return lhs + "%" + rhs;
+        return "(" + lhs + "%" + rhs + ")";
     }
 
     @Override

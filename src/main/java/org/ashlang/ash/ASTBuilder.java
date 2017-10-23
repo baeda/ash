@@ -6,6 +6,7 @@ import org.ashlang.gen.AshBaseVisitor;
 import org.ashlang.gen.AshParser.ArithmeticExpressionContext;
 import org.ashlang.gen.AshParser.FileContext;
 import org.ashlang.gen.AshParser.IntExpressionContext;
+import org.ashlang.gen.AshParser.ParenExpressionContext;
 
 import java.nio.file.Path;
 import java.util.Objects;
@@ -27,6 +28,15 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     //region Expression nodes
+
+    @Override
+    public ASTNode visitParenExpression(ParenExpressionContext ctx) {
+        ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
+        return new ParenExpressionNode(
+            createToken(ctx.start),
+            createToken(ctx.stop),
+            expression);
+    }
 
     @Override
     public ExpressionNode visitArithmeticExpression(ArithmeticExpressionContext ctx) {
