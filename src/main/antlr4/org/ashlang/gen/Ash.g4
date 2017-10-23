@@ -25,14 +25,14 @@ file
 expression
     : lhs=expression op=('/'|'*'|'%') rhs=expression #ArithmeticExpression
     | lhs=expression op=('-'|'+')     rhs=expression #ArithmeticExpression
-    | value=Integer                                  #IntExpression
+    | value=INTEGER                                  #IntExpression
     ;
 
-Plus     : '+' ;
-Minus    : '-' ;
-Asterisk : '*' ;
-Slash    : '/' ;
-Percent  : '%' ;
+PLUS     : '+' ;
+MINUS    : '-' ;
+ASTERISK : '*' ;
+SLASH    : '/' ;
+PERCENT  : '%' ;
 
-Integer    : [0-9]+                        ;
-Whitespace : [ \t\r\n]+ -> channel(HIDDEN) ;
+INTEGER    : [0-9]+                        ;
+WHITESPACE : [ \t\r\n]+ -> channel(HIDDEN) ;

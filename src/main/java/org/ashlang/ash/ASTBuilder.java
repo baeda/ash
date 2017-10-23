@@ -33,15 +33,15 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         ExpressionNode lhs = (ExpressionNode) visit(ctx.lhs);
         ExpressionNode rhs = (ExpressionNode) visit(ctx.rhs);
         switch (ctx.op.getType()) {
-            case Plus:
+            case PLUS:
                 return new AddExpressionNode(lhs, rhs);
-            case Minus:
+            case MINUS:
                 return new SubExpressionNode(lhs, rhs);
-            case Asterisk:
+            case ASTERISK:
                 return new MulExpressionNode(lhs, rhs);
-            case Slash:
+            case SLASH:
                 return new DivExpressionNode(lhs, rhs);
-            case Percent:
+            case PERCENT:
                 return new ModExpressionNode(lhs, rhs);
         }
 
