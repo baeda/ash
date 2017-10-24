@@ -28,6 +28,8 @@ public interface ASTVisitor<T, A> {
 
     T visitFileNode(FileNode node, A argument);
 
+    T visitDumpStatementNode(DumpStatementNode node, A argument);
+
     T visitParenExpressionNode(ParenExpressionNode node, A argument);
     T visitAddExpressionNode(AddExpressionNode node, A argument);
     T visitSubExpressionNode(SubExpressionNode node, A argument);

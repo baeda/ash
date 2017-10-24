@@ -29,10 +29,22 @@ class C11Visitor implements ASTVisitor<String, Object> {
             "#include <stdio.h>",
             "#include <stdint.h>",
             "int main(int argc, char **argv) {",
-            "  printf(\"%d\", (int32_t) " + visitChildren(node, null) + ");",
+            visitChildren(node, argument),
             "  return 0;",
             "}");
     }
+
+    //region Statement nodes
+
+    @Override
+    public String visitDumpStatementNode(DumpStatementNode node, Object argument) {
+        String expression = visitChildren(node, argument);
+        return "printf(\"%d\", (int32_t) " + expression + ");";
+    }
+
+    //endregion Statement nodes
+
+    //region Expression nodes
 
     @Override
     public String visitParenExpressionNode(ParenExpressionNode node, Object argument) {
@@ -78,6 +90,8 @@ class C11Visitor implements ASTVisitor<String, Object> {
     public String visitIntExpressionNode(IntExpressionNode node, Object argument) {
         return node.getValue().getText();
     }
+
+    //endregion Expression nodes
 
     @Override
     public String aggregate(String aggregate, String next) {

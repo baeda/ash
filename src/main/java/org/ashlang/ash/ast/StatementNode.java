@@ -16,32 +16,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-grammar Ash;
+package org.ashlang.ash.ast;
 
-file
-    : statement
-    ;
+public abstract class StatementNode extends ASTNode {
 
-statement
-    : 'dump' expr=expression ';' #DumpStatement
-    ;
+    public StatementNode(Token startToken, Token stopToken) {
+        super(startToken, stopToken);
+    }
 
-expression
-    : '(' expr=expression ')'                        #ParenExpression
-    | lhs=expression op=('/'|'*'|'%') rhs=expression #ArithmeticExpression
-    | lhs=expression op=('-'|'+')     rhs=expression #ArithmeticExpression
-    | value=INTEGER                                  #IntExpression
-    ;
+    public Token getSemicolonToken() {
+        return getStopToken();
+    }
 
-PLUS     : '+' ;
-MINUS    : '-' ;
-ASTERISK : '*' ;
-SLASH    : '/' ;
-PERCENT  : '%' ;
-L_PAREN  : '(' ;
-R_PAREN  : ')' ;
-
-KW_DUMP : 'dump' ;
-
-INTEGER    : [0-9]+                        ;
-WHITESPACE : [ \t\r\n]+ -> channel(HIDDEN) ;
+}

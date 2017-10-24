@@ -28,10 +28,22 @@ class Java8Visitor implements ASTVisitor<String, Object> {
             "\n",
             "class _$Main {",
             "  public static void main(String[] args) {",
-            "    System.out.print(" + visitChildren(node, argument) + ");",
+            visitChildren(node, argument),
             "  }",
             "}");
     }
+
+    //region Statement nodes
+
+    @Override
+    public String visitDumpStatementNode(DumpStatementNode node, Object argument) {
+        String expression = visitChildren(node, argument);
+        return "System.out.print(" + expression + ");";
+    }
+
+    //endregion Statement nodes
+
+    //region Expression nodes
 
     @Override
     public String visitParenExpressionNode(ParenExpressionNode node, Object argument) {
@@ -77,6 +89,8 @@ class Java8Visitor implements ASTVisitor<String, Object> {
     public String visitIntExpressionNode(IntExpressionNode node, Object argument) {
         return node.getValue().getText();
     }
+
+    //endregion Expression nodes
 
     @Override
     public String aggregate(String aggregate, String next) {

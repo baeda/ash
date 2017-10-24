@@ -3,15 +3,16 @@ package org.ashlang.ash;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.ashlang.ash.ast.*;
 import org.ashlang.gen.AshBaseVisitor;
-import org.ashlang.gen.AshParser.ArithmeticExpressionContext;
-import org.ashlang.gen.AshParser.FileContext;
-import org.ashlang.gen.AshParser.IntExpressionContext;
-import org.ashlang.gen.AshParser.ParenExpressionContext;
+import org.ashlang.gen.AshParser.*;
 
 import java.nio.file.Path;
 import java.util.Objects;
 
-import static org.ashlang.gen.AshLexer.*;
+import static org.ashlang.gen.AshLexer.ASTERISK;
+import static org.ashlang.gen.AshLexer.MINUS;
+import static org.ashlang.gen.AshLexer.PERCENT;
+import static org.ashlang.gen.AshLexer.PLUS;
+import static org.ashlang.gen.AshLexer.SLASH;
 
 public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
@@ -23,9 +24,22 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     @Override
     public FileNode visitFile(FileContext ctx) {
-        ExpressionNode expression = (ExpressionNode) visit(ctx.expression());
-        return new FileNode(expression);
+        StatementNode statement = (StatementNode) visit(ctx.statement());
+        return new FileNode(statement);
     }
+
+    //region Statement nodes
+
+    @Override
+    public ASTNode visitDumpStatement(DumpStatementContext ctx) {
+        ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
+        return new DumpStatementNode(
+            createToken(ctx.start),
+            createToken(ctx.stop),
+            expression);
+    }
+
+    //endregion Statement nodes
 
     //region Expression nodes
 
