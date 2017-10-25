@@ -1,3 +1,6 @@
+.*
+!/.gitignore
+
 ### Java template
 # Compiled class file
 *.class

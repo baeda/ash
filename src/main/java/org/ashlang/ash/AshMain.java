@@ -18,6 +18,7 @@
 
 package org.ashlang.ash;
 
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.ashlang.ash.ast.ASTNode;
@@ -27,19 +28,35 @@ import org.ashlang.gen.AshLexer;
 import org.ashlang.gen.AshParser;
 import org.ashlang.gen.AshParser.FileContext;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 public final class AshMain {
 
     private AshMain() { /**/ }
 
-    public static void main(String[] args) {
-        ASTNode rootNode = buildAST("dump 1+2;");
+    public static void main(String[] args) throws IOException {
+        if (args.length < 1) {
+            System.err.println("Usage: ashc <file>");
+            System.exit(1);
+        }
+
+        ASTNode rootNode = buildAST(
+            CharStreams.fromFileName(args[0], StandardCharsets.UTF_8));
         ASTPrinter.print(rootNode);
+
+        String c11Src = translateToC11(rootNode);
+        System.out.println("C11 source:\n==============");
+        System.out.println(c11Src);
     }
 
     static ASTNode buildAST(String ashSrc) {
-        AshLexer lexer = new AshLexer(CharStreams.fromString(ashSrc));
+        return buildAST(CharStreams.fromString(ashSrc));
+    }
+
+    private static ASTNode buildAST(CharStream charStream) {
+        AshLexer lexer = new AshLexer(charStream);
         AshParser parser = new AshParser(new CommonTokenStream(lexer));
 
         FileContext file = parser.file();
@@ -48,7 +65,15 @@ public final class AshMain {
     }
 
     static void compileToNative(ASTNode rootNode, Path outFile) {
-        String c11Src = CodeGenerators.c11().generate(rootNode);
+        String c11Src = translateToC11(rootNode);
+        compileToNative(c11Src, outFile);
+    }
+
+    private static String translateToC11(ASTNode rootNode) {
+        return CodeGenerators.c11().generate(rootNode);
+    }
+
+    private static void compileToNative(String c11Src, Path outFile) {
         Path outDir = outFile.getParent();
         if (outDir == null) {
             throw new IllegalArgumentException(String.format(
