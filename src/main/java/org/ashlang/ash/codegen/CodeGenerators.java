@@ -22,10 +22,6 @@ public final class CodeGenerators {
 
     private CodeGenerators() { /**/ }
 
-    public static CodeGenerator<String> java8() {
-        return new Java8CodeGenerator();
-    }
-
     public static CodeGenerator<String> c11() {
         return new C11CodeGenerator();
     }

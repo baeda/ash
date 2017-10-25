@@ -97,23 +97,6 @@ public class CompilerSystemTest {
     }
 
     @Test(dataProvider = "provideAshSourceAndExpectedResultString")
-    public void java8_target(String input, String expected) {
-        IOUtil.executeInTempDir(tmpDir -> {
-            // Act
-            ASTNode rootNode = AshMain.buildAST(input);
-            String mainClassName = AshMain.compileToJVM(rootNode, tmpDir);
-
-            // Assert
-            ExecResult java = IOUtil.exec(
-                "java", "-classpath", tmpDir, mainClassName);
-
-            assertThat(java.getErr()).isEmpty();
-            assertThat(java.getOut()).isEqualTo(expected);
-            assertThat(java.getExitCode()).isZero();
-        });
-    }
-
-    @Test(dataProvider = "provideAshSourceAndExpectedResultString")
     public void c11_target(String input, String expected) {
         IOUtil.executeInTempDir(tmpDir -> {
             // Act

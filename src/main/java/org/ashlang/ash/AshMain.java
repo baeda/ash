@@ -34,7 +34,7 @@ public final class AshMain {
     private AshMain() { /**/ }
 
     public static void main(String[] args) {
-        ASTNode rootNode = buildAST("1+2");
+        ASTNode rootNode = buildAST("dump 1+2;");
         ASTPrinter.print(rootNode);
     }
 
@@ -45,23 +45,6 @@ public final class AshMain {
         FileContext file = parser.file();
 
         return new ASTBuilder(null).visit(file);
-    }
-
-    static String compileToJVM(ASTNode rootNode, Path outDir) {
-        String mainClassName = "_$Main";
-        String java8Src = CodeGenerators.java8().generate(rootNode);
-
-        Path javaFile = outDir.resolve(mainClassName + ".java");
-        IOUtil.writeUTF8(javaFile, java8Src);
-
-        ExecResult javac = IOUtil.exec("javac", javaFile.toAbsolutePath());
-
-        if (javac.getExitCode() != 0) {
-            throw new IllegalStateException(
-                "ASH -> JVM(Java8) Compilation failed!\n" + javac.getErr());
-        }
-
-        return mainClassName;
     }
 
     static void compileToNative(ASTNode rootNode, Path outFile) {
