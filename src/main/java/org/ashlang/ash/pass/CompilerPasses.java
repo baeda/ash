@@ -18,15 +18,13 @@
 
 package org.ashlang.ash.pass;
 
-public final class CompilerPasses {
+import org.ashlang.ash.ast.ASTNode;
 
-    private CompilerPasses() { /**/ }
+import java.util.function.Consumer;
 
-    public static CompilerPass typeAssignPass() {
-        return node -> {
-            new TypeAssignVisitor().visit(node, null);
-            return node;
-        };
-    }
+public interface CompilerPasses {
+
+    Consumer<ASTNode> TYPE_ASSIGN_PASS = node ->
+        new TypeAssignVisitor().visit(node, null);
 
 }

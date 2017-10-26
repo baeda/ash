@@ -24,6 +24,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.ashlang.ash.ast.ASTNode;
 import org.ashlang.ash.ast.ASTPrinter;
 import org.ashlang.ash.codegen.CodeGenerators;
+import org.ashlang.ash.pass.CompilerPassChain;
 import org.ashlang.ash.pass.CompilerPasses;
 import org.ashlang.gen.AshLexer;
 import org.ashlang.gen.AshParser;
@@ -63,8 +64,10 @@ public final class AshMain {
         FileContext file = parser.file();
 
         ASTNode rootNode = new ASTBuilder(null).visit(file);
-        return CompilerPasses.typeAssignPass()
-            .apply(rootNode);
+        new CompilerPassChain()
+            .appendPass(CompilerPasses.TYPE_ASSIGN_PASS)
+            .applyTo(rootNode);
+        return rootNode;
     }
 
     static void compileToNative(ASTNode rootNode, Path outFile) {

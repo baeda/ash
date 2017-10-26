@@ -20,6 +20,23 @@ package org.ashlang.ash.pass;
 
 import org.ashlang.ash.ast.ASTNode;
 
-import java.util.function.Function;
+import java.util.function.Consumer;
 
-public interface CompilerPass extends Function<ASTNode, ASTNode> {}
+public class CompilerPassChain {
+
+    private Consumer<ASTNode> entryPass;
+
+    public CompilerPassChain() {
+        entryPass = node -> {};
+    }
+
+    public CompilerPassChain appendPass(Consumer<ASTNode> pass) {
+        entryPass = entryPass.andThen(pass);
+        return this;
+    }
+
+    public void applyTo(ASTNode node) {
+        entryPass.accept(node);
+    }
+
+}
