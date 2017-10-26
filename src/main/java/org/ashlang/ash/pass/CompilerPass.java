@@ -16,15 +16,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.codegen;
+package org.ashlang.ash.pass;
 
 import org.ashlang.ash.ast.ASTNode;
 
-public class C11CodeGenerator implements CodeGenerator<String> {
+import java.util.function.Function;
 
-    @Override
-    public String generate(ASTNode root) {
-        return new C11Visitor().visit(root, null);
-    }
-
-}
+public interface CompilerPass extends Function<ASTNode, ASTNode> {}

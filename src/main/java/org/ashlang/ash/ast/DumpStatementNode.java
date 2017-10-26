@@ -29,6 +29,10 @@ public class DumpStatementNode extends StatementNode {
         this.expression = expression;
     }
 
+    public ExpressionNode getExpression() {
+        return expression;
+    }
+
     @Override
     public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitDumpStatementNode(this, argument);

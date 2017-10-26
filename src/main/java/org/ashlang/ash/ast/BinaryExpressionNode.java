@@ -16,14 +16,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.codegen;
+package org.ashlang.ash.ast;
 
-public final class CodeGenerators {
+public abstract class BinaryExpressionNode extends ExpressionNode {
 
-    private CodeGenerators() { /**/ }
+    private final ExpressionNode lhs;
+    private final ExpressionNode rhs;
 
-    public static CodeGenerator<String> c11() {
-        return root -> new C11Visitor().visit(root, null);
+    public BinaryExpressionNode(ExpressionNode lhs, ExpressionNode rhs) {
+        super(lhs.getStartToken(), rhs.getStopToken());
+        this.lhs = lhs;
+        this.rhs = rhs;
+    }
+
+    public ExpressionNode getLhs() {
+        return lhs;
+    }
+
+    public ExpressionNode getRhs() {
+        return rhs;
     }
 
 }

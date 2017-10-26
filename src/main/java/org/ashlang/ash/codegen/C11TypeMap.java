@@ -18,12 +18,24 @@
 
 package org.ashlang.ash.codegen;
 
-public final class CodeGenerators {
+import org.ashlang.ash.type.Type;
 
-    private CodeGenerators() { /**/ }
+import java.util.HashMap;
+import java.util.Map;
 
-    public static CodeGenerator<String> c11() {
-        return root -> new C11Visitor().visit(root, null);
+import static org.ashlang.ash.type.Type.INT;
+
+public class C11TypeMap {
+
+    private final Map<Type, String> typeMap;
+
+    public C11TypeMap() {
+        typeMap = new HashMap<>();
+        typeMap.put(INT, "int32_t");
+    }
+
+    public String get(Type type) {
+        return typeMap.getOrDefault(type, "INVALID_TYPE");
     }
 
 }

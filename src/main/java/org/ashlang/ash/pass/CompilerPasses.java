@@ -16,14 +16,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.codegen;
+package org.ashlang.ash.pass;
 
-public final class CodeGenerators {
+public final class CompilerPasses {
 
-    private CodeGenerators() { /**/ }
+    private CompilerPasses() { /**/ }
 
-    public static CodeGenerator<String> c11() {
-        return root -> new C11Visitor().visit(root, null);
+    public static CompilerPass typeAssignPass() {
+        return node -> {
+            new TypeAssignVisitor().visit(node, null);
+            return node;
+        };
     }
 
 }

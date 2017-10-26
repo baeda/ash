@@ -18,24 +18,10 @@
 
 package org.ashlang.ash.ast;
 
-public class ModExpressionNode extends ExpressionNode {
-
-    private final ExpressionNode lhs;
-    private final ExpressionNode rhs;
+public class ModExpressionNode extends BinaryExpressionNode {
 
     public ModExpressionNode(ExpressionNode lhs, ExpressionNode rhs) {
-        super(lhs.getStartToken(), rhs.getStopToken());
-
-        this.lhs = lhs;
-        this.rhs = rhs;
-    }
-
-    public ExpressionNode getLhs() {
-        return lhs;
-    }
-
-    public ExpressionNode getRhs() {
-        return rhs;
+        super(lhs, rhs);
     }
 
     @Override

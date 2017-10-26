@@ -18,10 +18,22 @@
 
 package org.ashlang.ash.ast;
 
+import org.ashlang.ash.type.Type;
+
 public abstract class ExpressionNode extends ASTNode {
+
+    private Type type = null;
 
     public ExpressionNode(Token startToken, Token stopToken) {
         super(startToken, stopToken);
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
 }

@@ -19,8 +19,15 @@
 package org.ashlang.ash.codegen;
 
 import org.ashlang.ash.ast.*;
+import org.ashlang.ash.type.Type;
 
 class C11Visitor implements ASTVisitor<String, Object> {
+
+    private final C11TypeMap typeMap;
+
+    C11Visitor() {
+        typeMap = new C11TypeMap();
+    }
 
     @Override
     public String visitFileNode(FileNode node, Object argument) {
@@ -39,7 +46,9 @@ class C11Visitor implements ASTVisitor<String, Object> {
     @Override
     public String visitDumpStatementNode(DumpStatementNode node, Object argument) {
         String expression = visitChildren(node, argument);
-        return "printf(\"%d\", (int32_t) " + expression + ");";
+        Type type = node.getExpression().getType();
+        String cType = typeMap.get(type);
+        return "printf(\"%d\", (" + cType + ") " + expression + ");";
     }
 
     //endregion Statement nodes
