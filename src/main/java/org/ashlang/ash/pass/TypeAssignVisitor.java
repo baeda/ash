@@ -19,6 +19,7 @@
 package org.ashlang.ash.pass;
 
 import org.ashlang.ash.ast.*;
+import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.type.Operator;
 import org.ashlang.ash.type.OperatorMap;
 import org.ashlang.ash.type.Type;
@@ -29,9 +30,12 @@ import static org.ashlang.ash.type.Type.INVALID;
 
 class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
 
+    private final ErrorHandler errorHandler;
     private final OperatorMap operatorMap;
 
-    TypeAssignVisitor() {
+    TypeAssignVisitor(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+
         operatorMap = new OperatorMap();
     }
 
@@ -47,31 +51,31 @@ class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
 
     @Override
     public Void visitAddExpressionNode(AddExpressionNode node, Void argument) {
-        visitChildrenAndAssignResultTypeOfOperation(node, ADD);
+        setResultTypeOfOperation(node, ADD);
         return null;
     }
 
     @Override
     public Void visitSubExpressionNode(SubExpressionNode node, Void argument) {
-        visitChildrenAndAssignResultTypeOfOperation(node, SUB);
+        setResultTypeOfOperation(node, SUB);
         return null;
     }
 
     @Override
     public Void visitMulExpressionNode(MulExpressionNode node, Void argument) {
-        visitChildrenAndAssignResultTypeOfOperation(node, MUL);
+        setResultTypeOfOperation(node, MUL);
         return null;
     }
 
     @Override
     public Void visitDivExpressionNode(DivExpressionNode node, Void argument) {
-        visitChildrenAndAssignResultTypeOfOperation(node, DIV);
+        setResultTypeOfOperation(node, DIV);
         return null;
     }
 
     @Override
     public Void visitModExpressionNode(ModExpressionNode node, Void argument) {
-        visitChildrenAndAssignResultTypeOfOperation(node, MOD);
+        setResultTypeOfOperation(node, MOD);
         return null;
     }
 
@@ -83,15 +87,14 @@ class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
 
     //endregion Expression nodes
 
-    private void visitChildrenAndAssignResultTypeOfOperation(
-        BinaryExpressionNode node, Operator op) {
+    private void
+    setResultTypeOfOperation(BinaryExpressionNode node, Operator op) {
         visitChildren(node, null);
         Type lhs = node.getLhs().getType();
         Type rhs = node.getRhs().getType();
         Type res = operatorMap.getResultOf(lhs, op, rhs);
         if (Type.allValid(lhs, rhs) && res == INVALID) {
-            System.err.printf("Invalid operator %s [%s] %s\n",
-                lhs, op, rhs);
+            errorHandler.emitInvalidOperator(node.getOp(), lhs, rhs);
         }
         node.setType(res);
     }

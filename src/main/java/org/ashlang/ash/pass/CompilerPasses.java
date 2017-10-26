@@ -19,12 +19,13 @@
 package org.ashlang.ash.pass;
 
 import org.ashlang.ash.ast.ASTNode;
+import org.ashlang.ash.err.ErrorHandler;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public interface CompilerPasses {
 
-    Consumer<ASTNode> TYPE_ASSIGN_PASS = node ->
-        new TypeAssignVisitor().visit(node, null);
+    BiConsumer<ErrorHandler, ASTNode> TYPE_ASSIGN_PASS
+        = (eh, node) -> new TypeAssignVisitor(eh).visit(node, null);
 
 }

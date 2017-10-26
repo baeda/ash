@@ -58,15 +58,15 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         ExpressionNode rhs = (ExpressionNode) visit(ctx.rhs);
         switch (ctx.op.getType()) {
             case PLUS:
-                return new AddExpressionNode(lhs, rhs);
+                return new AddExpressionNode(lhs, rhs, createToken(ctx.op));
             case MINUS:
-                return new SubExpressionNode(lhs, rhs);
+                return new SubExpressionNode(lhs, rhs, createToken(ctx.op));
             case ASTERISK:
-                return new MulExpressionNode(lhs, rhs);
+                return new MulExpressionNode(lhs, rhs, createToken(ctx.op));
             case SLASH:
-                return new DivExpressionNode(lhs, rhs);
+                return new DivExpressionNode(lhs, rhs, createToken(ctx.op));
             case PERCENT:
-                return new ModExpressionNode(lhs, rhs);
+                return new ModExpressionNode(lhs, rhs, createToken(ctx.op));
         }
 
         throw new IllegalStateException();

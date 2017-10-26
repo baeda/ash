@@ -19,24 +19,35 @@
 package org.ashlang.ash.pass;
 
 import org.ashlang.ash.ast.ASTNode;
+import org.ashlang.ash.err.ErrorHandler;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public class CompilerPassChain {
 
-    private Consumer<ASTNode> entryPass;
-
-    public CompilerPassChain() {
-        entryPass = node -> {};
+    public static CompilerPassChain
+    withErrorHandler(ErrorHandler errorHandler) {
+        return new CompilerPassChain(errorHandler);
     }
 
-    public CompilerPassChain appendPass(Consumer<ASTNode> pass) {
+    private final ErrorHandler errorHandler;
+
+    private BiConsumer<ErrorHandler, ASTNode> entryPass;
+
+    private CompilerPassChain(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+
+        entryPass = (eh, node) -> {};
+    }
+
+    public CompilerPassChain
+    appendPass(BiConsumer<ErrorHandler, ASTNode> pass) {
         entryPass = entryPass.andThen(pass);
         return this;
     }
 
     public void applyTo(ASTNode node) {
-        entryPass.accept(node);
+        entryPass.accept(errorHandler, node);
     }
 
 }

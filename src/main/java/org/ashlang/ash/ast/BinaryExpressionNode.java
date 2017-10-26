@@ -22,11 +22,13 @@ public abstract class BinaryExpressionNode extends ExpressionNode {
 
     private final ExpressionNode lhs;
     private final ExpressionNode rhs;
+    private final Token op;
 
-    public BinaryExpressionNode(ExpressionNode lhs, ExpressionNode rhs) {
+    public BinaryExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op) {
         super(lhs.getStartToken(), rhs.getStopToken());
         this.lhs = lhs;
         this.rhs = rhs;
+        this.op = op;
     }
 
     public ExpressionNode getLhs() {
@@ -35,6 +37,10 @@ public abstract class BinaryExpressionNode extends ExpressionNode {
 
     public ExpressionNode getRhs() {
         return rhs;
+    }
+
+    public Token getOp() {
+        return op;
     }
 
 }

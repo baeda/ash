@@ -16,17 +16,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.ast;
+package org.ashlang.ash.err;
 
-public class SubExpressionNode extends BinaryExpressionNode {
+import org.ashlang.ash.ast.Token;
+import org.ashlang.ash.type.Type;
 
-    public SubExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op) {
-        super(lhs, rhs, op);
+public class ErrorHandler {
+
+    private int numSemanticErrors;
+
+    public ErrorHandler() {
+        numSemanticErrors = 0;
     }
 
-    @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
-        return visitor.visitSubExpressionNode(this, argument);
+    public void
+    emitInvalidOperator(Token position, Type left, Type right) {
+        System.err.printf("%s:%d:%d: error: Invalid operator %s [%s] %s\n",
+            position.getFile(), position.getLine(), position.getColumn(),
+            left, position.getText(), right);
+        numSemanticErrors++;
+    }
+
+    public boolean hasErrors() {
+        return numSemanticErrors != 0;
     }
 
 }

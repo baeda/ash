@@ -24,6 +24,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.ashlang.ash.ast.ASTNode;
 import org.ashlang.ash.ast.ASTPrinter;
 import org.ashlang.ash.codegen.CodeGenerators;
+import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.pass.CompilerPassChain;
 import org.ashlang.ash.pass.CompilerPasses;
 import org.ashlang.gen.AshLexer;
@@ -32,7 +33,9 @@ import org.ashlang.gen.AshParser.FileContext;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public final class AshMain {
 
@@ -58,15 +61,29 @@ public final class AshMain {
     }
 
     private static ASTNode buildAST(CharStream charStream) {
+        Path file;
+        try {
+            file = Paths.get(charStream.getSourceName());
+        } catch (InvalidPathException e) {
+            file = null;
+        }
+
         AshLexer lexer = new AshLexer(charStream);
         AshParser parser = new AshParser(new CommonTokenStream(lexer));
+        ErrorHandler errorHandler = new ErrorHandler();
 
-        FileContext file = parser.file();
+        FileContext fileCtx = parser.file();
 
-        ASTNode rootNode = new ASTBuilder(null).visit(file);
-        new CompilerPassChain()
+        ASTNode rootNode = new ASTBuilder(file).visit(fileCtx);
+        CompilerPassChain
+            .withErrorHandler(errorHandler)
             .appendPass(CompilerPasses.TYPE_ASSIGN_PASS)
             .applyTo(rootNode);
+
+        if (errorHandler.hasErrors()) {
+            System.exit(1);
+        }
+
         return rootNode;
     }
 
