@@ -5,7 +5,6 @@ import org.ashlang.ash.ast.*;
 import org.ashlang.gen.AshBaseVisitor;
 import org.ashlang.gen.AshParser.*;
 
-import java.nio.file.Path;
 import java.util.Objects;
 
 import static org.ashlang.gen.AshLexer.ASTERISK;
@@ -16,11 +15,13 @@ import static org.ashlang.gen.AshLexer.SLASH;
 
 public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
-    private final Path file;
+    private static final ASTBuilder INSTANCE = new ASTBuilder();
 
-    public ASTBuilder(Path file) {
-        this.file = file;
+    public static ASTNode buildAST(ParseTree tree) {
+        return INSTANCE.visit(tree);
     }
+
+    private ASTBuilder() { /**/ }
 
     @Override
     public FileNode visitFile(FileContext ctx) {
@@ -34,8 +35,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     public ASTNode visitDumpStatement(DumpStatementContext ctx) {
         ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
         return new DumpStatementNode(
-            createToken(ctx.start),
-            createToken(ctx.stop),
+            new Token(ctx.start),
+            new Token(ctx.stop),
             expression);
     }
 
@@ -47,8 +48,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     public ASTNode visitParenExpression(ParenExpressionContext ctx) {
         ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
         return new ParenExpressionNode(
-            createToken(ctx.start),
-            createToken(ctx.stop),
+            new Token(ctx.start),
+            new Token(ctx.stop),
             expression);
     }
 
@@ -58,15 +59,15 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         ExpressionNode rhs = (ExpressionNode) visit(ctx.rhs);
         switch (ctx.op.getType()) {
             case PLUS:
-                return new AddExpressionNode(lhs, rhs, createToken(ctx.op));
+                return new AddExpressionNode(lhs, rhs, new Token(ctx.op));
             case MINUS:
-                return new SubExpressionNode(lhs, rhs, createToken(ctx.op));
+                return new SubExpressionNode(lhs, rhs, new Token(ctx.op));
             case ASTERISK:
-                return new MulExpressionNode(lhs, rhs, createToken(ctx.op));
+                return new MulExpressionNode(lhs, rhs, new Token(ctx.op));
             case SLASH:
-                return new DivExpressionNode(lhs, rhs, createToken(ctx.op));
+                return new DivExpressionNode(lhs, rhs, new Token(ctx.op));
             case PERCENT:
-                return new ModExpressionNode(lhs, rhs, createToken(ctx.op));
+                return new ModExpressionNode(lhs, rhs, new Token(ctx.op));
         }
 
         throw new IllegalStateException();
@@ -74,18 +75,10 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     @Override
     public IntExpressionNode visitIntExpression(IntExpressionContext ctx) {
-        return new IntExpressionNode(createToken(ctx.value));
+        return new IntExpressionNode(new Token(ctx.value));
     }
 
     //endregion Expression nodes
-
-    private Token createToken(org.antlr.v4.runtime.Token token) {
-        return new Token(
-            file,
-            token.getLine() - 1 /* ANTLR line indices start at 1 */,
-            token.getCharPositionInLine(),
-            token.getText());
-    }
 
     //region ANTLR visitor default overrides
 

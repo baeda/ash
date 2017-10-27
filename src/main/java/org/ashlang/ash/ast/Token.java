@@ -5,24 +5,26 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import java.nio.file.Path;
-
 public class Token {
 
-    private final Path   file;
-    private final int    line;
-    private final int    column;
+    private final int line;
+    private final int column;
     private final String text;
+    private final String sourceName;
 
-    public Token(Path file, int line, int column, String text) {
-        this.file = file;
+    public Token(org.antlr.v4.runtime.Token token) {
+        this(
+            token.getLine() - 1 /* ANTLR line indices start at 1 */,
+            token.getCharPositionInLine(),
+            token.getText(),
+            token.getInputStream().getSourceName());
+    }
+
+    private Token(int line, int column, String text, String sourceName) {
         this.line = line;
         this.column = column;
         this.text = text;
-    }
-
-    public Path getFile() {
-        return file;
+        this.sourceName = sourceName;
     }
 
     public int getLine() {
@@ -35,6 +37,10 @@ public class Token {
 
     public String getText() {
         return text;
+    }
+
+    public String getSourceName() {
+        return sourceName;
     }
 
     @Override
@@ -52,28 +58,28 @@ public class Token {
         return new EqualsBuilder()
             .append(line, token.line)
             .append(column, token.column)
-            .append(file, token.file)
             .append(text, token.text)
+            .append(sourceName, token.sourceName)
             .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-            .append(file)
             .append(line)
             .append(column)
             .append(text)
+            .append(sourceName)
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
-            .append("file", file)
             .append("line", line)
             .append("column", column)
             .append("text", text)
+            .append("sourceName", sourceName)
             .toString();
     }
 

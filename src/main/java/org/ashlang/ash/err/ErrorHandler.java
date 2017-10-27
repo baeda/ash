@@ -32,7 +32,7 @@ public class ErrorHandler {
     public void
     emitInvalidOperator(Token position, Type left, Type right) {
         System.err.printf("%s:%d:%d: error: Invalid operator %s [%s] %s\n",
-            position.getFile(), position.getLine(), position.getColumn(),
+            position.getSourceName(), position.getLine(), position.getColumn(),
             left, position.getText(), right);
         numSemanticErrors++;
     }

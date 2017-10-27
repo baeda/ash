@@ -33,7 +33,6 @@ import org.ashlang.gen.AshParser.FileContext;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -47,8 +46,8 @@ public final class AshMain {
             System.exit(1);
         }
 
-        ASTNode rootNode = buildAST(
-            CharStreams.fromFileName(args[0], StandardCharsets.UTF_8));
+        ASTNode rootNode = buildAST(CharStreams.fromPath(
+            Paths.get(args[0]).normalize(), StandardCharsets.UTF_8));
         ASTPrinter.print(rootNode);
 
         String c11Src = translateToC11(rootNode);
@@ -61,20 +60,13 @@ public final class AshMain {
     }
 
     private static ASTNode buildAST(CharStream charStream) {
-        Path file;
-        try {
-            file = Paths.get(charStream.getSourceName());
-        } catch (InvalidPathException e) {
-            file = null;
-        }
-
         AshLexer lexer = new AshLexer(charStream);
         AshParser parser = new AshParser(new CommonTokenStream(lexer));
         ErrorHandler errorHandler = new ErrorHandler();
 
         FileContext fileCtx = parser.file();
 
-        ASTNode rootNode = new ASTBuilder(file).visit(fileCtx);
+        ASTNode rootNode = ASTBuilder.buildAST(fileCtx);
         CompilerPassChain
             .withErrorHandler(errorHandler)
             .appendPass(CompilerPasses.TYPE_ASSIGN_PASS)

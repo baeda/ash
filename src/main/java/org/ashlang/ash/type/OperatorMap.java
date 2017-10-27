@@ -60,7 +60,7 @@ public class OperatorMap {
             this.right = right;
         }
 
-        public void resultsIn(Type result) {
+        private void resultsIn(Type result) {
             opMap.put(Triple.of(left, op, right), result);
         }
 
