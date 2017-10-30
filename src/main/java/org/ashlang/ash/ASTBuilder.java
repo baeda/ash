@@ -97,7 +97,7 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     @Override
     protected ASTNode defaultResult() {
-        throw new IllegalStateException("Cannot provide default AST node");
+        return null;
     }
 
     @Override
