@@ -25,9 +25,10 @@ import org.ashlang.ash.ast.ASTNode;
 import org.ashlang.ash.ast.ASTPrinter;
 import org.ashlang.ash.codegen.CodeGenerators;
 import org.ashlang.ash.err.ErrorHandler;
+import org.ashlang.ash.lang.AshLexer;
+import org.ashlang.ash.lang.LexerErrorListener;
 import org.ashlang.ash.pass.CompilerPassChain;
 import org.ashlang.ash.pass.CompilerPasses;
-import org.ashlang.gen.AshLexer;
 import org.ashlang.gen.AshParser;
 import org.ashlang.gen.AshParser.FileContext;
 
@@ -64,7 +65,13 @@ public final class AshMain {
         AshParser parser = new AshParser(new CommonTokenStream(lexer));
         ErrorHandler errorHandler = new ErrorHandler();
 
+        lexer.addErrorListener(new LexerErrorListener(errorHandler));
+
         FileContext fileCtx = parser.file();
+
+        if (errorHandler.hasErrors()) {
+            System.exit(1);
+        }
 
         ASTNode rootNode = ASTBuilder.buildAST(fileCtx);
         CompilerPassChain

@@ -23,22 +23,39 @@ import org.ashlang.ash.type.Type;
 
 public class ErrorHandler {
 
+    private int numLexicalErrors;
     private int numSemanticErrors;
 
     public ErrorHandler() {
+        numLexicalErrors = 0;
         numSemanticErrors = 0;
     }
 
+    public void emitUnknownToken(Token pos) {
+        emit(pos, "unknown token '%s'", pos.getText());
+        numLexicalErrors++;
+    }
+
     public void
-    emitInvalidOperator(Token position, Type left, Type right) {
-        System.err.printf("%s:%d:%d: error: Invalid operator %s [%s] %s\n",
-            position.getSourceName(), position.getLine(), position.getColumn(),
-            left, position.getText(), right);
+    emitInvalidOperator(Token pos, Type left, Type right) {
+        emit(pos, "invalid operator %s [%s] %s", left, pos.getText(), right);
         numSemanticErrors++;
     }
 
     public boolean hasErrors() {
-        return numSemanticErrors != 0;
+        return numLexicalErrors != 0
+            || numSemanticErrors != 0;
+    }
+
+    private static void emit(Token pos, String format, Object... args) {
+        String position = formatPosition(pos);
+        String message = String.format(format, args);
+        System.err.printf("%s: error: %s\n", position, message);
+    }
+
+    private static String formatPosition(Token pos) {
+        return String.format("%s:%d:%d",
+            pos.getSourceName(), pos.getLine() + 1, pos.getColumn() + 1);
     }
 
 }

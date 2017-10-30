@@ -20,7 +20,7 @@ public class Token {
             token.getInputStream().getSourceName());
     }
 
-    private Token(int line, int column, String text, String sourceName) {
+    public Token(int line, int column, String text, String sourceName) {
         this.line = line;
         this.column = column;
         this.text = text;
