@@ -19,6 +19,8 @@
 package org.ashlang.ash;
 
 import org.ashlang.ash.ast.ASTNode;
+import org.ashlang.ash.err.ConsoleErrorHandler;
+import org.ashlang.ash.err.ErrorHandler;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -99,14 +101,29 @@ public class CompilerSystemTest {
     @Test(dataProvider = "provideAshSourceAndExpectedResultString")
     public void c11_target(String input, String expected) {
         IOUtil.executeInTempDir(tmpDir -> {
-            // Act
-            ASTNode rootNode = AshMain.buildAST(input);
+            // [ash compiler] Arrange
+            ErrorHandler errorHandler = new ConsoleErrorHandler();
+
+            // [ash compiler] Act
+            ASTNode rootNode = AshMain.buildAST(input, errorHandler);
+
+            // [ash compiler] Assert
+            assertThat(errorHandler.hasErrors()).isFalse();
+
+            // [c11 compiler] Arrange
             Path outFile = tmpDir.resolve("out");
+
+            // [c11 compiler] Act
             AshMain.compileToNative(rootNode, outFile);
 
-            // Assert
+            // [c11 compiler] Assert
+            // asserted by thrown exception on failure
+
+            // [bin execution] Arrange
+            // [bin execution] Act
             ExecResult run = IOUtil.exec(outFile);
 
+            // [bin execution] Assert
             assertThat(run.getErr()).isEmpty();
             assertThat(run.getOut()).isEqualTo(expected);
             assertThat(run.getExitCode()).isZero();

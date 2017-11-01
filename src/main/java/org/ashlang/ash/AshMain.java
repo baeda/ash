@@ -24,6 +24,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.ashlang.ash.ast.ASTNode;
 import org.ashlang.ash.ast.ASTPrinter;
 import org.ashlang.ash.codegen.CodeGenerators;
+import org.ashlang.ash.err.ConsoleErrorHandler;
 import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.lang.AshLexer;
 import org.ashlang.ash.lang.AshParser;
@@ -48,8 +49,15 @@ public final class AshMain {
             System.exit(1);
         }
 
-        ASTNode rootNode = buildAST(CharStreams.fromPath(
-            Paths.get(args[0]).normalize(), StandardCharsets.UTF_8));
+        Path inFile = Paths.get(args[0]).normalize();
+        CharStream in = CharStreams.fromPath(inFile, StandardCharsets.UTF_8);
+        ErrorHandler errorHandler = new ConsoleErrorHandler();
+
+        ASTNode rootNode = buildAST(in, errorHandler);
+        if (errorHandler.hasErrors()) {
+            errorHandler.flush();
+            return;
+        }
         ASTPrinter.print(rootNode);
 
         String c11Src = translateToC11(rootNode);
@@ -66,14 +74,14 @@ public final class AshMain {
         });
     }
 
-    static ASTNode buildAST(String ashSrc) {
-        return buildAST(CharStreams.fromString(ashSrc));
+    static ASTNode buildAST(String ashSrc, ErrorHandler errorHandler) {
+        return buildAST(CharStreams.fromString(ashSrc), errorHandler);
     }
 
-    private static ASTNode buildAST(CharStream charStream) {
+    private static ASTNode
+    buildAST(CharStream charStream, ErrorHandler errorHandler) {
         AshLexer lexer = new AshLexer(charStream);
         AshParser parser = new AshParser(new CommonTokenStream(lexer));
-        ErrorHandler errorHandler = new ErrorHandler();
 
         lexer.removeErrorListeners();
         lexer.addErrorListener(new LexerErrorListener(errorHandler));

@@ -21,60 +21,15 @@ package org.ashlang.ash.err;
 import org.ashlang.ash.ast.Token;
 import org.ashlang.ash.type.Type;
 
-public class ErrorHandler {
+public interface ErrorHandler {
 
-    private int numLexicalErrors;
-    private int numSyntacticErrors;
-    private int numSemanticErrors;
+    boolean hasErrors();
+    void flush();
 
-    public ErrorHandler() {
-        numLexicalErrors = 0;
-        numSyntacticErrors = 0;
-        numSemanticErrors = 0;
-    }
-
-    public void emitUnknownToken(Token pos) {
-        emit(pos, "unknown token '%s'", pos.getText());
-        numLexicalErrors++;
-    }
-
-    public void emitInputMismatch(Token pos, String expectedTokens) {
-        emit(pos, "mismatched input '%s' expecting %s",
-            pos.getText(), expectedTokens);
-        numSyntacticErrors++;
-    }
-
-    public void emitMissingToken(Token pos, String expectedTokens) {
-        emit(pos, "missing %s at '%s'", expectedTokens, pos.getText());
-        numSyntacticErrors++;
-    }
-
-    public void emitInvalidType(Token pos) {
-        emit(pos, "invalid type '%s'", pos.getText());
-        numSemanticErrors++;
-    }
-
-    public void
-    emitInvalidOperator(Token pos, Type left, Type right) {
-        emit(pos, "invalid operator %s [%s] %s", left, pos.getText(), right);
-        numSemanticErrors++;
-    }
-
-    public boolean hasErrors() {
-        return numLexicalErrors != 0
-            || numSyntacticErrors != 0
-            || numSemanticErrors != 0;
-    }
-
-    private static void emit(Token pos, String format, Object... args) {
-        String position = formatPosition(pos);
-        String message = String.format(format, args);
-        System.err.printf("%s: error: %s\n", position, message);
-    }
-
-    private static String formatPosition(Token pos) {
-        return String.format("%s:%d:%d",
-            pos.getSourceName(), pos.getLine() + 1, pos.getColumn() + 1);
-    }
+    void emitUnknownToken(Token pos);
+    void emitInputMismatch(Token pos, String expectedTokens);
+    void emitMissingToken(Token pos, String expectedTokens);
+    void emitInvalidType(Token pos);
+    void emitInvalidOperator(Token pos, Type left, Type right);
 
 }
