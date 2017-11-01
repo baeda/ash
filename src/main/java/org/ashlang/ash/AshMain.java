@@ -91,7 +91,7 @@ public final class AshMain {
         FileContext fileCtx = parser.file();
 
         if (errorHandler.hasErrors()) {
-            System.exit(1);
+            return null;
         }
 
         ASTNode rootNode = ASTBuilder.buildAST(fileCtx);
@@ -102,7 +102,7 @@ public final class AshMain {
             .applyTo(rootNode);
 
         if (errorHandler.hasErrors()) {
-            System.exit(1);
+            return null;
         }
 
         return rootNode;

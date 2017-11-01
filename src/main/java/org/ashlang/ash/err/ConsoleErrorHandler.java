@@ -50,15 +50,15 @@ public class ConsoleErrorHandler implements ErrorHandler {
     }
 
     @Override
-    public void emitInputMismatch(Token pos, String expectedTokens) {
-        emit(pos, "mismatched input '%s' expecting %s",
-            pos.getText(), expectedTokens);
+    public void emitMissingToken(Token pos, String expectedTokens) {
+        emit(pos, "missing %s at '%s'", expectedTokens, pos.getText());
         numSyntacticErrors++;
     }
 
     @Override
-    public void emitMissingToken(Token pos, String expectedTokens) {
-        emit(pos, "missing %s at '%s'", expectedTokens, pos.getText());
+    public void emitInputMismatch(Token pos, String expectedTokens) {
+        emit(pos, "mismatched input '%s' expecting %s",
+            pos.getText(), expectedTokens);
         numSyntacticErrors++;
     }
 

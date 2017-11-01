@@ -16,20 +16,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.err;
+package org.ashlang.ash;
 
-import org.ashlang.ash.ast.Token;
-import org.ashlang.ash.type.Type;
-
-public interface ErrorHandler {
-
-    boolean hasErrors();
-    void flush();
-
-    void emitUnknownToken(Token pos);
-    void emitMissingToken(Token pos, String expectedTokens);
-    void emitInputMismatch(Token pos, String expectedTokens);
-    void emitInvalidType(Token pos);
-    void emitInvalidOperator(Token pos, Type left, Type right);
-
+enum ErrorType {
+    UNKNOWN_TOKEN,
+    MISSING_TOKEN,
+    INPUT_MISMATCH,
+    INVALID_TYPE,
+    INVALID_OPERATOR
 }
