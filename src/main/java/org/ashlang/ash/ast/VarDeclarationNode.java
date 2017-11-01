@@ -16,19 +16,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.pass;
+package org.ashlang.ash.ast;
 
-import org.ashlang.ash.ast.ASTNode;
-import org.ashlang.ash.err.ErrorHandler;
+import org.ashlang.ash.type.Type;
 
-import java.util.function.BiConsumer;
+public class VarDeclarationNode extends StatementNode {
 
-public interface CompilerPasses {
+    private Type type;
 
-    BiConsumer<ErrorHandler, ASTNode> TYPE_ASSIGN_PASS
-        = (eh, node) -> new TypeAssignVisitor(eh).visit(node, null);
+    public VarDeclarationNode(Token identifier, Token type) {
+        super(identifier, type);
+    }
 
-    BiConsumer<ErrorHandler, ASTNode> TYPE_CHECK_PASS
-        = (eh, node) -> new TypeCheckVisitor(eh).visit(node, null);
+    public Token getIdentifierToken() {
+        return getStartToken();
+    }
+
+    public Token getTypeToken() {
+        return getStopToken();
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    @Override
+    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+        return visitor.visitVarDeclarationNode(this, argument);
+    }
 
 }

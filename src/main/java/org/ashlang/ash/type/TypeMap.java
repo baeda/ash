@@ -16,19 +16,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.pass;
+package org.ashlang.ash.type;
 
-import org.ashlang.ash.ast.ASTNode;
-import org.ashlang.ash.err.ErrorHandler;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.function.BiConsumer;
+import static org.ashlang.ash.type.Type.INT;
+import static org.ashlang.ash.type.Type.INVALID;
 
-public interface CompilerPasses {
+public class TypeMap {
 
-    BiConsumer<ErrorHandler, ASTNode> TYPE_ASSIGN_PASS
-        = (eh, node) -> new TypeAssignVisitor(eh).visit(node, null);
+    private final Map<String, Type> typeMap;
 
-    BiConsumer<ErrorHandler, ASTNode> TYPE_CHECK_PASS
-        = (eh, node) -> new TypeCheckVisitor(eh).visit(node, null);
+    public TypeMap() {
+        typeMap = new HashMap<>();
+        typeMap.put("i32", INT);
+    }
+
+    public Type resolve(String typeString) {
+        return typeMap.getOrDefault(typeString, INVALID);
+    }
 
 }

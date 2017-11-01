@@ -41,7 +41,20 @@ class C11Visitor implements ASTVisitor<String, Object> {
             "}");
     }
 
+    @Override
+    public String visitVarDeclarationNode(VarDeclarationNode node, Object argument) {
+        String type = typeMap.get(node.getType());
+        return type + " " + node.getIdentifierToken().getText();
+    }
+
     //region Statement nodes
+
+    @Override
+    public String
+    visitVarDeclarationStatementNode(VarDeclarationStatementNode node,
+                                     Object argument) {
+        return visitChildren(node, argument) + ";";
+    }
 
     @Override
     public String visitDumpStatementNode(DumpStatementNode node, Object argument) {

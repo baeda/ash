@@ -49,6 +49,11 @@ public class ErrorHandler {
         numSyntacticErrors++;
     }
 
+    public void emitInvalidType(Token pos) {
+        emit(pos, "invalid type '%s'", pos.getText());
+        numSemanticErrors++;
+    }
+
     public void
     emitInvalidOperator(Token pos, Type left, Type right) {
         emit(pos, "invalid operator %s [%s] %s", left, pos.getText(), right);

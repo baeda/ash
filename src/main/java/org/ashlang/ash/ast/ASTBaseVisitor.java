@@ -26,9 +26,26 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
     }
 
     @Override
+    public T visitVarDeclarationNode(VarDeclarationNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
+    //region Statement nodes
+
+    @Override
+    public T visitVarDeclarationStatementNode(VarDeclarationStatementNode node,
+                                              A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
     public T visitDumpStatementNode(DumpStatementNode node, A argument) {
         return visitChildren(node, argument);
     }
+
+    //endregion Statement nodes
+
+    //region Expression nodes
 
     @Override
     public T visitParenExpressionNode(ParenExpressionNode node, A argument) {
@@ -64,5 +81,7 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
     public T visitIntExpressionNode(IntExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }
+
+    //endregion Expression nodes
 
 }

@@ -55,6 +55,15 @@ public final class AshMain {
         String c11Src = translateToC11(rootNode);
         System.out.println("C11 source:\n==============");
         System.out.println(c11Src);
+        IOUtil.executeInTempDir(tmpDir -> {
+            Path out = tmpDir.resolve("out");
+            compileToNative(c11Src, out);
+            ExecResult exec = IOUtil.exec(out);
+            System.out.println("C11 output:\n==============");
+            System.out.println(exec.getOut());
+            System.out.println("C11 error:\n==============");
+            System.out.println(exec.getErr());
+        });
     }
 
     static ASTNode buildAST(String ashSrc) {
@@ -81,6 +90,7 @@ public final class AshMain {
         CompilerPassChain
             .withErrorHandler(errorHandler)
             .appendPass(CompilerPasses.TYPE_ASSIGN_PASS)
+            .appendPass(CompilerPasses.TYPE_CHECK_PASS)
             .applyTo(rootNode);
 
         if (errorHandler.hasErrors()) {

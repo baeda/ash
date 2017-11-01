@@ -18,17 +18,27 @@
 
 package org.ashlang.ash.pass;
 
-import org.ashlang.ash.ast.ASTNode;
+import org.ashlang.ash.ast.ASTBaseVisitor;
+import org.ashlang.ash.ast.VarDeclarationNode;
 import org.ashlang.ash.err.ErrorHandler;
 
-import java.util.function.BiConsumer;
+import static org.ashlang.ash.type.Type.INVALID;
 
-public interface CompilerPasses {
+class TypeCheckVisitor extends ASTBaseVisitor<Void, Void> {
 
-    BiConsumer<ErrorHandler, ASTNode> TYPE_ASSIGN_PASS
-        = (eh, node) -> new TypeAssignVisitor(eh).visit(node, null);
+    private final ErrorHandler errorHandler;
 
-    BiConsumer<ErrorHandler, ASTNode> TYPE_CHECK_PASS
-        = (eh, node) -> new TypeCheckVisitor(eh).visit(node, null);
+    TypeCheckVisitor(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+    }
+
+    @Override
+    public Void
+    visitVarDeclarationNode(VarDeclarationNode node, Void argument) {
+        if (node.getType() == INVALID) {
+            errorHandler.emitInvalidType(node.getTypeToken());
+        }
+        return null;
+    }
 
 }

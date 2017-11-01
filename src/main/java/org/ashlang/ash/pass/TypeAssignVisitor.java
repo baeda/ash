@@ -23,6 +23,7 @@ import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.type.Operator;
 import org.ashlang.ash.type.OperatorMap;
 import org.ashlang.ash.type.Type;
+import org.ashlang.ash.type.TypeMap;
 
 import static org.ashlang.ash.type.Operator.*;
 import static org.ashlang.ash.type.Type.INT;
@@ -31,12 +32,22 @@ import static org.ashlang.ash.type.Type.INVALID;
 class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
 
     private final ErrorHandler errorHandler;
+    private final TypeMap typeMap;
     private final OperatorMap operatorMap;
 
     TypeAssignVisitor(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
 
+        typeMap = new TypeMap();
         operatorMap = new OperatorMap();
+    }
+
+    @Override
+    public Void visitVarDeclarationNode(VarDeclarationNode node, Void argument) {
+        String typeString = node.getTypeToken().getText();
+        Type type = typeMap.resolve(typeString);
+        node.setType(type);
+        return null;
     }
 
     //region Expression nodes

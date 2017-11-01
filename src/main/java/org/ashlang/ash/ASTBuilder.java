@@ -29,7 +29,22 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         return new FileNode(statement);
     }
 
+    @Override
+    public VarDeclarationNode visitVarDeclaration(VarDeclarationContext ctx) {
+        return new VarDeclarationNode(
+            new Token(ctx.id),
+            new Token(ctx.type));
+    }
+
     //region Statement nodes
+
+    @Override
+    public VarDeclarationStatementNode
+    visitVarDeclarationStatement(VarDeclarationStatementContext ctx) {
+        return new VarDeclarationStatementNode(
+            visitVarDeclaration(ctx.ref),
+            new Token(ctx.stop));
+    }
 
     @Override
     public ASTNode visitDumpStatement(DumpStatementContext ctx) {

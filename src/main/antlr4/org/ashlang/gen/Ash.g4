@@ -22,8 +22,13 @@ file
     : statement
     ;
 
+varDeclaration
+    : id=IDENTIFIER ':' type=IDENTIFIER
+    ;
+
 statement
-    : 'dump' expr=expression ';' #DumpStatement
+    : ref=varDeclaration     ';' #VarDeclarationStatement
+    | 'dump' expr=expression ';' #DumpStatement
     ;
 
 expression
@@ -33,15 +38,19 @@ expression
     | value=INTEGER                                  #IntExpression
     ;
 
-PLUS     : '+' ;
-MINUS    : '-' ;
-ASTERISK : '*' ;
-SLASH    : '/' ;
-PERCENT  : '%' ;
-L_PAREN  : '(' ;
-R_PAREN  : ')' ;
+PLUS      : '+' ;
+MINUS     : '-' ;
+ASTERISK  : '*' ;
+SLASH     : '/' ;
+PERCENT   : '%' ;
+EQUALS    : '=' ;
+L_PAREN   : '(' ;
+R_PAREN   : ')' ;
+SEMICOLON : ';' ;
+COLON     : ':' ;
 
 KW_DUMP : 'dump' ;
 
 INTEGER    : [0-9]+                        ;
+IDENTIFIER : [a-z][a-zA-Z0-9_]*            ;
 WHITESPACE : [ \t\r\n]+ -> channel(HIDDEN) ;

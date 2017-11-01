@@ -16,19 +16,29 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.pass;
+package org.ashlang.ash;
 
-import org.ashlang.ash.ast.ASTNode;
-import org.ashlang.ash.err.ErrorHandler;
+import org.testng.ITestResult;
+import org.testng.TestListenerAdapter;
 
-import java.util.function.BiConsumer;
+import java.util.Arrays;
 
-public interface CompilerPasses {
+public class AshTestListener extends TestListenerAdapter {
 
-    BiConsumer<ErrorHandler, ASTNode> TYPE_ASSIGN_PASS
-        = (eh, node) -> new TypeAssignVisitor(eh).visit(node, null);
+    @Override
+    public void onTestFailure(ITestResult testResult) {
+        log("FAILURE", testResult);
+    }
 
-    BiConsumer<ErrorHandler, ASTNode> TYPE_CHECK_PASS
-        = (eh, node) -> new TypeCheckVisitor(eh).visit(node, null);
+    @Override
+    public void onTestSuccess(ITestResult testResult) {
+        log("SUCCESS", testResult);
+    }
+
+    private void log(String status, ITestResult tr) {
+        long millis = tr.getEndMillis() - tr.getStartMillis();
+        System.out.printf("  %s[%5dms]: %s%s\n",
+            status, millis, tr.getName(), Arrays.toString(tr.getParameters()));
+    }
 
 }
