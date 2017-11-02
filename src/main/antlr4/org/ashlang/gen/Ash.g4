@@ -19,7 +19,7 @@
 grammar Ash;
 
 file
-    : statement
+    : statement+
     ;
 
 varDeclaration

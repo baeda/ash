@@ -23,7 +23,9 @@ import org.ashlang.ash.ast.Token;
 import org.ashlang.ash.err.ErrorHandler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -99,25 +101,29 @@ class CompilerErrorAssertor {
             }
 
             if (matches.isEmpty()) {
-                List<String> locationsOfSameType = getErrors().stream()
-                    .filter(pair -> pair.getLeft() == errorType)
-                    .map(Pair::getRight)
-                    .map(pos -> String.format("%d:%d",
-                        pos.getLine() + 1, pos.getColumn() + 1))
-                    .collect(toList());
+                Map<ErrorType, List<String>> errorMap = getErrors().stream()
+                    .collect(Collectors.toMap(
+                        Pair::getLeft,
+                        pair -> {
+                            String pos = String.format("%d:%d",
+                                pair.getRight().getLine() + 1,
+                                pair.getRight().getColumn() + 1);
+                            return Collections.singletonList(pos);
+                        }
+                    ));
 
-                List<ErrorType> typesAtSameLocation = getErrors().stream()
-                    .filter(pair -> pair.getRight().getLine() + 1 == line)
-                    .filter(pair -> pair.getRight().getColumn() + 1 == column)
-                    .map(Pair::getLeft)
-                    .collect(toList());
+                StringBuilder buf = new StringBuilder();
+                errorMap.forEach((errorType, posList) -> {
+                    buf.append(errorType).append("\n");
+                    posList.forEach(pos -> {
+                        buf.append("  ").append(pos).append("\n");
+                    });
+                });
 
                 fail("Expected error type '%s' at %d:%d\n" +
-                        "Found error type '%s' in %s\n" +
-                        "Found error types %s at %d:%d",
+                        "Found errors:\n%s",
                     errorType, line, column,
-                    errorType, locationsOfSameType,
-                    typesAtSameLocation, line, column);
+                    buf);
             } else {
                 // 'matches' will only contain one item at this point
                 getErrors().removeAll(matches);

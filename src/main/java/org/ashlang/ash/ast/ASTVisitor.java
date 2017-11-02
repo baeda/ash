@@ -19,6 +19,7 @@
 package org.ashlang.ash.ast;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 
 import static org.ashlang.ash.ast.ASTWalkUtil.getFieldValue;
@@ -54,6 +55,14 @@ public interface ASTVisitor<T, A> {
                 if (value instanceof ASTNode) {
                     T next = visit((ASTNode) value, argument);
                     aggregate = aggregate(aggregate, next);
+                } else if (value instanceof Collection<?>) {
+                    Collection<?> collection = (Collection<?>) value;
+                    for (Object obj : collection) {
+                        if (obj instanceof ASTNode) {
+                            T next = visit((ASTNode) obj, argument);
+                            aggregate = aggregate(aggregate, next);
+                        }
+                    }
                 }
             }
         }

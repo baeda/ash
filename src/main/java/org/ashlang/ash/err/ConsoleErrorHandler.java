@@ -21,13 +21,37 @@ package org.ashlang.ash.err;
 import org.ashlang.ash.ast.Token;
 import org.ashlang.ash.type.Type;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+
 public class ConsoleErrorHandler implements ErrorHandler {
+
+    private final PrintStream out;
 
     private int numLexicalErrors;
     private int numSyntacticErrors;
     private int numSemanticErrors;
 
     public ConsoleErrorHandler() {
+        this(System.err);
+    }
+
+    public ConsoleErrorHandler(OutputStream outStream) {
+        this(createPrintStream(outStream));
+    }
+
+    private static PrintStream createPrintStream(OutputStream outStream) {
+        try {
+            return new PrintStream(outStream, false, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ConsoleErrorHandler(PrintStream out) {
+        this.out = out;
+
         numLexicalErrors = 0;
         numSyntacticErrors = 0;
         numSemanticErrors = 0;
@@ -41,7 +65,9 @@ public class ConsoleErrorHandler implements ErrorHandler {
     }
 
     @Override
-    public void flush() { /* no-op */ }
+    public void flush() {
+        out.flush();
+    }
 
     @Override
     public void emitUnknownToken(Token pos) {
@@ -75,10 +101,10 @@ public class ConsoleErrorHandler implements ErrorHandler {
         numSemanticErrors++;
     }
 
-    private static void emit(Token pos, String format, Object... args) {
+    private void emit(Token pos, String format, Object... args) {
         String position = formatPosition(pos);
         String message = String.format(format, args);
-        System.err.printf("%s: error: %s\n", position, message);
+        out.printf("%s: error: %s\n", position, message);
     }
 
     private static String formatPosition(Token pos) {

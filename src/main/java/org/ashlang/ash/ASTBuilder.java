@@ -5,7 +5,9 @@ import org.ashlang.ash.ast.*;
 import org.ashlang.gen.AshBaseVisitor;
 import org.ashlang.gen.AshParser.*;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.ashlang.gen.AshLexer.ASTERISK;
 import static org.ashlang.gen.AshLexer.MINUS;
@@ -25,8 +27,11 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     @Override
     public FileNode visitFile(FileContext ctx) {
-        StatementNode statement = (StatementNode) visit(ctx.statement());
-        return new FileNode(statement);
+        List<StatementNode> statements = ctx.statement().stream()
+            .map(stmtCtx -> (StatementNode) visit(stmtCtx))
+            .collect(Collectors.toList());
+
+        return new FileNode(statements);
     }
 
     @Override

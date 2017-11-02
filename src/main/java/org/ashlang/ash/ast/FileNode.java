@@ -1,13 +1,15 @@
 package org.ashlang.ash.ast;
 
+import java.util.List;
+
 public class FileNode extends ASTNode {
 
-    private final StatementNode statement;
+    private final List<StatementNode> statements;
 
-    public FileNode(StatementNode statement) {
-        super(statement.getStartToken(), statement.getStopToken());
+    public FileNode(List<StatementNode> statements) {
+        super(getFirstStartToken(statements), getLastStopToken(statements));
 
-        this.statement = statement;
+        this.statements = statements;
     }
 
     @Override

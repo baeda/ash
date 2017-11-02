@@ -24,6 +24,7 @@ import org.ashlang.ash.err.ErrorHandler;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,13 +103,16 @@ public class CompilerSystemTest {
     public void c11_target(String input, String expected) {
         IOUtil.executeInTempDir(tmpDir -> {
             // [ash compiler] Arrange
-            ErrorHandler errorHandler = new ConsoleErrorHandler();
+            ByteArrayOutputStream errStream = new ByteArrayOutputStream();
+            ErrorHandler errorHandler = new ConsoleErrorHandler(errStream);
 
             // [ash compiler] Act
             ASTNode rootNode = AshMain.buildAST(input, errorHandler);
 
             // [ash compiler] Assert
-            assertThat(errorHandler.hasErrors()).isFalse();
+            assertThat(errorHandler.hasErrors())
+                .as(errStream.toString().trim())
+                .isFalse();
 
             // [c11 compiler] Arrange
             Path outFile = tmpDir.resolve("out");
