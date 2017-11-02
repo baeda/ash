@@ -16,22 +16,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.err;
+package org.ashlang.ash.ast;
 
-import org.ashlang.ash.ast.Token;
-import org.ashlang.ash.type.Type;
+public class VarAssignStatementNode extends StatementNode {
 
-public interface ErrorHandler {
+    private final VarAssignNode varAssign;
 
-    boolean hasErrors();
-    void flush();
+    public VarAssignStatementNode(VarAssignNode varAssign, Token stopToken) {
+        super(varAssign.getStartToken(), stopToken);
 
-    void emitUnknownToken(Token pos);
-    void emitMissingToken(Token pos, String expectedTokens);
-    void emitInputMismatch(Token pos, String expectedTokens);
-    void emitInvalidType(Token pos);
-    void emitInvalidOperator(Token pos, Type left, Type right);
-    void emitSymbolAlreadyDeclared(Token pos, Token declSite);
-    void emitSymbolNotDeclared(Token pos);
+        this.varAssign = varAssign;
+    }
+
+    public VarAssignNode getVarAssign() {
+        return varAssign;
+    }
+
+    @Override
+    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+        return visitor.visitVarAssignStatementNode(this, argument);
+    }
 
 }

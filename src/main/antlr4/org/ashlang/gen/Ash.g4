@@ -26,8 +26,13 @@ varDeclaration
     : id=IDENTIFIER ':' type=IDENTIFIER
     ;
 
+varAssign
+    : id=IDENTIFIER '=' value=expression
+    ;
+
 statement
     : ref=varDeclaration     ';' #VarDeclarationStatement
+    | ref=varAssign          ';' #VarAssignStatement
     | 'dump' expr=expression ';' #DumpStatement
     ;
 

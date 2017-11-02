@@ -76,6 +76,15 @@ public class CompilerErrorTest {
             .hasNoMoreErrors();
     }
 
+    @Test
+    public void symbolNotDeclared() {
+        assertThat(
+            "a : i32;",
+            "b = 12;")
+            .hasError(SYMBOL_NOT_DECLARED).at(2, 1)
+            .hasNoMoreErrors();
+    }
+
     private static CompilerErrorAssertor
     assertThat(String... lines) {
         String ashSrc = Stream.of(lines)

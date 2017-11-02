@@ -78,6 +78,11 @@ class TestErrorHandler implements ErrorHandler {
         addError(SYMBOL_ALREADY_DECLARED, pos);
     }
 
+    @Override
+    public void emitSymbolNotDeclared(Token pos) {
+        addError(SYMBOL_NOT_DECLARED, pos);
+    }
+
     private void addError(ErrorType errorType, Token pos) {
         errors.add(Pair.of(errorType, pos));
     }

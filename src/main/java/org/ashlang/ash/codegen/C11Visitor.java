@@ -49,12 +49,25 @@ class C11Visitor implements ASTVisitor<String, Object> {
         return cType + " " + symbol.getIdentifier();
     }
 
+    @Override
+    public String visitVarAssignNode(VarAssignNode node, Object argument) {
+        Symbol symbol = node.getSymbol();
+        String expression = visit(node.getExpression(), argument);
+        return symbol.getIdentifier() + " = " + expression;
+    }
+
     //region Statement nodes
 
     @Override
     public String
     visitVarDeclarationStatementNode(VarDeclarationStatementNode node,
                                      Object argument) {
+        return visitChildren(node, argument) + ";";
+    }
+
+    @Override
+    public String
+    visitVarAssignStatementNode(VarAssignStatementNode node, Object argument) {
         return visitChildren(node, argument) + ";";
     }
 

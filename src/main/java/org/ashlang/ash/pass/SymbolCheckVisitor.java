@@ -19,6 +19,7 @@
 package org.ashlang.ash.pass;
 
 import org.ashlang.ash.ast.ASTBaseVisitor;
+import org.ashlang.ash.ast.VarAssignNode;
 import org.ashlang.ash.ast.VarDeclarationNode;
 import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.symbol.Symbol;
@@ -50,4 +51,15 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
         return null;
     }
 
+    @Override
+    public Void visitVarAssignNode(VarAssignNode node, Void argument) {
+        String identifier = node.getIdentifierToken().getText();
+        Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
+        if (symbol == null) {
+            errorHandler.emitSymbolNotDeclared(node.getIdentifierToken());
+        }
+
+        node.setSymbol(symbol);
+        return null;
+    }
 }

@@ -108,6 +108,12 @@ public class ConsoleErrorHandler implements ErrorHandler {
         numSemanticErrors++;
     }
 
+    @Override
+    public void emitSymbolNotDeclared(Token pos) {
+        emit(pos, "symbol '%s' is not declared.", pos.getText());
+        numSemanticErrors++;
+    }
+
     private void emit(Token pos, String format, Object... args) {
         String position = formatPosition(pos);
         String message = String.format(format, args);

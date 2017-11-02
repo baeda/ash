@@ -45,6 +45,10 @@ public class SymbolTable {
 
     public Symbol getDeclaredSymbol(VarDeclarationNode declSite) {
         String identifier = declSite.getIdentifierToken().getText();
+        return getDeclaredSymbol(identifier);
+    }
+
+    public Symbol getDeclaredSymbol(String identifier) {
         return symbolTable.get(identifier);
     }
 

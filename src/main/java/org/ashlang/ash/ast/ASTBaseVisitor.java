@@ -30,11 +30,22 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
         return visitChildren(node, argument);
     }
 
+    @Override
+    public T visitVarAssignNode(VarAssignNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
     //region Statement nodes
 
     @Override
     public T visitVarDeclarationStatementNode(VarDeclarationStatementNode node,
                                               A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
+    public T
+    visitVarAssignStatementNode(VarAssignStatementNode node, A argument) {
         return visitChildren(node, argument);
     }
 

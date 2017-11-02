@@ -41,6 +41,14 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
             new Token(ctx.type));
     }
 
+    @Override
+    public VarAssignNode visitVarAssign(VarAssignContext ctx) {
+        ExpressionNode expression = (ExpressionNode) visit(ctx.value);
+        return new VarAssignNode(
+            new Token(ctx.id),
+            expression);
+    }
+
     //region Statement nodes
 
     @Override
@@ -48,6 +56,14 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     visitVarDeclarationStatement(VarDeclarationStatementContext ctx) {
         return new VarDeclarationStatementNode(
             visitVarDeclaration(ctx.ref),
+            new Token(ctx.stop));
+    }
+
+    @Override
+    public VarAssignStatementNode
+    visitVarAssignStatement(VarAssignStatementContext ctx) {
+        return new VarAssignStatementNode(
+            visitVarAssign(ctx.ref),
             new Token(ctx.stop));
     }
 

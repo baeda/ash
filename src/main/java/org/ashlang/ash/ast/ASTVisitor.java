@@ -30,8 +30,10 @@ public interface ASTVisitor<T, A> {
     T visitFileNode(FileNode node, A argument);
 
     T visitVarDeclarationNode(VarDeclarationNode node, A argument);
+    T visitVarAssignNode(VarAssignNode node, A argument);
 
     T visitVarDeclarationStatementNode(VarDeclarationStatementNode node, A argument);
+    T visitVarAssignStatementNode(VarAssignStatementNode node, A argument);
     T visitDumpStatementNode(DumpStatementNode node, A argument);
 
     T visitParenExpressionNode(ParenExpressionNode node, A argument);
