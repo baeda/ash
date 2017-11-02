@@ -29,7 +29,6 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Scanner;
-import java.util.function.Consumer;
 
 public final class IOUtil {
 
@@ -85,11 +84,12 @@ public final class IOUtil {
         }
     }
 
-    public static void executeInTempDir(Consumer<Path> consumer) {
+    public static <X extends Throwable> void
+    executeInTempDir(ThrowingConsumer<Path, X> consumer) throws X {
         Path tmpDir = null;
         try {
             tmpDir = Files.createTempDirectory(IOUtil.class.getCanonicalName())
-                          .toAbsolutePath();
+                .toAbsolutePath();
             consumer.accept(tmpDir);
         } catch (IOException e) {
             throw new RuntimeException(e);

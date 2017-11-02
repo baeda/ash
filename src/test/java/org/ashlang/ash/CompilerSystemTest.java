@@ -100,7 +100,7 @@ public class CompilerSystemTest {
     }
 
     @Test(dataProvider = "provideAshSourceAndExpectedResultString")
-    public void c11_target(String input, String expected) {
+    public void c11_target(String input, String expected) throws Exception {
         IOUtil.executeInTempDir(tmpDir -> {
             // [ash compiler] Arrange
             ByteArrayOutputStream errStream = new ByteArrayOutputStream();
@@ -111,7 +111,7 @@ public class CompilerSystemTest {
 
             // [ash compiler] Assert
             assertThat(errorHandler.hasErrors())
-                .as(errStream.toString().trim())
+                .as(errStream.toString("UTF-8").trim())
                 .isFalse();
 
             // [c11 compiler] Arrange

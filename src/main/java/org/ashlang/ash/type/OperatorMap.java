@@ -46,15 +46,18 @@ public class OperatorMap {
     }
 
     private EntryBuilder operation(Type left, Operator op, Type right) {
-        return new EntryBuilder(left, op, right);
+        return new EntryBuilder(opMap, left, op, right);
     }
 
-    private class EntryBuilder {
+    private static class EntryBuilder {
+        private final Map<Triple<Type, Operator, Type>, Type> opMap;
         private final Type left;
         private final Operator op;
         private final Type right;
 
-        private EntryBuilder(Type left, Operator op, Type right) {
+        private EntryBuilder(Map<Triple<Type, Operator, Type>, Type> opMap,
+                             Type left, Operator op, Type right) {
+            this.opMap = opMap;
             this.left = left;
             this.op = op;
             this.right = right;

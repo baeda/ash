@@ -18,6 +18,7 @@
 
 package org.ashlang.ash;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.tuple.Pair;
 import org.ashlang.ash.ast.Token;
 import org.ashlang.ash.err.ErrorHandler;
@@ -31,6 +32,9 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.fail;
 
+@SuppressFBWarnings({
+    "CD_CIRCULAR_DEPENDENCY",
+    "IMA_INEFFICIENT_MEMBER_ACCESS"})
 class CompilerErrorAssertor {
 
     private final TestErrorHandler errorHandler;

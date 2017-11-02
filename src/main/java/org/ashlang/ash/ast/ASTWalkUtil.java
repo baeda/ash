@@ -19,6 +19,8 @@
 package org.ashlang.ash.ast;
 
 import java.lang.reflect.Field;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -59,7 +61,10 @@ public final class ASTWalkUtil {
 
     public static Object getFieldValue(Field field, Object obj) {
         try {
-            field.setAccessible(true);
+            AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
+                field.setAccessible(true);
+                return null;
+            });
             return field.get(obj);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
