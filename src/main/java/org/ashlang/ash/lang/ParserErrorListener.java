@@ -34,6 +34,11 @@ public class ParserErrorListener extends BaseErrorListener {
     public void
     syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol,
                 int line, int column, String msg, RecognitionException e) {
+        if (!(recognizer instanceof Parser)) {
+            throw new IllegalStateException(
+                "This error handler may only be used with " + Parser.class);
+        }
+
         Token position = new Token((org.antlr.v4.runtime.Token) offendingSymbol);
         Parser parser = (Parser) recognizer;
         Vocabulary vocabulary = parser.getVocabulary();

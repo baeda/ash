@@ -137,20 +137,22 @@
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <version>3.0.4</version>
                 <configuration>
-                    <effort>Max</effort>
-                    <threshold>Low</threshold>
                     <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
-                    <findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>
+                    <findbugsXmlOutputDirectory>
+                        ${project.build.directory}/findbugs
+                    </findbugsXmlOutputDirectory>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>noFailOnError</id>
+                        <id>max-effort</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
                         <configuration>
-                            <failOnError>false</failOnError>
+                            <effort>Max</effort>
+                            <threshold>Low</threshold>
+                            <failOnError>true</failOnError>
                         </configuration>
                     </execution>
                 </executions>

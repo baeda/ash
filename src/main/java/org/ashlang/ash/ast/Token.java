@@ -7,6 +7,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class Token {
 
+    public static final Token INVALID = new Token(
+        -1, -1, "<INVALID>", "<INVALID>");
+
     private final int line;
     private final int column;
     private final String text;

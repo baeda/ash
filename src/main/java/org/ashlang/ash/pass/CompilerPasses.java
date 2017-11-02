@@ -31,4 +31,7 @@ public interface CompilerPasses {
     BiConsumer<ErrorHandler, ASTNode> TYPE_CHECK_PASS
         = (eh, node) -> new TypeCheckVisitor(eh).visit(node, null);
 
+    BiConsumer<ErrorHandler, ASTNode> SYMBOL_CHECK_PASS
+        = (eh, node) -> new SymbolCheckVisitor(eh).visit(node, null);
+
 }

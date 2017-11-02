@@ -19,6 +19,7 @@
 package org.ashlang.ash.codegen;
 
 import org.ashlang.ash.ast.*;
+import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 
 class C11Visitor implements ASTVisitor<String, Object> {
@@ -43,8 +44,9 @@ class C11Visitor implements ASTVisitor<String, Object> {
 
     @Override
     public String visitVarDeclarationNode(VarDeclarationNode node, Object argument) {
-        String type = typeMap.get(node.getType());
-        return type + " " + node.getIdentifierToken().getText();
+        Symbol symbol = node.getSymbol();
+        String cType = typeMap.get(symbol.getType());
+        return cType + " " + symbol.getIdentifier();
     }
 
     //region Statement nodes

@@ -31,5 +31,6 @@ public interface ErrorHandler {
     void emitInputMismatch(Token pos, String expectedTokens);
     void emitInvalidType(Token pos);
     void emitInvalidOperator(Token pos, Type left, Type right);
+    void emitSymbolAlreadyDeclared(Token pos, Token declSite);
 
 }

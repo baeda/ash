@@ -18,11 +18,13 @@
 
 package org.ashlang.ash.ast;
 
+import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 
 public class VarDeclarationNode extends StatementNode {
 
     private Type type;
+    private Symbol symbol;
 
     public VarDeclarationNode(Token identifier, Token type) {
         super(identifier, type);
@@ -42,6 +44,14 @@ public class VarDeclarationNode extends StatementNode {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public Symbol getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(Symbol symbol) {
+        this.symbol = symbol;
     }
 
     @Override

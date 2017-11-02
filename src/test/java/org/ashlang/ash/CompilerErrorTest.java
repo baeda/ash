@@ -67,6 +67,15 @@ public class CompilerErrorTest {
             .hasNoMoreErrors();
     }
 
+    @Test
+    public void symbolAlreadyDeclared() {
+        assertThat(
+            "a : i32;",
+            "a : i32;")
+            .hasError(SYMBOL_ALREADY_DECLARED).at(2, 1)
+            .hasNoMoreErrors();
+    }
+
     private static CompilerErrorAssertor
     assertThat(String... lines) {
         String ashSrc = Stream.of(lines)

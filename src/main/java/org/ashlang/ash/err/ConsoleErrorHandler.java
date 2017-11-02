@@ -101,6 +101,13 @@ public class ConsoleErrorHandler implements ErrorHandler {
         numSemanticErrors++;
     }
 
+    @Override
+    public void emitSymbolAlreadyDeclared(Token pos, Token declSite) {
+        emit(pos, "symbol '%s' already declared at %d:%d.",
+            pos.getText(), declSite.getLine() + 1, declSite.getColumn() + 1);
+        numSemanticErrors++;
+    }
+
     private void emit(Token pos, String format, Object... args) {
         String position = formatPosition(pos);
         String message = String.format(format, args);

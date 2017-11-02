@@ -73,6 +73,11 @@ class TestErrorHandler implements ErrorHandler {
         addError(INVALID_OPERATOR, pos);
     }
 
+    @Override
+    public void emitSymbolAlreadyDeclared(Token pos, Token declSite) {
+        addError(SYMBOL_ALREADY_DECLARED, pos);
+    }
+
     private void addError(ErrorType errorType, Token pos) {
         errors.add(Pair.of(errorType, pos));
     }
