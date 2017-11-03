@@ -20,6 +20,7 @@ package org.ashlang.ash.pass;
 
 import org.ashlang.ash.ast.ASTNode;
 import org.ashlang.ash.err.ErrorHandler;
+import org.ashlang.ash.symbol.SymbolTable;
 
 import java.util.function.BiConsumer;
 
@@ -31,23 +32,25 @@ public class CompilerPassChain {
     }
 
     private final ErrorHandler errorHandler;
+    private final SymbolTable symbolTable;
 
-    private BiConsumer<ErrorHandler, ASTNode> entryPass;
+    private CompilerPass entryPass;
 
     private CompilerPassChain(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
 
-        entryPass = (eh, node) -> {};
+        symbolTable = new SymbolTable();
+        entryPass = (eh, st, node) -> {};
     }
 
     public CompilerPassChain
-    appendPass(BiConsumer<ErrorHandler, ASTNode> pass) {
+    appendPass(CompilerPass pass) {
         entryPass = entryPass.andThen(pass);
         return this;
     }
 
     public void applyTo(ASTNode node) {
-        entryPass.accept(errorHandler, node);
+        entryPass.accept(errorHandler, symbolTable, node);
     }
 
 }

@@ -30,9 +30,9 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
     private final ErrorHandler errorHandler;
     private final SymbolTable symbolTable;
 
-    SymbolCheckVisitor(ErrorHandler errorHandler) {
+    SymbolCheckVisitor(ErrorHandler errorHandler, SymbolTable symbolTable) {
         this.errorHandler = errorHandler;
-        symbolTable = new SymbolTable();
+        this.symbolTable = symbolTable;
     }
 
     @Override

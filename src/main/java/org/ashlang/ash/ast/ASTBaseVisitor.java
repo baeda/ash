@@ -89,6 +89,11 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
     }
 
     @Override
+    public T visitIdExpressionNode(IdExpressionNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
     public T visitIntExpressionNode(IntExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }

@@ -96,6 +96,11 @@ public class CompilerSystemTest {
             {"dump 1+2*3;", "7"},
             {"dump 1+(2*3);", "7"},
             {"dump (1+2)*3;", "9"},
+
+            {"a:i32; a=0; dump a;", "0"},
+            {"a:i32; a=12+5; dump a;", "17"},
+            {"a:i32; a=12; dump a+5;", "17"},
+            {"a:i32; b:i32; a=12; b=5; dump a+b;", "17"},
         };
     }
 

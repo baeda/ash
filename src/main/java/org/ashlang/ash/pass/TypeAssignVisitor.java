@@ -20,6 +20,8 @@ package org.ashlang.ash.pass;
 
 import org.ashlang.ash.ast.*;
 import org.ashlang.ash.err.ErrorHandler;
+import org.ashlang.ash.symbol.Symbol;
+import org.ashlang.ash.symbol.SymbolTable;
 import org.ashlang.ash.type.Operator;
 import org.ashlang.ash.type.OperatorMap;
 import org.ashlang.ash.type.Type;
@@ -32,11 +34,13 @@ import static org.ashlang.ash.type.Type.INVALID;
 class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
 
     private final ErrorHandler errorHandler;
+    private final SymbolTable symbolTable;
     private final TypeMap typeMap;
     private final OperatorMap operatorMap;
 
-    TypeAssignVisitor(ErrorHandler errorHandler) {
+    TypeAssignVisitor(ErrorHandler errorHandler, SymbolTable symbolTable) {
         this.errorHandler = errorHandler;
+        this.symbolTable = symbolTable;
 
         typeMap = new TypeMap();
         operatorMap = new OperatorMap();
@@ -87,6 +91,14 @@ class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
     @Override
     public Void visitModExpressionNode(ModExpressionNode node, Void argument) {
         setResultTypeOfOperation(node, MOD);
+        return null;
+    }
+
+    @Override
+    public Void visitIdExpressionNode(IdExpressionNode node, Void argument) {
+        String identifier = node.getValue().getText();
+        Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
+        node.setType(symbol.getType());
         return null;
     }
 

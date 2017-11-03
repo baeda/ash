@@ -26,14 +26,9 @@ import org.ashlang.ash.type.Type;
 public class Symbol {
 
     private final VarDeclarationNode declSite;
-    private final String identifier;
-    private final Type type;
 
     Symbol(VarDeclarationNode declSite) {
         this.declSite = declSite;
-        this.type = declSite.getType();
-
-        identifier = declSite.getIdentifierToken().getText();
     }
 
     public VarDeclarationNode getDeclSite() {
@@ -41,11 +36,11 @@ public class Symbol {
     }
 
     public String getIdentifier() {
-        return identifier;
+        return declSite.getIdentifierToken().getText();
     }
 
     public Type getType() {
-        return type;
+        return declSite.getType();
     }
 
     @Override
@@ -59,14 +54,14 @@ public class Symbol {
 
         Symbol symbol = (Symbol) obj;
         return new EqualsBuilder()
-            .append(identifier, symbol.identifier)
+            .append(getIdentifier(), symbol.getIdentifier())
             .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-            .append(identifier)
+            .append(getIdentifier())
             .toHashCode();
     }
 

@@ -40,6 +40,7 @@ expression
     : '(' expr=expression ')'                        #ParenExpression
     | lhs=expression op=('/'|'*'|'%') rhs=expression #ArithmeticExpression
     | lhs=expression op=('-'|'+')     rhs=expression #ArithmeticExpression
+    | value=IDENTIFIER                               #IdExpression
     | value=INTEGER                                  #IntExpression
     ;
 

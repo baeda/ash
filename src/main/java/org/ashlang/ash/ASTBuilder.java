@@ -110,6 +110,11 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
+    public IdExpressionNode visitIdExpression(IdExpressionContext ctx) {
+        return new IdExpressionNode(new Token(ctx.value));
+    }
+
+    @Override
     public IntExpressionNode visitIntExpression(IntExpressionContext ctx) {
         return new IntExpressionNode(new Token(ctx.value));
     }

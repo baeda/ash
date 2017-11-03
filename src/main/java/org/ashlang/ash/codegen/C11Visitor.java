@@ -124,6 +124,11 @@ class C11Visitor implements ASTVisitor<String, Object> {
     }
 
     @Override
+    public String visitIdExpressionNode(IdExpressionNode node, Object argument) {
+        return node.getValue().getText();
+    }
+
+    @Override
     public String visitIntExpressionNode(IntExpressionNode node, Object argument) {
         return node.getValue().getText();
     }

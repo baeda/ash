@@ -97,9 +97,9 @@ public final class AshMain {
         ASTNode rootNode = ASTBuilder.buildAST(fileCtx);
         CompilerPassChain
             .withErrorHandler(errorHandler)
+            .appendPass(CompilerPasses.SYMBOL_CHECK_PASS)
             .appendPass(CompilerPasses.TYPE_ASSIGN_PASS)
             .appendPass(CompilerPasses.TYPE_CHECK_PASS)
-            .appendPass(CompilerPasses.SYMBOL_CHECK_PASS)
             .applyTo(rootNode);
 
         if (errorHandler.hasErrors()) {

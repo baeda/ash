@@ -16,17 +16,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.pass;
+package org.ashlang.ash.ast;
 
-public interface CompilerPasses {
+public class IdExpressionNode extends ExpressionNode {
 
-    CompilerPass TYPE_ASSIGN_PASS = (eh, st, node) ->
-        new TypeAssignVisitor(eh, st).visit(node, null);
+    public IdExpressionNode(Token value) {
+        super(value, value);
+    }
 
-    CompilerPass TYPE_CHECK_PASS = (eh, st, node) ->
-        new TypeCheckVisitor(eh).visit(node, null);
+    public Token getValue() {
+        return getStartToken();
+    }
 
-    CompilerPass SYMBOL_CHECK_PASS = (eh, st, node) ->
-        new SymbolCheckVisitor(eh, st).visit(node, null);
+    @Override
+    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+        return visitor.visitIdExpressionNode(this, argument);
+    }
 
 }
