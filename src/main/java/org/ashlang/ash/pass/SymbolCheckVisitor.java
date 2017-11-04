@@ -19,6 +19,7 @@
 package org.ashlang.ash.pass;
 
 import org.ashlang.ash.ast.ASTBaseVisitor;
+import org.ashlang.ash.ast.IdExpressionNode;
 import org.ashlang.ash.ast.VarAssignNode;
 import org.ashlang.ash.ast.VarDeclarationNode;
 import org.ashlang.ash.err.ErrorHandler;
@@ -62,4 +63,17 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
         node.setSymbol(symbol);
         return null;
     }
+
+    //region Expression nodes
+
+    @Override
+    public Void visitIdExpressionNode(IdExpressionNode node, Void argument) {
+        String identifier = node.getValue().getText();
+        Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
+        node.setSymbol(symbol);
+        return null;
+    }
+
+    //endregion Expression nodes
+
 }

@@ -20,6 +20,8 @@ package org.ashlang.ash.symbol;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.ashlang.ash.ast.VarDeclarationNode;
 import org.ashlang.ash.type.Type;
 
@@ -63,6 +65,14 @@ public class Symbol {
         return new HashCodeBuilder(17, 37)
             .append(getIdentifier())
             .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
+            .append("identifier", getIdentifier())
+            .append("type", getType())
+            .build();
     }
 
 }

@@ -18,7 +18,11 @@
 
 package org.ashlang.ash.ast;
 
+import org.ashlang.ash.symbol.Symbol;
+
 public class IdExpressionNode extends ExpressionNode {
+
+    private Symbol symbol;
 
     public IdExpressionNode(Token value) {
         super(value, value);
@@ -26,6 +30,14 @@ public class IdExpressionNode extends ExpressionNode {
 
     public Token getValue() {
         return getStartToken();
+    }
+
+    public Symbol getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(Symbol symbol) {
+        this.symbol = symbol;
     }
 
     @Override
