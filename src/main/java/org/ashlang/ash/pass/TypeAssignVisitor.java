@@ -28,7 +28,7 @@ import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.TypeMap;
 
 import static org.ashlang.ash.type.Operator.*;
-import static org.ashlang.ash.type.Type.INT;
+import static org.ashlang.ash.type.Type.I32;
 import static org.ashlang.ash.type.Type.INVALID;
 
 class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
@@ -104,7 +104,7 @@ class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
 
     @Override
     public Void visitIntExpressionNode(IntExpressionNode node, Void argument) {
-        node.setType(INT);
+        node.setType(I32);
         return null;
     }
 

@@ -23,7 +23,7 @@ import org.ashlang.ash.type.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.ashlang.ash.type.Type.INT;
+import static org.ashlang.ash.type.Type.I32;
 
 public class C11TypeMap {
 
@@ -31,7 +31,7 @@ public class C11TypeMap {
 
     public C11TypeMap() {
         typeMap = new HashMap<>();
-        typeMap.put(INT, "int32_t");
+        typeMap.put(I32, "int32_t");
     }
 
     public String get(Type type) {

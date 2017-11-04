@@ -21,7 +21,7 @@ package org.ashlang.ash.type;
 public enum Type {
 
     INVALID,
-    INT;
+    I32;
 
     public static boolean allValid(Type... types) {
         for (Type type : types) {

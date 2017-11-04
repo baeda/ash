@@ -21,7 +21,7 @@ package org.ashlang.ash.type;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.ashlang.ash.type.Type.INT;
+import static org.ashlang.ash.type.Type.I32;
 import static org.ashlang.ash.type.Type.INVALID;
 
 public class TypeMap {
@@ -30,7 +30,7 @@ public class TypeMap {
 
     public TypeMap() {
         typeMap = new HashMap<>();
-        typeMap.put("i32", INT);
+        typeMap.put("i32", I32);
     }
 
     public Type resolve(String typeString) {
