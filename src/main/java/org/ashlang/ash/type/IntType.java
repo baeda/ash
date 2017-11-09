@@ -23,16 +23,17 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public abstract class Type {
+public class IntType extends Type {
 
-    private final int bitSize;
+    private final boolean isSigned;
 
-    public Type(int bitSize) {
-        this.bitSize = bitSize;
+    IntType(int bitSize, boolean isSigned) {
+        super(bitSize);
+        this.isSigned = isSigned;
     }
 
-    public int getBitSize() {
-        return bitSize;
+    public boolean isSigned() {
+        return isSigned;
     }
 
     @Override
@@ -45,24 +46,27 @@ public abstract class Type {
             return false;
         }
 
-        Type type = (Type) obj;
+        IntType intType = (IntType) obj;
 
         return new EqualsBuilder()
-            .append(bitSize, type.bitSize)
+            .appendSuper(super.equals(obj))
+            .append(isSigned, intType.isSigned)
             .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-            .append(bitSize)
+            .appendSuper(super.hashCode())
+            .append(isSigned)
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("bitSize", bitSize)
+            .appendSuper(super.toString())
+            .append("isSigned", isSigned)
             .toString();
     }
 

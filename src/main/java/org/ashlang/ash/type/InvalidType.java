@@ -16,29 +16,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.pass;
+package org.ashlang.ash.type;
 
-import org.ashlang.ash.ast.ASTBaseVisitor;
-import org.ashlang.ash.ast.VarDeclarationNode;
-import org.ashlang.ash.err.ErrorHandler;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
-import static org.ashlang.ash.type.Types.INVALID;
+final class InvalidType extends Type {
 
-class TypeCheckVisitor extends ASTBaseVisitor<Void, Void> {
-
-    private final ErrorHandler errorHandler;
-
-    TypeCheckVisitor(ErrorHandler errorHandler) {
-        this.errorHandler = errorHandler;
+    InvalidType() {
+        super(0);
     }
 
     @Override
-    public Void
-    visitVarDeclarationNode(VarDeclarationNode node, Void argument) {
-        if (INVALID.equals(node.getType())) {
-            errorHandler.emitInvalidType(node.getTypeToken());
-        }
-        return null;
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+            .toString();
     }
 
 }

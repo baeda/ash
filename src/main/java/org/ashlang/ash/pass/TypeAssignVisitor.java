@@ -28,8 +28,7 @@ import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.TypeMap;
 
 import static org.ashlang.ash.type.Operator.*;
-import static org.ashlang.ash.type.Type.I32;
-import static org.ashlang.ash.type.Type.INVALID;
+import static org.ashlang.ash.type.Types.*;
 
 class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
 
@@ -116,7 +115,7 @@ class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
         Type lhs = node.getLhs().getType();
         Type rhs = node.getRhs().getType();
         Type res = operatorMap.getResultOf(lhs, op, rhs);
-        if (Type.allValid(lhs, rhs) && res == INVALID) {
+        if (allValid(lhs, rhs) && INVALID.equals(res)) {
             errorHandler.emitInvalidOperator(node.getOp(), lhs, rhs);
         }
         node.setType(res);

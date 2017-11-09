@@ -23,7 +23,7 @@ import org.ashlang.ash.type.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.ashlang.ash.type.Type.I32;
+import static org.ashlang.ash.type.Types.I32;
 
 public class C11TypeMap {
 

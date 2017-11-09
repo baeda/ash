@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.ashlang.ash.type.Operator.*;
-import static org.ashlang.ash.type.Type.I32;
-import static org.ashlang.ash.type.Type.INVALID;
+import static org.ashlang.ash.type.Types.I32;
+import static org.ashlang.ash.type.Types.INVALID;
 
 public class OperatorMap {
 
