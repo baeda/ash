@@ -21,8 +21,8 @@ package org.ashlang.ash.pass;
 import org.ashlang.ash.ast.ASTNode;
 import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.symbol.SymbolTable;
-
-import java.util.function.BiConsumer;
+import org.ashlang.ash.type.OperatorMap;
+import org.ashlang.ash.type.TypeMap;
 
 public class CompilerPassChain {
 
@@ -33,6 +33,8 @@ public class CompilerPassChain {
 
     private final ErrorHandler errorHandler;
     private final SymbolTable symbolTable;
+    private final TypeMap typeMap;
+    private final OperatorMap operatorMap;
 
     private CompilerPass entryPass;
 
@@ -40,7 +42,9 @@ public class CompilerPassChain {
         this.errorHandler = errorHandler;
 
         symbolTable = new SymbolTable();
-        entryPass = (eh, st, node) -> {};
+        typeMap = new TypeMap();
+        operatorMap = new OperatorMap();
+        entryPass = (eh, st, tm, om, node) -> {};
     }
 
     public CompilerPassChain
@@ -50,7 +54,7 @@ public class CompilerPassChain {
     }
 
     public void applyTo(ASTNode node) {
-        entryPass.accept(errorHandler, symbolTable, node);
+        entryPass.accept(errorHandler, symbolTable, typeMap, operatorMap, node);
     }
 
 }

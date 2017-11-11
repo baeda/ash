@@ -20,13 +20,13 @@ package org.ashlang.ash.pass;
 
 public interface CompilerPasses {
 
-    CompilerPass TYPE_ASSIGN_PASS = (eh, st, node) ->
-        new TypeAssignVisitor(eh, st).visit(node, null);
-
-    CompilerPass TYPE_CHECK_PASS = (eh, st, node) ->
-        new TypeCheckVisitor(eh).visit(node, null);
-
-    CompilerPass SYMBOL_CHECK_PASS = (eh, st, node) ->
+    CompilerPass SYMBOL_CHECK_PASS = (eh, st, tm, om, node) ->
         new SymbolCheckVisitor(eh, st).visit(node, null);
+
+    CompilerPass TYPE_ASSIGN_PASS = (eh, st, tm, om, node) ->
+        new TypeAssignVisitor(st, tm).visit(node, null);
+
+    CompilerPass TYPE_CHECK_PASS = (eh, st, tm, om, node) ->
+        new TypeCheckVisitor(eh, om).visit(node, null);
 
 }

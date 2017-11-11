@@ -21,20 +21,24 @@ package org.ashlang.ash.pass;
 import org.ashlang.ash.ast.ASTNode;
 import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.symbol.SymbolTable;
+import org.ashlang.ash.type.OperatorMap;
+import org.ashlang.ash.type.TypeMap;
 
 import java.util.Objects;
 
 @FunctionalInterface
 public interface CompilerPass {
 
-    void accept(ErrorHandler errorHandler, SymbolTable symbolTable, ASTNode node);
+    void accept(ErrorHandler errorHandler, SymbolTable symbolTable,
+                TypeMap typeMap, OperatorMap operatorMap,
+                ASTNode node);
 
     default CompilerPass andThen(CompilerPass after) {
         Objects.requireNonNull(after);
 
-        return (errorHandler, symbolTable, node) -> {
-            accept(errorHandler, symbolTable, node);
-            after.accept(errorHandler, symbolTable, node);
+        return (eh, st, tm, om, node) -> {
+            accept(eh, st, tm, om, node);
+            after.accept(eh, st, tm, om, node);
         };
     }
 

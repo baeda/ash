@@ -18,31 +18,25 @@
 
 package org.ashlang.ash.pass;
 
-import org.ashlang.ash.ast.*;
-import org.ashlang.ash.err.ErrorHandler;
+import org.ashlang.ash.ast.ASTBaseVisitor;
+import org.ashlang.ash.ast.IdExpressionNode;
+import org.ashlang.ash.ast.IntExpressionNode;
+import org.ashlang.ash.ast.VarDeclarationNode;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.symbol.SymbolTable;
-import org.ashlang.ash.type.Operator;
-import org.ashlang.ash.type.OperatorMap;
 import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.TypeMap;
 
-import static org.ashlang.ash.type.Operator.*;
-import static org.ashlang.ash.type.Types.*;
+import static org.ashlang.ash.type.Types.I32;
 
 class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
 
-    private final ErrorHandler errorHandler;
     private final SymbolTable symbolTable;
     private final TypeMap typeMap;
-    private final OperatorMap operatorMap;
 
-    TypeAssignVisitor(ErrorHandler errorHandler, SymbolTable symbolTable) {
-        this.errorHandler = errorHandler;
+    TypeAssignVisitor(SymbolTable symbolTable, TypeMap typeMap) {
         this.symbolTable = symbolTable;
-
-        typeMap = new TypeMap();
-        operatorMap = new OperatorMap();
+        this.typeMap = typeMap;
     }
 
     @Override
@@ -54,44 +48,6 @@ class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
     }
 
     //region Expression nodes
-
-    @Override
-    public Void visitParenExpressionNode(ParenExpressionNode node, Void argument) {
-        visitChildren(node, null);
-        Type type = node.getExpression().getType();
-        node.setType(type);
-        return null;
-    }
-
-    @Override
-    public Void visitAddExpressionNode(AddExpressionNode node, Void argument) {
-        setResultTypeOfOperation(node, ADD);
-        return null;
-    }
-
-    @Override
-    public Void visitSubExpressionNode(SubExpressionNode node, Void argument) {
-        setResultTypeOfOperation(node, SUB);
-        return null;
-    }
-
-    @Override
-    public Void visitMulExpressionNode(MulExpressionNode node, Void argument) {
-        setResultTypeOfOperation(node, MUL);
-        return null;
-    }
-
-    @Override
-    public Void visitDivExpressionNode(DivExpressionNode node, Void argument) {
-        setResultTypeOfOperation(node, DIV);
-        return null;
-    }
-
-    @Override
-    public Void visitModExpressionNode(ModExpressionNode node, Void argument) {
-        setResultTypeOfOperation(node, MOD);
-        return null;
-    }
 
     @Override
     public Void visitIdExpressionNode(IdExpressionNode node, Void argument) {
@@ -108,17 +64,5 @@ class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
     }
 
     //endregion Expression nodes
-
-    private void
-    setResultTypeOfOperation(BinaryExpressionNode node, Operator op) {
-        visitChildren(node, null);
-        Type lhs = node.getLhs().getType();
-        Type rhs = node.getRhs().getType();
-        Type res = operatorMap.getResultOf(lhs, op, rhs);
-        if (allValid(lhs, rhs) && INVALID.equals(res)) {
-            errorHandler.emitInvalidOperator(node.getOp(), lhs, rhs);
-        }
-        node.setType(res);
-    }
 
 }
