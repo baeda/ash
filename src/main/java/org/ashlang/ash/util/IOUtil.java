@@ -18,9 +18,9 @@
 
 package org.ashlang.ash.util;
 
-import org.ashlang.ash.ThrowingConsumer;
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -34,28 +34,8 @@ public final class IOUtil {
     private IOUtil() { /**/ }
 
     public static ExecResult exec(Path executable, Object... args) {
-        String[] cmd = new String[1 + args.length];
-        cmd[0] = executable.toAbsolutePath().toString();
-        for (int i = 0; i < args.length; i++) {
-            cmd[i + 1] = args[i].toString();
-        }
-
-        Process process = null;
-        try {
-            process = Runtime.getRuntime().exec(cmd);
-            int exitCode = process.waitFor();
-            String out = IOUtil.exhaustiveReadStreamUTF8(process.getInputStream());
-            String err = IOUtil.exhaustiveReadStreamUTF8(process.getErrorStream());
-            return new ExecResult(exitCode, out, err);
-        } catch (InterruptedException | IOException e) {
-            StringWriter writer = new StringWriter();
-            e.printStackTrace(new PrintWriter(writer));
-            return new ExecResult(0xFFFFFFFF, "", writer.toString());
-        } finally {
-            if (process != null) {
-                process.destroy();
-            }
-        }
+        String command = executable.toAbsolutePath().toString();
+        return exec(command, args);
     }
 
     public static ExecResult exec(Object command, Object... args) {
@@ -80,11 +60,9 @@ public final class IOUtil {
             int exitCode = process.waitFor();
             String out = IOUtil.exhaustiveReadStreamUTF8(process.getInputStream());
             String err = IOUtil.exhaustiveReadStreamUTF8(process.getErrorStream());
-            return new ExecResult(exitCode, out, err);
+            return new ExecResult(exitCode, out, err, null);
         } catch (InterruptedException | IOException e) {
-            StringWriter writer = new StringWriter();
-            e.printStackTrace(new PrintWriter(writer));
-            return new ExecResult(0xFFFFFFFF, "", writer.toString());
+            return new ExecResult(0xFFFFFFFF, "", "", e);
         } finally {
             if (process != null) {
                 process.destroy();

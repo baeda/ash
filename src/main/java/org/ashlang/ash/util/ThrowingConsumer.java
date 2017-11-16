@@ -16,7 +16,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash;
+package org.ashlang.ash.util;
 
 @FunctionalInterface
 public interface ThrowingConsumer<T, X extends Throwable> {

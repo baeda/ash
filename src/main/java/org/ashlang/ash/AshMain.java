@@ -54,6 +54,12 @@ public final class AshMain {
             System.err.println("Usage: ashc <file>");
             return;
         }
+
+        if (gccMajorVersion() < 6) {
+            System.err.println("GCC version 6 or greater required.");
+            return;
+        }
+
         CharStream in = CharStreams.fromPath(inFile, StandardCharsets.UTF_8);
         ErrorHandler errorHandler = new ConsoleErrorHandler().withDebugEnabled();
 
@@ -143,11 +149,14 @@ public final class AshMain {
         ExecResult gcc = IOUtil.execInDir(
             workDir,
             "gcc",
-            "-std=c11",
+            "-std=c99",
             "-Wall",
             "-Wextra",
+            "-Werror",
             "-pedantic",
+            "-Wno-pedantic-ms-format",
             "--save-temps",
+            "-O3",
             "-o",
             outFile.toAbsolutePath(),
             tmpFile.toAbsolutePath()
@@ -157,6 +166,20 @@ public final class AshMain {
             throw new IllegalStateException(
                 "ASH -> Native(C11) Compilation failed!\n" + gcc.getErr());
         }
+    }
+
+    private static int gccMajorVersion() {
+        ExecResult gccVersion = IOUtil.exec("gcc", "-dumpversion");
+        if (gccVersion.isExceptional()) {
+            System.err.println(gccVersion.getException().getMessage());
+            return -1;
+        }
+        if (gccVersion.hasErrors()) {
+            System.err.println(gccVersion.getErr());
+            return -1;
+        }
+
+        return Integer.parseInt(gccVersion.getOut().split("\\.")[0]);
     }
 
 }
