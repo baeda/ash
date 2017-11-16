@@ -24,8 +24,8 @@ public class IdExpressionNode extends ExpressionNode {
 
     private Symbol symbol;
 
-    public IdExpressionNode(Token value) {
-        super(value, value);
+    public IdExpressionNode(Token value, SourceProvider sourceProvider) {
+        super(value, value, sourceProvider);
     }
 
     public Token getValue() {

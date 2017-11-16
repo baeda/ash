@@ -6,8 +6,13 @@ public class FileNode extends ASTNode {
 
     private final List<StatementNode> statements;
 
-    public FileNode(List<StatementNode> statements) {
-        super(getFirstStartToken(statements), getLastStopToken(statements));
+    public FileNode(List<StatementNode> statements,
+                    SourceProvider sourceProvider) {
+        super(
+            getFirstStartToken(statements),
+            getLastStopToken(statements),
+            sourceProvider
+        );
 
         this.statements = statements;
     }

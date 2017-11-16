@@ -23,8 +23,9 @@ public class ParenExpressionNode extends ExpressionNode {
     private final ExpressionNode expression;
 
     public ParenExpressionNode(Token leftParenToken, Token rightParenToken,
-                               ExpressionNode expression) {
-        super(leftParenToken, rightParenToken);
+                               ExpressionNode expression,
+                               SourceProvider sourceProvider) {
+        super(leftParenToken, rightParenToken, sourceProvider);
 
         this.expression = expression;
     }

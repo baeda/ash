@@ -40,7 +40,9 @@ public class LexerErrorListener extends BaseErrorListener {
             line - 1 /* ANTLR line indices start at 1 */,
             column,
             (String) offendingSymbol,
-            recognizer.getInputStream().getSourceName());
+            recognizer.getInputStream().getSourceName(),
+            -1,
+            -1);
 
         errorHandler.emitUnknownToken(token);
     }

@@ -23,8 +23,9 @@ public class VarDeclarationStatementNode extends StatementNode {
     private final VarDeclarationNode varDeclaration;
 
     public VarDeclarationStatementNode(VarDeclarationNode varDeclaration,
-                                       Token stopToken) {
-        super(varDeclaration.getStartToken(), stopToken);
+                                       Token stopToken,
+                                       SourceProvider sourceProvider) {
+        super(varDeclaration.getStartToken(), stopToken, sourceProvider);
 
         this.varDeclaration = varDeclaration;
     }

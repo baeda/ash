@@ -18,25 +18,6 @@
 
 package org.ashlang.ash.ast;
 
-public class DumpStatementNode extends StatementNode {
+import java.util.function.BiFunction;
 
-    private final ExpressionNode expression;
-
-    public DumpStatementNode(Token startToken, Token stopToken,
-                             ExpressionNode expression,
-                             SourceProvider sourceProvider) {
-        super(startToken, stopToken, sourceProvider);
-
-        this.expression = expression;
-    }
-
-    public ExpressionNode getExpression() {
-        return expression;
-    }
-
-    @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
-        return visitor.visitDumpStatementNode(this, argument);
-    }
-
-}
+public interface SourceProvider extends BiFunction<Token, Token, String> {}

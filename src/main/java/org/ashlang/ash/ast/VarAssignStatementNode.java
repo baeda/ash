@@ -22,8 +22,9 @@ public class VarAssignStatementNode extends StatementNode {
 
     private final VarAssignNode varAssign;
 
-    public VarAssignStatementNode(VarAssignNode varAssign, Token stopToken) {
-        super(varAssign.getStartToken(), stopToken);
+    public VarAssignStatementNode(VarAssignNode varAssign, Token stopToken,
+                                  SourceProvider sourceProvider) {
+        super(varAssign.getStartToken(), stopToken, sourceProvider);
 
         this.varAssign = varAssign;
     }

@@ -23,9 +23,11 @@ import org.ashlang.ash.type.Type;
 public abstract class ExpressionNode extends ASTNode {
 
     private Type type = null;
+    private Object value = null;
 
-    public ExpressionNode(Token startToken, Token stopToken) {
-        super(startToken, stopToken);
+    public ExpressionNode(Token startToken, Token stopToken,
+                          SourceProvider sourceProvider) {
+        super(startToken, stopToken, sourceProvider);
     }
 
     public Type getType() {
@@ -34,6 +36,14 @@ public abstract class ExpressionNode extends ASTNode {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
     }
 
 }

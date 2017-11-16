@@ -26,8 +26,9 @@ public class VarAssignNode extends StatementNode {
 
     private Symbol symbol;
 
-    public VarAssignNode(Token identifier, ExpressionNode expression) {
-        super(identifier, expression.getStopToken());
+    public VarAssignNode(Token identifier, ExpressionNode expression,
+                         SourceProvider sourceProvider) {
+        super(identifier, expression.getStopToken(), sourceProvider);
 
         this.expression = expression;
     }

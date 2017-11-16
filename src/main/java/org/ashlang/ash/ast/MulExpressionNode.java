@@ -20,8 +20,9 @@ package org.ashlang.ash.ast;
 
 public class MulExpressionNode extends BinaryExpressionNode {
 
-    public MulExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op) {
-        super(lhs, rhs, op);
+    public MulExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op,
+                             SourceProvider sourceProvider) {
+        super(lhs, rhs, op, sourceProvider);
     }
 
     @Override

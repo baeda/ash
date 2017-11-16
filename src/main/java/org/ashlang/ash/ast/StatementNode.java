@@ -20,8 +20,9 @@ package org.ashlang.ash.ast;
 
 public abstract class StatementNode extends ASTNode {
 
-    public StatementNode(Token startToken, Token stopToken) {
-        super(startToken, stopToken);
+    public StatementNode(Token startToken, Token stopToken,
+                         SourceProvider sourceProvider) {
+        super(startToken, stopToken, sourceProvider);
     }
 
     public Token getSemicolonToken() {

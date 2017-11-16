@@ -20,8 +20,9 @@ package org.ashlang.ash.ast;
 
 public class SubExpressionNode extends BinaryExpressionNode {
 
-    public SubExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op) {
-        super(lhs, rhs, op);
+    public SubExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op,
+                             SourceProvider sourceProvider) {
+        super(lhs, rhs, op, sourceProvider);
     }
 
     @Override

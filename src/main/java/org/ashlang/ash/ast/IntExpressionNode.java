@@ -20,11 +20,16 @@ package org.ashlang.ash.ast;
 
 public class IntExpressionNode extends ExpressionNode {
 
-    public IntExpressionNode(Token value) {
-        super(value, value);
+    public IntExpressionNode(Token startToken, Token stopToken,
+                             SourceProvider sourceProvider) {
+        super(startToken, stopToken, sourceProvider);
     }
 
-    public Token getValue() {
+    public IntExpressionNode(Token value, SourceProvider sourceProvider) {
+        super(value, value, sourceProvider);
+    }
+
+    public Token getValueToken() {
         return getStartToken();
     }
 

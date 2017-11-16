@@ -20,7 +20,7 @@ package org.ashlang.ash;
 
 public class ExecResult {
 
-    private final int    exitCode;
+    private final int exitCode;
     private final String out;
     private final String err;
 

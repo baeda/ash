@@ -26,8 +26,9 @@ public class VarDeclarationNode extends StatementNode {
     private Type type;
     private Symbol symbol;
 
-    public VarDeclarationNode(Token identifier, Token type) {
-        super(identifier, type);
+    public VarDeclarationNode(Token identifier, Token type,
+                              SourceProvider sourceProvider) {
+        super(identifier, type, sourceProvider);
     }
 
     public Token getIdentifierToken() {

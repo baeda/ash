@@ -130,7 +130,7 @@ class C11Visitor implements ASTVisitor<String, Object> {
 
     @Override
     public String visitIntExpressionNode(IntExpressionNode node, Object argument) {
-        return node.getValue().getText();
+        return node.getValueToken().getText();
     }
 
     //endregion Expression nodes
