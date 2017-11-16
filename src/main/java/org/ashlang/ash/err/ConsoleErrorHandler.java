@@ -123,6 +123,13 @@ public class ConsoleErrorHandler implements ErrorHandler {
     }
 
     @Override
+    public void emitSymbolNotInitialized(TokenRange pos, Token declSite) {
+        emit(pos, "symbol '%s' not initialized - declared in %s",
+            declSite.getText(), formatPosition(declSite));
+        numSemanticErrors++;
+    }
+
+    @Override
     public void emitDivisionByZero(TokenRange pos) {
         emit(pos, "division by zero");
     }
@@ -149,19 +156,22 @@ public class ConsoleErrorHandler implements ErrorHandler {
     }
 
     private void emitError(Token pos, String format, Object... args) {
-        String position = formatPosition(pos);
+        String position = formatDebugPosition(pos);
         String message = String.format(format, args);
         out.printf("%s: error: %s\n", position, message);
     }
 
-    private String formatPosition(Token pos) {
+    private String formatDebugPosition(Token pos) {
         String codePos = "";
         if (debug) {
             codePos = Thread.currentThread().getStackTrace()[5] + " :: ";
         }
 
-        return String.format("%s%s:%d:%d",
-            codePos,
+        return String.format("%s%s", codePos, formatPosition(pos));
+    }
+
+    private String formatPosition(Token pos) {
+        return String.format("%s:%d:%d",
             pos.getSourceName(), pos.getLine() + 1, pos.getColumn() + 1);
     }
 

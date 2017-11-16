@@ -97,6 +97,15 @@ public class CompilerErrorTest {
     }
 
     @Test
+    public void symbolNotInitialized() {
+        assertThat(
+            "a : i32;",
+            "dump a;")
+            .hasError(SYMBOL_NOT_INITIALIZED).at(2, 6)
+            .hasNoMoreErrors();
+    }
+
+    @Test
     public void divisionByZero() {
         assertThat("dump (6+1)/0;")
             .hasError(DIV_BY_ZERO).at(1, 6)

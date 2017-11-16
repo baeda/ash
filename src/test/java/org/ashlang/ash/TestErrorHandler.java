@@ -90,6 +90,11 @@ class TestErrorHandler implements ErrorHandler {
     }
 
     @Override
+    public void emitSymbolNotInitialized(TokenRange pos, Token declSite) {
+        addError(SYMBOL_NOT_INITIALIZED, pos.getStartToken());
+    }
+
+    @Override
     public void emitDivisionByZero(TokenRange pos) {
         addError(DIV_BY_ZERO, pos.getStartToken());
     }

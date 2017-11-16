@@ -35,6 +35,7 @@ public interface ErrorHandler {
     void emitInvalidOperator(Token pos, Type left, Type right);
     void emitSymbolAlreadyDeclared(Token pos, Token declSite);
     void emitSymbolNotDeclared(Token pos);
+    void emitSymbolNotInitialized(TokenRange pos, Token declSite);
 
     void emitDivisionByZero(TokenRange pos);
     void emitIntConstantOverflow(TokenRange pos, Type have);

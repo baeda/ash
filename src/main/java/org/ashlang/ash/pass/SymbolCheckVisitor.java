@@ -57,6 +57,8 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
         Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
         if (symbol == null) {
             errorHandler.emitSymbolNotDeclared(node.getIdentifierToken());
+        } else {
+            symbol.initialize();
         }
 
         node.setSymbol(symbol);
@@ -68,6 +70,14 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
     protected void visitIdExpressionNode(IdExpressionNode node) {
         String identifier = node.getValue().getText();
         Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
+
+        if (!symbol.isInitialized()) {
+            errorHandler.emitSymbolNotInitialized(
+                node,
+                symbol.getDeclSite().getIdentifierToken()
+            );
+        }
+
         node.setSymbol(symbol);
     }
 

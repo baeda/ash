@@ -29,6 +29,8 @@ public class Symbol {
 
     private final VarDeclarationNode declSite;
 
+    private boolean isInitialized;
+
     Symbol(VarDeclarationNode declSite) {
         this.declSite = declSite;
     }
@@ -43,6 +45,14 @@ public class Symbol {
 
     public Type getType() {
         return declSite.getType();
+    }
+
+    public void initialize() {
+        isInitialized = true;
+    }
+
+    public boolean isInitialized() {
+        return isInitialized;
     }
 
     @Override
