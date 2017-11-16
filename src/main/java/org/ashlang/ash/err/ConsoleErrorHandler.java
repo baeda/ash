@@ -33,6 +33,8 @@ public class ConsoleErrorHandler implements ErrorHandler {
     private int numSyntacticErrors;
     private int numSemanticErrors;
 
+    private boolean debug = false;
+
     public ConsoleErrorHandler() {
         this(System.err);
     }
@@ -41,20 +43,17 @@ public class ConsoleErrorHandler implements ErrorHandler {
         this(createPrintStream(outStream));
     }
 
-    private static PrintStream createPrintStream(OutputStream outStream) {
-        try {
-            return new PrintStream(outStream, false, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public ConsoleErrorHandler(PrintStream out) {
         this.out = out;
 
         numLexicalErrors = 0;
         numSyntacticErrors = 0;
         numSemanticErrors = 0;
+    }
+
+    public ConsoleErrorHandler withDebugEnabled() {
+        debug = true;
+        return this;
     }
 
     @Override
@@ -103,26 +102,44 @@ public class ConsoleErrorHandler implements ErrorHandler {
 
     @Override
     public void emitSymbolAlreadyDeclared(Token pos, Token declSite) {
-        emit(pos, "symbol '%s' already declared at %d:%d.",
+        emit(pos, "symbol '%s' already declared at %d:%d",
             pos.getText(), declSite.getLine() + 1, declSite.getColumn() + 1);
         numSemanticErrors++;
     }
 
     @Override
     public void emitSymbolNotDeclared(Token pos) {
-        emit(pos, "symbol '%s' is not declared.", pos.getText());
+        emit(pos, "symbol '%s' is not declared", pos.getText());
         numSemanticErrors++;
     }
 
     private void emit(Token pos, String format, Object... args) {
+        emitError(pos, format, args);
+    }
+
+    private void emitError(Token pos, String format, Object... args) {
         String position = formatPosition(pos);
         String message = String.format(format, args);
         out.printf("%s: error: %s\n", position, message);
     }
 
-    private static String formatPosition(Token pos) {
-        return String.format("%s:%d:%d",
+    private String formatPosition(Token pos) {
+        String codePos = "";
+        if (debug) {
+            codePos = Thread.currentThread().getStackTrace()[5] + " :: ";
+        }
+
+        return String.format("%s%s:%d:%d",
+            codePos,
             pos.getSourceName(), pos.getLine() + 1, pos.getColumn() + 1);
+    }
+
+    private static PrintStream createPrintStream(OutputStream outStream) {
+        try {
+            return new PrintStream(outStream, false, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

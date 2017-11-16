@@ -56,7 +56,7 @@ public final class AshMain {
             return;
         }
         CharStream in = CharStreams.fromPath(inFile, StandardCharsets.UTF_8);
-        ErrorHandler errorHandler = new ConsoleErrorHandler();
+        ErrorHandler errorHandler = new ConsoleErrorHandler().withDebugEnabled();
 
         ASTNode rootNode = buildAST(in, errorHandler);
         if (errorHandler.hasErrors()) {
