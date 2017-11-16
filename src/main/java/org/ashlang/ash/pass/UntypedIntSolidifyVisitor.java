@@ -48,6 +48,8 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
         );
     }
 
+    //region statement nodes
+
     @Override
     protected void visitDumpStatementNode(DumpStatementNode node) {
         visitChildren(node);
@@ -94,8 +96,9 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
         expression.setType(result);
     }
 
-    //region Expression nodes
+    //endregion statement nodes
 
+    //region expression nodes
 
     @Override
     protected void
@@ -151,7 +154,7 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
         );
     }
 
-    //endregion Expression nodes
+    //endregion expression nodes
 
     private void solidifyUntypedInt(Type lhs, ExpressionNode rhsNode) {
         solidifyUntypedIntRight(lhs, rhsNode);

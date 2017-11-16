@@ -89,7 +89,7 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         );
     }
 
-    //region Statement nodes
+    //region statement nodes
 
     @Override
     public VarDeclarationStatementNode
@@ -133,9 +133,9 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         );
     }
 
-    //endregion Statement nodes
+    //endregion statement nodes
 
-    //region Expression nodes
+    //region expression nodes
 
     @Override
     public ASTNode visitParenExpression(ParenExpressionContext ctx) {
@@ -224,7 +224,7 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         );
     }
 
-    //endregion Expression nodes
+    //endregion expression nodes
 
     //region ANTLR visitor default overrides
 

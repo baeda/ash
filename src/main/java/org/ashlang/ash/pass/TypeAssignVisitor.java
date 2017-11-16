@@ -47,7 +47,7 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
         node.setType(type);
     }
 
-    //region Expression nodes
+    //region expression nodes
 
     @Override
     protected void visitIdExpressionNode(IdExpressionNode node) {
@@ -63,6 +63,6 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
         node.setValue(value);
     }
 
-    //endregion Expression nodes
+    //endregion expression nodes
 
 }

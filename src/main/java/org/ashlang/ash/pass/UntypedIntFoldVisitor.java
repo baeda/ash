@@ -35,7 +35,7 @@ class UntypedIntFoldVisitor extends ASTVoidBaseVisitor {
         this.errorHandler = errorHandler;
     }
 
-    //region Expression nodes
+    //region expression nodes
 
     @Override
     protected void visitParenExpressionNode(ParenExpressionNode node) {
@@ -87,7 +87,7 @@ class UntypedIntFoldVisitor extends ASTVoidBaseVisitor {
         resolveAndFoldTree(node, BigInteger::remainder);
     }
 
-    //endregion Expression nodes
+    //endregion expression nodes
 
     private void resolveAndFoldTree(BinaryExpressionNode node,
                                     BinaryOperator<BigInteger> operator) {

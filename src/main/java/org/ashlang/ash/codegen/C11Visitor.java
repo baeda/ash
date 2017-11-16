@@ -65,7 +65,7 @@ class C11Visitor extends ASTSingleVisitor<String> {
         return symbol.getIdentifier() + " = " + expression;
     }
 
-    //region Statement nodes
+    //region statement nodes
 
     @Override
     public String
@@ -87,9 +87,9 @@ class C11Visitor extends ASTSingleVisitor<String> {
         return "printf(\"%\"" + fmt + "\"\", " + expression + ");\n";
     }
 
-    //endregion Statement nodes
+    //endregion statement nodes
 
-    //region Expression nodes
+    //region expression nodes
 
     @Override
     public String visitParenExpressionNode(ParenExpressionNode node) {
@@ -144,7 +144,7 @@ class C11Visitor extends ASTSingleVisitor<String> {
         return "((" + cType + ")" + value.toString() + "ull)";
     }
 
-    //endregion Expression nodes
+    //endregion expression nodes
 
     @Override
     public String aggregate(String aggregate, String next) {

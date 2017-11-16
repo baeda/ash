@@ -37,7 +37,7 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
         return visitChildren(node, argument);
     }
 
-    //region Statement nodes
+    //region statement nodes
 
     @Override
     public T visitVarDeclarationStatementNode(VarDeclarationStatementNode node,
@@ -56,9 +56,9 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
         return visitChildren(node, argument);
     }
 
-    //endregion Statement nodes
+    //endregion statement nodes
 
-    //region Expression nodes
+    //region expression nodes
 
     @Override
     public T visitParenExpressionNode(ParenExpressionNode node, A argument) {
@@ -100,6 +100,6 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
         return visitChildren(node, argument);
     }
 
-    //endregion Expression nodes
+    //endregion expression nodes
 
 }

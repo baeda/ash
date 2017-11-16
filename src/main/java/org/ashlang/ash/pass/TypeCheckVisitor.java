@@ -67,7 +67,7 @@ class TypeCheckVisitor extends ASTVoidBaseVisitor {
         }
     }
 
-    //region Expression nodes
+    //region expression nodes
 
     @Override
     protected void visitParenExpressionNode(ParenExpressionNode node) {
@@ -101,7 +101,7 @@ class TypeCheckVisitor extends ASTVoidBaseVisitor {
         setResultTypeOfOperation(node, MOD);
     }
 
-    //endregion Expression nodes
+    //endregion expression nodes
 
     private void
     setResultTypeOfOperation(BinaryExpressionNode node, Operator op) {

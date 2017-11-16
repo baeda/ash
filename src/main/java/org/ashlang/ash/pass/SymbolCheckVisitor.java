@@ -64,7 +64,7 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
         node.setSymbol(symbol);
     }
 
-    //region Expression nodes
+    //region expression nodes
 
     @Override
     protected void visitIdExpressionNode(IdExpressionNode node) {
@@ -81,6 +81,6 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
         node.setSymbol(symbol);
     }
 
-    //endregion Expression nodes
+    //endregion expression nodes
 
 }
