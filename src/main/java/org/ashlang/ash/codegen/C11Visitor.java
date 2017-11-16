@@ -24,7 +24,7 @@ import org.ashlang.ash.type.Type;
 
 import java.math.BigInteger;
 
-class C11Visitor implements ASTVisitor<String, Object> {
+class C11Visitor extends ASTSingleVisitor<String> {
 
     private final C11TypeMap typeMap;
 
@@ -33,7 +33,7 @@ class C11Visitor implements ASTVisitor<String, Object> {
     }
 
     @Override
-    public String visitFileNode(FileNode node, Object argument) {
+    public String visitFileNode(FileNode node) {
         return String.join(
             "\n",
             "#include <stdio.h>",
@@ -44,23 +44,23 @@ class C11Visitor implements ASTVisitor<String, Object> {
             "  (void) argc;",
             "  (void) argv;",
             "",
-            visitChildren(node, argument),
+            visitChildren(node),
             "  return 0;",
             "}",
             "");
     }
 
     @Override
-    public String visitVarDeclarationNode(VarDeclarationNode node, Object argument) {
+    public String visitVarDeclarationNode(VarDeclarationNode node) {
         Symbol symbol = node.getSymbol();
         String cType = typeMap.getType(symbol.getType());
         return cType + " " + symbol.getIdentifier();
     }
 
     @Override
-    public String visitVarAssignNode(VarAssignNode node, Object argument) {
+    public String visitVarAssignNode(VarAssignNode node) {
         Symbol symbol = node.getSymbol();
-        String expression = visit(node.getExpression(), argument);
+        String expression = visit(node.getExpression());
         return symbol.getIdentifier() + " = " + expression;
     }
 
@@ -68,20 +68,19 @@ class C11Visitor implements ASTVisitor<String, Object> {
 
     @Override
     public String
-    visitVarDeclarationStatementNode(VarDeclarationStatementNode node,
-                                     Object argument) {
-        return visitChildren(node, argument) + ";\n";
+    visitVarDeclarationStatementNode(VarDeclarationStatementNode node) {
+        return visitChildren(node) + ";\n";
     }
 
     @Override
     public String
-    visitVarAssignStatementNode(VarAssignStatementNode node, Object argument) {
-        return visitChildren(node, argument) + ";\n";
+    visitVarAssignStatementNode(VarAssignStatementNode node) {
+        return visitChildren(node) + ";\n";
     }
 
     @Override
-    public String visitDumpStatementNode(DumpStatementNode node, Object argument) {
-        String expression = visitChildren(node, argument);
+    public String visitDumpStatementNode(DumpStatementNode node) {
+        String expression = visitChildren(node);
         Type type = node.getExpression().getType();
         String fmt = typeMap.getFormat(type);
         return "printf(\"%\"" + fmt + "\"\", " + expression + ");\n";
@@ -92,52 +91,52 @@ class C11Visitor implements ASTVisitor<String, Object> {
     //region Expression nodes
 
     @Override
-    public String visitParenExpressionNode(ParenExpressionNode node, Object argument) {
-        return "(" + visitChildren(node, argument) + ")";
+    public String visitParenExpressionNode(ParenExpressionNode node) {
+        return "(" + visitChildren(node) + ")";
     }
 
     @Override
-    public String visitAddExpressionNode(AddExpressionNode node, Object argument) {
-        String lhs = visit(node.getLhs(), argument);
-        String rhs = visit(node.getRhs(), argument);
+    public String visitAddExpressionNode(AddExpressionNode node) {
+        String lhs = visit(node.getLhs());
+        String rhs = visit(node.getRhs());
         return "(" + lhs + "+" + rhs + ")";
     }
 
     @Override
-    public String visitSubExpressionNode(SubExpressionNode node, Object argument) {
-        String lhs = visit(node.getLhs(), argument);
-        String rhs = visit(node.getRhs(), argument);
+    public String visitSubExpressionNode(SubExpressionNode node) {
+        String lhs = visit(node.getLhs());
+        String rhs = visit(node.getRhs());
         return "(" + lhs + "-" + rhs + ")";
     }
 
     @Override
-    public String visitMulExpressionNode(MulExpressionNode node, Object argument) {
-        String lhs = visit(node.getLhs(), argument);
-        String rhs = visit(node.getRhs(), argument);
+    public String visitMulExpressionNode(MulExpressionNode node) {
+        String lhs = visit(node.getLhs());
+        String rhs = visit(node.getRhs());
         return "(" + lhs + "*" + rhs + ")";
     }
 
     @Override
-    public String visitDivExpressionNode(DivExpressionNode node, Object argument) {
-        String lhs = visit(node.getLhs(), argument);
-        String rhs = visit(node.getRhs(), argument);
+    public String visitDivExpressionNode(DivExpressionNode node) {
+        String lhs = visit(node.getLhs());
+        String rhs = visit(node.getRhs());
         return "(" + lhs + "/" + rhs + ")";
     }
 
     @Override
-    public String visitModExpressionNode(ModExpressionNode node, Object argument) {
-        String lhs = visit(node.getLhs(), argument);
-        String rhs = visit(node.getRhs(), argument);
+    public String visitModExpressionNode(ModExpressionNode node) {
+        String lhs = visit(node.getLhs());
+        String rhs = visit(node.getRhs());
         return "(" + lhs + "%" + rhs + ")";
     }
 
     @Override
-    public String visitIdExpressionNode(IdExpressionNode node, Object argument) {
+    public String visitIdExpressionNode(IdExpressionNode node) {
         return node.getValue().getText();
     }
 
     @Override
-    public String visitIntExpressionNode(IntExpressionNode node, Object argument) {
+    public String visitIntExpressionNode(IntExpressionNode node) {
         BigInteger value = (BigInteger) node.getValue();
         Type type = node.getType();
         String cType = typeMap.getType(type);

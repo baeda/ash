@@ -18,7 +18,7 @@
 
 package org.ashlang.ash.pass;
 
-import org.ashlang.ash.ast.ASTBaseVisitor;
+import org.ashlang.ash.ast.ASTVoidBaseVisitor;
 import org.ashlang.ash.ast.IdExpressionNode;
 import org.ashlang.ash.ast.IntExpressionNode;
 import org.ashlang.ash.ast.VarDeclarationNode;
@@ -30,7 +30,7 @@ import org.ashlang.ash.type.UntypedInt;
 
 import java.math.BigInteger;
 
-class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
+class TypeAssignVisitor extends ASTVoidBaseVisitor {
 
     private final SymbolTable symbolTable;
     private final TypeMap typeMap;
@@ -41,29 +41,26 @@ class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
     }
 
     @Override
-    public Void visitVarDeclarationNode(VarDeclarationNode node, Void argument) {
+    protected void visitVarDeclarationNode(VarDeclarationNode node) {
         String typeString = node.getTypeToken().getText();
         Type type = typeMap.resolve(typeString);
         node.setType(type);
-        return null;
     }
 
     //region Expression nodes
 
     @Override
-    public Void visitIdExpressionNode(IdExpressionNode node, Void argument) {
+    protected void visitIdExpressionNode(IdExpressionNode node) {
         String identifier = node.getValue().getText();
         Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
         node.setType(symbol.getType());
-        return null;
     }
 
     @Override
-    public Void visitIntExpressionNode(IntExpressionNode node, Void argument) {
+    protected void visitIntExpressionNode(IntExpressionNode node) {
         BigInteger value = new BigInteger(node.getValueToken().getText());
         node.setType(new UntypedInt(value));
         node.setValue(value);
-        return null;
     }
 
     //endregion Expression nodes

@@ -26,7 +26,7 @@ import org.ashlang.ash.type.UntypedInt;
 import java.math.BigInteger;
 import java.util.function.BinaryOperator;
 
-class UntypedIntFoldVisitor extends ASTBaseVisitor<Void, Void> {
+class UntypedIntFoldVisitor extends ASTVoidBaseVisitor {
 
     private final ErrorHandler errorHandler;
 
@@ -37,45 +37,39 @@ class UntypedIntFoldVisitor extends ASTBaseVisitor<Void, Void> {
     //region Expression nodes
 
     @Override
-    public Void visitParenExpressionNode(ParenExpressionNode node, Void argument) {
-        visitChildren(node, null);
+    protected void visitParenExpressionNode(ParenExpressionNode node) {
+        visitChildren(node);
 
         Type type = node.getExpression().getType();
-
         if (!(type instanceof UntypedInt)) {
-            return null;
+            return;
         }
 
         UntypedInt uti = (UntypedInt) type;
         replaceWithIntExpression(node, uti);
-
-        return null;
     }
 
     @Override
-    public Void visitAddExpressionNode(AddExpressionNode node, Void argument) {
-        visitChildren(node, argument);
+    protected void visitAddExpressionNode(AddExpressionNode node) {
+        visitChildren(node);
         resolveAndFoldTree(node, BigInteger::add);
-        return null;
     }
 
     @Override
-    public Void visitSubExpressionNode(SubExpressionNode node, Void argument) {
-        visitChildren(node, argument);
+    protected void visitSubExpressionNode(SubExpressionNode node) {
+        visitChildren(node);
         resolveAndFoldTree(node, BigInteger::subtract);
-        return null;
     }
 
     @Override
-    public Void visitMulExpressionNode(MulExpressionNode node, Void argument) {
-        visitChildren(node, argument);
+    protected void visitMulExpressionNode(MulExpressionNode node) {
+        visitChildren(node);
         resolveAndFoldTree(node, BigInteger::multiply);
-        return null;
     }
 
     @Override
-    public Void visitDivExpressionNode(DivExpressionNode node, Void argument) {
-        visitChildren(node, argument);
+    protected void visitDivExpressionNode(DivExpressionNode node) {
+        visitChildren(node);
         resolveAndFoldTree(node, (lhs, rhs) -> {
             if (rhs.equals(BigInteger.ZERO)) {
                 errorHandler.emitDivisionByZero(node);
@@ -84,15 +78,15 @@ class UntypedIntFoldVisitor extends ASTBaseVisitor<Void, Void> {
             }
             return lhs.divide(rhs);
         });
-        return null;
     }
 
     @Override
-    public Void visitModExpressionNode(ModExpressionNode node, Void argument) {
-        visitChildren(node, argument);
+    protected void visitModExpressionNode(ModExpressionNode node) {
+        visitChildren(node);
         resolveAndFoldTree(node, BigInteger::remainder);
-        return null;
     }
+
+    //endregion Expression nodes
 
     private void resolveAndFoldTree(BinaryExpressionNode node,
                                     BinaryOperator<BigInteger> operator) {
@@ -126,7 +120,5 @@ class UntypedIntFoldVisitor extends ASTBaseVisitor<Void, Void> {
         // replace 'this' node on the parent with the replacement
         node.replaceWith(replacementNode);
     }
-
-    //endregion Expression nodes
 
 }

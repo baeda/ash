@@ -25,7 +25,7 @@ import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.Types;
 import org.ashlang.ash.type.UntypedInt;
 
-class UntypedIntSolidifyVisitor extends ASTBaseVisitor<Void, Type> {
+class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
 
     private final ErrorHandler errorHandler;
 
@@ -34,24 +34,22 @@ class UntypedIntSolidifyVisitor extends ASTBaseVisitor<Void, Type> {
     }
 
     @Override
-    public Void visitVarAssignNode(VarAssignNode node, Type argument) {
-        visitChildren(node, null);
+    protected void visitVarAssignNode(VarAssignNode node) {
+        visitChildren(node);
 
         if (node.getSymbol() == null) {
-            return null;
+            return;
         }
 
         solidifyUntypedInt(
             node.getSymbol().getType(),
             node.getExpression()
         );
-
-        return null;
     }
 
     @Override
-    public Void visitDumpStatementNode(DumpStatementNode node, Type argument) {
-        visitChildren(node, null);
+    protected void visitDumpStatementNode(DumpStatementNode node) {
+        visitChildren(node);
 
         // resolve parenthesized integer constants, i.e. dump (12);
         ExpressionNode expression = node.getExpression();
@@ -61,7 +59,7 @@ class UntypedIntSolidifyVisitor extends ASTBaseVisitor<Void, Type> {
 
         Type type = expression.getType();
         if (!(type instanceof UntypedInt)) {
-            return null;
+            return;
         }
 
         UntypedInt uti = (UntypedInt) type;
@@ -93,88 +91,68 @@ class UntypedIntSolidifyVisitor extends ASTBaseVisitor<Void, Type> {
         }
 
         expression.setType(result);
-
-        return null;
     }
 
     //region Expression nodes
 
 
     @Override
-    public Void
-    visitParenExpressionNode(ParenExpressionNode node, Type argument) {
-        visitChildren(node, null);
+    protected void
+    visitParenExpressionNode(ParenExpressionNode node) {
+        visitChildren(node);
 
         Type type = node.getExpression().getType();
         node.setType(type);
-
-        return null;
     }
 
     @Override
-    public Void visitAddExpressionNode(AddExpressionNode node, Type argument) {
-        visitChildren(node, null);
-
+    protected void visitAddExpressionNode(AddExpressionNode node) {
+        visitChildren(node);
         solidifyUntypedInt(
             node.getLhs(),
             node.getRhs()
         );
-
-        return null;
     }
 
     @Override
-    public Void visitSubExpressionNode(SubExpressionNode node, Type argument) {
-        visitChildren(node, null);
-
+    protected void visitSubExpressionNode(SubExpressionNode node) {
+        visitChildren(node);
         solidifyUntypedInt(
             node.getLhs(),
             node.getRhs()
         );
-
-        return null;
     }
 
     @Override
-    public Void visitMulExpressionNode(MulExpressionNode node, Type argument) {
-        visitChildren(node, null);
-
+    protected void visitMulExpressionNode(MulExpressionNode node) {
+        visitChildren(node);
         solidifyUntypedInt(
             node.getLhs(),
             node.getRhs()
         );
-
-        return null;
     }
 
     @Override
-    public Void visitDivExpressionNode(DivExpressionNode node, Type argument) {
-        visitChildren(node, null);
-
+    protected void visitDivExpressionNode(DivExpressionNode node) {
+        visitChildren(node);
         solidifyUntypedInt(
             node.getLhs(),
             node.getRhs()
         );
-
-        return null;
     }
 
     @Override
-    public Void visitModExpressionNode(ModExpressionNode node, Type argument) {
-        visitChildren(node, null);
-
+    protected void visitModExpressionNode(ModExpressionNode node) {
+        visitChildren(node);
         solidifyUntypedInt(
             node.getLhs(),
             node.getRhs()
         );
-
-        return null;
     }
 
     //endregion Expression nodes
 
-    private void
-    solidifyUntypedInt(Type lhs, ExpressionNode rhsNode) {
+    private void solidifyUntypedInt(Type lhs, ExpressionNode rhsNode) {
         solidifyUntypedIntRight(lhs, rhsNode);
     }
 

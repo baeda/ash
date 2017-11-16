@@ -28,7 +28,7 @@ import static org.ashlang.ash.type.Operator.*;
 import static org.ashlang.ash.type.Types.INVALID;
 import static org.ashlang.ash.type.Types.allValid;
 
-class TypeCheckVisitor extends ASTBaseVisitor<Void, Void> {
+class TypeCheckVisitor extends ASTVoidBaseVisitor {
 
     private final ErrorHandler errorHandler;
     private final OperatorMap operatorMap;
@@ -39,81 +39,72 @@ class TypeCheckVisitor extends ASTBaseVisitor<Void, Void> {
     }
 
     @Override
-    public Void
-    visitVarDeclarationNode(VarDeclarationNode node, Void argument) {
+    protected void
+    visitVarDeclarationNode(VarDeclarationNode node) {
         if (INVALID.equals(node.getType())) {
             errorHandler.emitInvalidType(node.getTypeToken());
         }
-        return null;
     }
 
     @Override
-    public Void visitVarAssignNode(VarAssignNode node, Void argument) {
-        visitChildren(node, null);
+    protected void visitVarAssignNode(VarAssignNode node) {
+        visitChildren(node);
 
         if (node.getSymbol() == null) {
-            return null;
+            return;
         }
 
         Type lhsType = node.getSymbol().getType();
         Type rhsType = node.getExpression().getType();
 
         if (INVALID.equals(rhsType) || INVALID.equals(lhsType)) {
-            return null;
+            return;
         }
 
         if (!lhsType.equals(rhsType)) {
             errorHandler.emitTypeMismatch(node, rhsType, lhsType);
         }
-
-        return null;
     }
 
     //region Expression nodes
 
     @Override
-    public Void visitParenExpressionNode(ParenExpressionNode node, Void argument) {
-        visitChildren(node, null);
+    protected void visitParenExpressionNode(ParenExpressionNode node) {
+        visitChildren(node);
         Type type = node.getExpression().getType();
         node.setType(type);
-        return null;
     }
 
     @Override
-    public Void visitAddExpressionNode(AddExpressionNode node, Void argument) {
+    protected void visitAddExpressionNode(AddExpressionNode node) {
         setResultTypeOfOperation(node, ADD);
-        return null;
     }
 
     @Override
-    public Void visitSubExpressionNode(SubExpressionNode node, Void argument) {
+    protected void visitSubExpressionNode(SubExpressionNode node) {
         setResultTypeOfOperation(node, SUB);
-        return null;
     }
 
     @Override
-    public Void visitMulExpressionNode(MulExpressionNode node, Void argument) {
+    protected void visitMulExpressionNode(MulExpressionNode node) {
         setResultTypeOfOperation(node, MUL);
-        return null;
     }
 
     @Override
-    public Void visitDivExpressionNode(DivExpressionNode node, Void argument) {
+    protected void visitDivExpressionNode(DivExpressionNode node) {
         setResultTypeOfOperation(node, DIV);
-        return null;
     }
 
     @Override
-    public Void visitModExpressionNode(ModExpressionNode node, Void argument) {
+    protected void visitModExpressionNode(ModExpressionNode node) {
         setResultTypeOfOperation(node, MOD);
-        return null;
     }
 
     //endregion Expression nodes
 
     private void
     setResultTypeOfOperation(BinaryExpressionNode node, Operator op) {
-        visitChildren(node, null);
+        visitChildren(node);
         Type lhs = node.getLhs().getType();
         Type rhs = node.getRhs().getType();
         Type res = operatorMap.getResultOf(lhs, op, rhs);

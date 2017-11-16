@@ -18,7 +18,7 @@
 
 package org.ashlang.ash.pass;
 
-import org.ashlang.ash.ast.ASTBaseVisitor;
+import org.ashlang.ash.ast.ASTVoidBaseVisitor;
 import org.ashlang.ash.ast.IdExpressionNode;
 import org.ashlang.ash.ast.VarAssignNode;
 import org.ashlang.ash.ast.VarDeclarationNode;
@@ -26,7 +26,7 @@ import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.symbol.SymbolTable;
 
-class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
+class SymbolCheckVisitor extends ASTVoidBaseVisitor {
 
     private final ErrorHandler errorHandler;
     private final SymbolTable symbolTable;
@@ -37,8 +37,8 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
     }
 
     @Override
-    public Void
-    visitVarDeclarationNode(VarDeclarationNode node, Void argument) {
+    protected void
+    visitVarDeclarationNode(VarDeclarationNode node) {
         Symbol symbol = symbolTable.getDeclaredSymbol(node);
         if (symbol != null) {
             errorHandler.emitSymbolAlreadyDeclared(
@@ -49,11 +49,10 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
         }
 
         node.setSymbol(symbol);
-        return null;
     }
 
     @Override
-    public Void visitVarAssignNode(VarAssignNode node, Void argument) {
+    protected void visitVarAssignNode(VarAssignNode node) {
         String identifier = node.getIdentifierToken().getText();
         Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
         if (symbol == null) {
@@ -61,17 +60,15 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
         }
 
         node.setSymbol(symbol);
-        return null;
     }
 
     //region Expression nodes
 
     @Override
-    public Void visitIdExpressionNode(IdExpressionNode node, Void argument) {
+    protected void visitIdExpressionNode(IdExpressionNode node) {
         String identifier = node.getValue().getText();
         Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
         node.setSymbol(symbol);
-        return null;
     }
 
     //endregion Expression nodes
