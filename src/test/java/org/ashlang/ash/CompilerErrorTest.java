@@ -55,7 +55,18 @@ public class CompilerErrorTest {
             .hasNoMoreErrors();
     }
 
-    @Test(enabled = false) /* All operators are valid so far */
+    @Test
+    public void typeMismatch() {
+        assertThat(
+            "a : i32;",
+            "b : u32;",
+            "a = 1;",
+            "b = a;")
+            .hasError(TYPE_MISMATCH).at(4, 1)
+            .hasNoMoreErrors();
+    }
+
+    @Test
     public void invalidOperator() {
         assertThat(
             "a : i32;",
@@ -82,6 +93,86 @@ public class CompilerErrorTest {
             "a : i32;",
             "b = 12;")
             .hasError(SYMBOL_NOT_DECLARED).at(2, 1)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void divisionByZero() {
+        assertThat("dump (6+1)/0;")
+            .hasError(DIV_BY_ZERO).at(1, 6)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void intConstOverflow_i32Constant() {
+        assertThat(
+            "a : i32;",
+            "a = 2147483648;")
+            .hasError(INT_CONST_OVERFLOW).at(2, 5)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void intConstOverflow_u32Constant() {
+        assertThat(
+            "a : u32;",
+            "a = 4294967296;")
+            .hasError(INT_CONST_OVERFLOW).at(2, 5)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void intConstOverflow_i32Arithmetic() {
+        assertThat(
+            "a : i32;",
+            "a = 2147483647 + 1;")
+            .hasError(INT_CONST_OVERFLOW).at(2, 5)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void intConstOverflow_u32Arithmetic() {
+        assertThat(
+            "a : u32;",
+            "a = 4294967298 + 1;")
+            .hasError(INT_CONST_OVERFLOW).at(2, 5)
+            .hasNoMoreErrors();
+    }
+
+    @Test(enabled = false) /* negative integer constants not yet implemented */
+    public void intConstUnderflow_i32Constant() {
+        assertThat(
+            "a : i32;",
+            "a = -2147483649;")
+            .hasError(INT_CONST_UNDERFLOW).at(2, 5)
+            .hasNoMoreErrors();
+    }
+
+
+    @Test(enabled = false) /* negative integer constants not yet implemented */
+    public void intConstUnderflow_u32Constant() {
+        assertThat(
+            "a : u32;",
+            "a = -1;")
+            .hasError(INT_CONST_UNDERFLOW).at(2, 5)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void intConstUnderflow_i32Arithmetic() {
+        assertThat(
+            "a : i32;",
+            "a = 0 - 2147483649;")
+            .hasError(INT_CONST_UNDERFLOW).at(2, 5)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void intConstUnderflow_u32Arithmetic() {
+        assertThat(
+            "a : u32;",
+            "a = 0 - 1;")
+            .hasError(INT_CONST_UNDERFLOW).at(2, 5)
             .hasNoMoreErrors();
     }
 

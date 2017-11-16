@@ -19,6 +19,7 @@
 package org.ashlang.ash.err;
 
 import org.ashlang.ash.ast.Token;
+import org.ashlang.ash.ast.TokenRange;
 import org.ashlang.ash.type.Type;
 
 public interface ErrorHandler {
@@ -30,8 +31,13 @@ public interface ErrorHandler {
     void emitMissingToken(Token pos, String expectedTokens);
     void emitInputMismatch(Token pos, String expectedTokens);
     void emitInvalidType(Token pos);
+    void emitTypeMismatch(TokenRange pos, Type have, Type want);
     void emitInvalidOperator(Token pos, Type left, Type right);
     void emitSymbolAlreadyDeclared(Token pos, Token declSite);
     void emitSymbolNotDeclared(Token pos);
+
+    void emitDivisionByZero(TokenRange pos);
+    void emitIntConstantOverflow(TokenRange pos, Type have);
+    void emitIntConstantUnderflow(TokenRange pos, Type have);
 
 }

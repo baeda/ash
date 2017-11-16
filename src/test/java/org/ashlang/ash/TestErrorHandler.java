@@ -20,6 +20,7 @@ package org.ashlang.ash;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.ashlang.ash.ast.Token;
+import org.ashlang.ash.ast.TokenRange;
 import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.type.Type;
 
@@ -69,6 +70,11 @@ class TestErrorHandler implements ErrorHandler {
     }
 
     @Override
+    public void emitTypeMismatch(TokenRange pos, Type have, Type want) {
+        addError(TYPE_MISMATCH, pos.getStartToken());
+    }
+
+    @Override
     public void emitInvalidOperator(Token pos, Type left, Type right) {
         addError(INVALID_OPERATOR, pos);
     }
@@ -81,6 +87,21 @@ class TestErrorHandler implements ErrorHandler {
     @Override
     public void emitSymbolNotDeclared(Token pos) {
         addError(SYMBOL_NOT_DECLARED, pos);
+    }
+
+    @Override
+    public void emitDivisionByZero(TokenRange pos) {
+        addError(DIV_BY_ZERO, pos.getStartToken());
+    }
+
+    @Override
+    public void emitIntConstantOverflow(TokenRange pos, Type have) {
+        addError(INT_CONST_OVERFLOW, pos.getStartToken());
+    }
+
+    @Override
+    public void emitIntConstantUnderflow(TokenRange pos, Type have) {
+        addError(INT_CONST_UNDERFLOW, pos.getStartToken());
     }
 
     private void addError(ErrorType errorType, Token pos) {

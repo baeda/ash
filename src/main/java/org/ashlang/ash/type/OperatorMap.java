@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.ashlang.ash.type.Operator.*;
-import static org.ashlang.ash.type.Types.I32;
 import static org.ashlang.ash.type.Types.INVALID;
 
 public class OperatorMap {
@@ -33,11 +32,14 @@ public class OperatorMap {
 
     public OperatorMap() {
         opMap = new HashMap<>();
-        operation(I32, ADD, I32).resultsIn(I32);
-        operation(I32, SUB, I32).resultsIn(I32);
-        operation(I32, MUL, I32).resultsIn(I32);
-        operation(I32, DIV, I32).resultsIn(I32);
-        operation(I32, MOD, I32).resultsIn(I32);
+        Types.allExactTypes(IntType.class)
+            .forEach(type -> {
+                operation(type, ADD, type).resultsIn(type);
+                operation(type, SUB, type).resultsIn(type);
+                operation(type, MUL, type).resultsIn(type);
+                operation(type, DIV, type).resultsIn(type);
+                operation(type, MOD, type).resultsIn(type);
+            });
     }
 
     public Type getResultOf(Type left, Operator op, Type right) {
@@ -66,7 +68,6 @@ public class OperatorMap {
         private void resultsIn(Type result) {
             opMap.put(Triple.of(left, op, right), result);
         }
-
     }
 
 }

@@ -23,22 +23,24 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public abstract class Type {
+import java.math.BigInteger;
 
-    private final String id;
-    private final int bitSize;
+public class UntypedInt extends Type {
 
-    public Type(String id, int bitSize) {
-        this.id = id;
-        this.bitSize = bitSize;
+    private final BigInteger value;
+
+    public UntypedInt(BigInteger value) {
+        super(createId(value), value.bitLength());
+
+        this.value = value;
     }
 
-    public String getId() {
-        return id;
+    public BigInteger getValue() {
+        return value;
     }
 
-    public int getBitSize() {
-        return bitSize;
+    public boolean isNegative() {
+        return value.signum() < 0;
     }
 
     @Override
@@ -51,25 +53,34 @@ public abstract class Type {
             return false;
         }
 
-        Type type = (Type) obj;
+        UntypedInt that = (UntypedInt) obj;
 
         return new EqualsBuilder()
-            .append(bitSize, type.bitSize)
+            .appendSuper(super.equals(obj))
+            .append(value, that.value)
             .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-            .append(bitSize)
+            .appendSuper(super.hashCode())
+            .append(value)
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-            .append("bitSize", bitSize)
+            .appendSuper(super.toString())
+            .append("value", value)
+            .append("value[hex]", value.toString(16))
             .toString();
+    }
+
+    private static String createId(BigInteger value) {
+        String prefix = value.signum() < 0 ? "negative " : "";
+        return "<" + prefix + value.bitLength() + "-bit integer>";
     }
 
 }

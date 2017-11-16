@@ -18,24 +18,49 @@
 
 package org.ashlang.ash.codegen;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.ashlang.ash.type.IntType;
 import org.ashlang.ash.type.Type;
+import org.ashlang.ash.type.Types;
 
-import java.util.HashMap;
 import java.util.Map;
-
-import static org.ashlang.ash.type.Types.I32;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class C11TypeMap {
 
-    private final Map<Type, String> typeMap;
+    private final Map<Type, Pair<String, String>> typeMap;
 
     public C11TypeMap() {
-        typeMap = new HashMap<>();
-        typeMap.put(I32, "int32_t");
+        typeMap = Types.allSubTypes(IntType.class)
+            .stream()
+            .collect(Collectors.toMap(
+                Function.identity(),
+                type -> Pair.of(cType(type), cFormat(type))
+            ));
     }
 
-    public String get(Type type) {
-        return typeMap.getOrDefault(type, "INVALID_TYPE");
+    public String getType(Type type) {
+        return typeMap.get(type).getLeft();
+    }
+
+    public String getFormat(Type type) {
+        return typeMap.get(type).getRight();
+    }
+
+    private static String cType(IntType type) {
+        String prefix = type.isSigned()
+            ? ""
+            : "u";
+        return String.format("%sint%d_t", prefix, type.getBitSize());
+    }
+
+
+    private static String cFormat(IntType type) {
+        String classifier = type.isSigned()
+            ? "d"
+            : "u";
+        return String.format("PRI%s%d", classifier, type.getBitSize());
     }
 
 }

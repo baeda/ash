@@ -26,8 +26,9 @@ import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.symbol.SymbolTable;
 import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.TypeMap;
+import org.ashlang.ash.type.UntypedInt;
 
-import static org.ashlang.ash.type.Types.I32;
+import java.math.BigInteger;
 
 class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
 
@@ -59,7 +60,9 @@ class TypeAssignVisitor extends ASTBaseVisitor<Void, Void> {
 
     @Override
     public Void visitIntExpressionNode(IntExpressionNode node, Void argument) {
-        node.setType(I32);
+        BigInteger value = new BigInteger(node.getValueToken().getText());
+        node.setType(new UntypedInt(value));
+        node.setValue(value);
         return null;
     }
 

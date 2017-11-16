@@ -22,6 +22,8 @@ import org.ashlang.ash.ast.*;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 
+import java.math.BigInteger;
+
 class C11Visitor implements ASTVisitor<String, Object> {
 
     private final C11TypeMap typeMap;
@@ -36,16 +38,22 @@ class C11Visitor implements ASTVisitor<String, Object> {
             "\n",
             "#include <stdio.h>",
             "#include <stdint.h>",
+            "#include <inttypes.h>",
+            "",
             "int main(int argc, char **argv) {",
+            "  (void) argc;",
+            "  (void) argv;",
+            "",
             visitChildren(node, argument),
             "  return 0;",
-            "}");
+            "}",
+            "");
     }
 
     @Override
     public String visitVarDeclarationNode(VarDeclarationNode node, Object argument) {
         Symbol symbol = node.getSymbol();
-        String cType = typeMap.get(symbol.getType());
+        String cType = typeMap.getType(symbol.getType());
         return cType + " " + symbol.getIdentifier();
     }
 
@@ -62,21 +70,21 @@ class C11Visitor implements ASTVisitor<String, Object> {
     public String
     visitVarDeclarationStatementNode(VarDeclarationStatementNode node,
                                      Object argument) {
-        return visitChildren(node, argument) + ";";
+        return visitChildren(node, argument) + ";\n";
     }
 
     @Override
     public String
     visitVarAssignStatementNode(VarAssignStatementNode node, Object argument) {
-        return visitChildren(node, argument) + ";";
+        return visitChildren(node, argument) + ";\n";
     }
 
     @Override
     public String visitDumpStatementNode(DumpStatementNode node, Object argument) {
         String expression = visitChildren(node, argument);
         Type type = node.getExpression().getType();
-        String cType = typeMap.get(type);
-        return "printf(\"%d\", (" + cType + ") " + expression + ");";
+        String fmt = typeMap.getFormat(type);
+        return "printf(\"%\"" + fmt + "\"\", " + expression + ");\n";
     }
 
     //endregion Statement nodes
@@ -130,7 +138,10 @@ class C11Visitor implements ASTVisitor<String, Object> {
 
     @Override
     public String visitIntExpressionNode(IntExpressionNode node, Object argument) {
-        return node.getValueToken().getText();
+        BigInteger value = (BigInteger) node.getValue();
+        Type type = node.getType();
+        String cType = typeMap.getType(type);
+        return "((" + cType + ")" + value.toString() + "ull)";
     }
 
     //endregion Expression nodes

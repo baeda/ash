@@ -18,10 +18,22 @@
 
 package org.ashlang.ash.type;
 
+import org.ashlang.ash.ast.ASTWalkUtil;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 public interface Types {
 
     Type INVALID = new InvalidType();
+    Type I8 = new IntType(8, true);
+    Type I16 = new IntType(16, true);
     Type I32 = new IntType(32, true);
+    Type I64 = new IntType(64, true);
+    Type U8 = new IntType(8, false);
+    Type U16 = new IntType(16, false);
+    Type U32 = new IntType(32, false);
+    Type U64 = new IntType(64, false);
 
     static boolean allValid(Type... types) {
         for (Type type : types) {
@@ -30,6 +42,23 @@ public interface Types {
             }
         }
         return true;
+    }
+
+    static Collection<Type> allTypes() {
+        return allSubTypes(Type.class);
+    }
+
+    static <T extends Type>
+    Collection<T> allSubTypes(Class<T> targetClass) {
+        return ASTWalkUtil.getAllStaticFields(Types.class, targetClass);
+    }
+
+    static <T extends Type>
+    Collection<T> allExactTypes(Class<T> targetClass) {
+        return allSubTypes(targetClass)
+            .stream()
+            .filter(t -> targetClass.equals(t.getClass()))
+            .collect(Collectors.toList());
     }
 
 }

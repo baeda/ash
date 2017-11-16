@@ -28,7 +28,7 @@ public class IntType extends Type {
     private final boolean isSigned;
 
     IntType(int bitSize, boolean isSigned) {
-        super(bitSize);
+        super(createId(bitSize, isSigned), bitSize);
         this.isSigned = isSigned;
     }
 
@@ -68,6 +68,11 @@ public class IntType extends Type {
             .appendSuper(super.toString())
             .append("isSigned", isSigned)
             .toString();
+    }
+
+    private static String createId(int bitSize, boolean isSigned) {
+        String prefix = isSigned ? "i" : "u";
+        return prefix + bitSize;
     }
 
 }

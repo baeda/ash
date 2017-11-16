@@ -18,10 +18,10 @@
 
 package org.ashlang.ash.type;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static org.ashlang.ash.type.Types.I32;
 import static org.ashlang.ash.type.Types.INVALID;
 
 public class TypeMap {
@@ -29,8 +29,12 @@ public class TypeMap {
     private final Map<String, Type> typeMap;
 
     public TypeMap() {
-        typeMap = new HashMap<>();
-        typeMap.put("i32", I32);
+        typeMap = Types.allTypes()
+            .stream()
+            .collect(Collectors.toMap(
+                Type::getId,
+                Function.identity()
+            ));
     }
 
     public Type resolve(String typeString) {

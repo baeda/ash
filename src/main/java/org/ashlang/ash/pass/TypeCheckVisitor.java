@@ -47,6 +47,28 @@ class TypeCheckVisitor extends ASTBaseVisitor<Void, Void> {
         return null;
     }
 
+    @Override
+    public Void visitVarAssignNode(VarAssignNode node, Void argument) {
+        visitChildren(node, null);
+
+        if (node.getSymbol() == null) {
+            return null;
+        }
+
+        Type lhsType = node.getSymbol().getType();
+        Type rhsType = node.getExpression().getType();
+
+        if (INVALID.equals(rhsType) || INVALID.equals(lhsType)) {
+            return null;
+        }
+
+        if (!lhsType.equals(rhsType)) {
+            errorHandler.emitTypeMismatch(node, rhsType, lhsType);
+        }
+
+        return null;
+    }
+
     //region Expression nodes
 
     @Override

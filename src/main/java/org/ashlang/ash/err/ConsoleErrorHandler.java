@@ -19,6 +19,7 @@
 package org.ashlang.ash.err;
 
 import org.ashlang.ash.ast.Token;
+import org.ashlang.ash.ast.TokenRange;
 import org.ashlang.ash.type.Type;
 
 import java.io.OutputStream;
@@ -94,9 +95,17 @@ public class ConsoleErrorHandler implements ErrorHandler {
     }
 
     @Override
+    public void emitTypeMismatch(TokenRange pos, Type have, Type want) {
+        emit(pos, "type mismatch - have '%s' want '%s'",
+            have.getId(), want.getId());
+        numSemanticErrors++;
+    }
+
+    @Override
     public void
     emitInvalidOperator(Token pos, Type left, Type right) {
-        emit(pos, "invalid operator %s [%s] %s", left, pos.getText(), right);
+        emit(pos, "invalid operator %s [%s] %s",
+            left.getId(), pos.getText(), right.getId());
         numSemanticErrors++;
     }
 
@@ -111,6 +120,28 @@ public class ConsoleErrorHandler implements ErrorHandler {
     public void emitSymbolNotDeclared(Token pos) {
         emit(pos, "symbol '%s' is not declared", pos.getText());
         numSemanticErrors++;
+    }
+
+    @Override
+    public void emitDivisionByZero(TokenRange pos) {
+        emit(pos, "division by zero");
+    }
+
+    @Override
+    public void emitIntConstantOverflow(TokenRange pos, Type have) {
+        emit(pos, "integer constant overflows '%s'", have.getId());
+        numSemanticErrors++;
+    }
+
+    @Override
+    public void emitIntConstantUnderflow(TokenRange pos, Type have) {
+        emit(pos, "integer constant '%s' underflows '%s'",
+            pos.getText(), have.getId());
+        numSemanticErrors++;
+    }
+
+    private void emit(TokenRange pos, String format, Object... args) {
+        emitError(pos.getStartToken(), format, args);
     }
 
     private void emit(Token pos, String format, Object... args) {

@@ -26,6 +26,11 @@ public interface CompilerPasses {
     CompilerPass TYPE_ASSIGN_PASS = (eh, st, tm, om, node) ->
         new TypeAssignVisitor(st, tm).visit(node, null);
 
+    CompilerPass CONSTANT_RESOLVE_PASS = (eh, st, tm, om, node) -> {
+        new UntypedIntFoldVisitor(eh).visit(node, null);
+        new UntypedIntSolidifyVisitor(eh).visit(node, null);
+    };
+
     CompilerPass TYPE_CHECK_PASS = (eh, st, tm, om, node) ->
         new TypeCheckVisitor(eh, om).visit(node, null);
 

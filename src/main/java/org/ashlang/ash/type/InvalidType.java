@@ -24,7 +24,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 final class InvalidType extends Type {
 
     InvalidType() {
-        super(0);
+        super("<invalid>", 0);
     }
 
     @Override
