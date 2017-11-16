@@ -18,10 +18,10 @@
 
 package org.ashlang.ash.pass;
 
-import org.ashlang.ash.ast.ASTVoidBaseVisitor;
 import org.ashlang.ash.ast.IdExpressionNode;
 import org.ashlang.ash.ast.VarAssignNode;
 import org.ashlang.ash.ast.VarDeclarationNode;
+import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
 import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.symbol.SymbolTable;

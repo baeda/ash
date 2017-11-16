@@ -19,6 +19,7 @@
 package org.ashlang.ash.pass;
 
 import org.ashlang.ash.ast.*;
+import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
 import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.type.Operator;
 import org.ashlang.ash.type.OperatorMap;

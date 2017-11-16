@@ -1,5 +1,7 @@
 package org.ashlang.ash.ast;
 
+import org.ashlang.ash.ast.visitor.ASTVisitor;
+
 import java.lang.reflect.Field;
 import java.util.List;
 

@@ -18,6 +18,8 @@
 
 package org.ashlang.ash.ast;
 
+import org.ashlang.ash.ast.visitor.ASTVisitor;
+
 public class ModExpressionNode extends BinaryExpressionNode {
 
     public ModExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op,

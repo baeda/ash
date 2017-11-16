@@ -18,6 +18,8 @@
 
 package org.ashlang.ash.ast;
 
+import org.ashlang.ash.ast.visitor.ASTVisitor;
+
 public class IntExpressionNode extends ExpressionNode {
 
     public IntExpressionNode(Token startToken, Token stopToken,

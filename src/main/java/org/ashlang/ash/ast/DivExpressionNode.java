@@ -18,6 +18,8 @@
 
 package org.ashlang.ash.ast;
 
+import org.ashlang.ash.ast.visitor.ASTVisitor;
+
 public class DivExpressionNode extends BinaryExpressionNode {
 
     public DivExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op,

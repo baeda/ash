@@ -18,6 +18,8 @@
 
 package org.ashlang.ash.ast;
 
+import org.ashlang.ash.ast.visitor.ASTVisitor;
+
 public class MulExpressionNode extends BinaryExpressionNode {
 
     public MulExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op,

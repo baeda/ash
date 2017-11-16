@@ -19,6 +19,7 @@
 package org.ashlang.ash.codegen;
 
 import org.ashlang.ash.ast.*;
+import org.ashlang.ash.ast.visitor.ASTSingleVisitor;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 

@@ -16,7 +16,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.ast;
+package org.ashlang.ash.ast.visitor;
+
+import org.ashlang.ash.ast.*;
 
 public class ASTVoidBaseVisitor extends ASTVoidVisitor {
 

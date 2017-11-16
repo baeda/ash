@@ -18,6 +18,8 @@
 
 package org.ashlang.ash.ast;
 
+import org.ashlang.ash.ast.visitor.ASTVisitor;
+
 public class DumpStatementNode extends StatementNode {
 
     private final ExpressionNode expression;
