@@ -1,12 +1,17 @@
 package org.ashlang.ash.ast;
 
+import java.lang.reflect.Field;
 import java.util.List;
+
+import static org.ashlang.ash.ast.ASTWalkUtil.*;
 
 public abstract class ASTNode implements TokenRange {
 
     private final Token startToken;
     private final Token stopToken;
     private final SourceProvider sourceProvider;
+
+    private ASTNode parent;
 
     public ASTNode(Token startToken, Token stopToken,
                    SourceProvider sourceProvider) {
@@ -32,6 +37,26 @@ public abstract class ASTNode implements TokenRange {
 
     public SourceProvider getSourceProvider() {
         return sourceProvider;
+    }
+
+    public void setParent(ASTNode parent) {
+        this.parent = parent;
+    }
+
+    public void replaceWith(ASTNode newNode) {
+        parent.replace(this, newNode);
+    }
+
+    private void replace(ASTNode oldNode, ASTNode newNode) {
+        List<Class<?>> hierarchy = recordHierarchy(this.getClass());
+        for (Class<?> clazz : hierarchy) {
+            for (Field field : clazz.getDeclaredFields()) {
+                Object value = getFieldValue(field, this);
+                if (value == oldNode) {
+                    setFieldValue(field, this, newNode);
+                }
+            }
+        }
     }
 
     public abstract <T, A> T accept(ASTVisitor<T, A> visitor, A argument);

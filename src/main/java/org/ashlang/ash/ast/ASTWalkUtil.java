@@ -71,4 +71,42 @@ public final class ASTWalkUtil {
         }
     }
 
+    public static <T> T getFieldValue(Field field, Object obj, Class<T> targetClass) {
+        try {
+            AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
+                field.setAccessible(true);
+                return null;
+            });
+            return targetClass.cast(field.get(obj));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (ClassCastException e) {
+            return null;
+        }
+    }
+
+    public static void setFieldValue(Field field, Object obj, Object value) {
+        try {
+            AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
+                field.setAccessible(true);
+                return null;
+            });
+            field.set(obj, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> List<T>
+    getAllStaticFields(Class<?> sourceClass, Class<T> fieldClass) {
+        List<T> result = new ArrayList<>();
+        for (Field field : sourceClass.getDeclaredFields()) {
+            T value = getFieldValue(field, sourceClass, fieldClass);
+            if (value != null) {
+                result.add(value);
+            }
+        }
+        return result;
+    }
+
 }

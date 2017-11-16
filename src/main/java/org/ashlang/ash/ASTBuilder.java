@@ -7,6 +7,7 @@ import org.ashlang.ash.ast.*;
 import org.ashlang.gen.AshBaseVisitor;
 import org.ashlang.gen.AshParser.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,7 +40,13 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
             .map(stmtCtx -> (StatementNode) visit(stmtCtx))
             .collect(Collectors.toList());
 
-        return new FileNode(statements, sourceProvider);
+        return setParent(
+            new FileNode(
+                statements,
+                sourceProvider
+            ),
+            statements
+        );
     }
 
     @Override
@@ -54,10 +61,13 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     @Override
     public VarAssignNode visitVarAssign(VarAssignContext ctx) {
         ExpressionNode expression = (ExpressionNode) visit(ctx.value);
-        return new VarAssignNode(
-            new Token(ctx.id),
-            expression,
-            sourceProvider
+        return setParent(
+            new VarAssignNode(
+                new Token(ctx.id),
+                expression,
+                sourceProvider
+            ),
+            expression
         );
     }
 
@@ -67,10 +77,13 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     public VarDeclarationStatementNode
     visitVarDeclarationStatement(VarDeclarationStatementContext ctx) {
         VarDeclarationNode varDeclarationNode = visitVarDeclaration(ctx.ref);
-        return new VarDeclarationStatementNode(
-            varDeclarationNode,
-            new Token(ctx.stop),
-            sourceProvider
+        return setParent(
+            new VarDeclarationStatementNode(
+                varDeclarationNode,
+                new Token(ctx.stop),
+                sourceProvider
+            ),
+            varDeclarationNode
         );
     }
 
@@ -78,21 +91,27 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     public VarAssignStatementNode
     visitVarAssignStatement(VarAssignStatementContext ctx) {
         VarAssignNode varAssign = visitVarAssign(ctx.ref);
-        return new VarAssignStatementNode(
-            varAssign,
-            new Token(ctx.stop),
-            sourceProvider
+        return setParent(
+            new VarAssignStatementNode(
+                varAssign,
+                new Token(ctx.stop),
+                sourceProvider
+            ),
+            varAssign
         );
     }
 
     @Override
     public ASTNode visitDumpStatement(DumpStatementContext ctx) {
         ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
-        return new DumpStatementNode(
-            new Token(ctx.start),
-            new Token(ctx.stop),
-            expression,
-            sourceProvider
+        return setParent(
+            new DumpStatementNode(
+                new Token(ctx.start),
+                new Token(ctx.stop),
+                expression,
+                sourceProvider
+            ),
+            expression
         );
     }
 
@@ -103,11 +122,14 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     @Override
     public ASTNode visitParenExpression(ParenExpressionContext ctx) {
         ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
-        return new ParenExpressionNode(
-            new Token(ctx.start),
-            new Token(ctx.stop),
-            expression,
-            sourceProvider
+        return setParent(
+            new ParenExpressionNode(
+                new Token(ctx.start),
+                new Token(ctx.stop),
+                expression,
+                sourceProvider
+            ),
+            expression
         );
     }
 
@@ -115,45 +137,57 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     public ExpressionNode visitArithmeticExpression(ArithmeticExpressionContext ctx) {
         ExpressionNode lhs = (ExpressionNode) visit(ctx.lhs);
         ExpressionNode rhs = (ExpressionNode) visit(ctx.rhs);
+        ExpressionNode node;
         switch (ctx.op.getType()) {
             case PLUS:
-                return new AddExpressionNode(
+                node = new AddExpressionNode(
                     lhs,
                     rhs,
                     new Token(ctx.op),
                     sourceProvider
                 );
+                break;
             case MINUS:
-                return new SubExpressionNode(
+                node = new SubExpressionNode(
                     lhs,
                     rhs,
                     new Token(ctx.op),
                     sourceProvider
                 );
+                break;
             case ASTERISK:
-                return new MulExpressionNode(
+                node = new MulExpressionNode(
                     lhs,
                     rhs,
                     new Token(ctx.op),
                     sourceProvider
                 );
+                break;
             case SLASH:
-                return new DivExpressionNode(
+                node = new DivExpressionNode(
                     lhs,
                     rhs,
                     new Token(ctx.op),
                     sourceProvider
                 );
+                break;
             case PERCENT:
-                return new ModExpressionNode(
+                node = new ModExpressionNode(
                     lhs,
                     rhs,
                     new Token(ctx.op),
                     sourceProvider
                 );
+                break;
             default:
                 throw new IllegalStateException();
         }
+
+        return setParent(
+            node,
+            lhs,
+            rhs
+        );
     }
 
     @Override
@@ -200,5 +234,20 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     //endregion ANTLR visitor default overrides
+
+    @SafeVarargs
+    private static <T extends ASTNode, U extends ASTNode>
+    T setParent(T parent, U... children) {
+        for (U child : children) {
+            child.setParent(parent);
+        }
+        return parent;
+    }
+
+    private static <T extends ASTNode, U extends ASTNode>
+    T setParent(T parent, Collection<U> children) {
+        children.forEach(child -> child.setParent(parent));
+        return parent;
+    }
 
 }

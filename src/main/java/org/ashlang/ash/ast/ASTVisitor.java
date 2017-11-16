@@ -54,6 +54,9 @@ public interface ASTVisitor<T, A> {
         T aggregate = defaultResult();
         for (Class<?> clazz : hierarchy) {
             for (Field field : clazz.getDeclaredFields()) {
+                if ("parent".equals(field.getName())) {
+                    continue;
+                }
                 Object value = getFieldValue(field, node);
                 if (value instanceof ASTNode) {
                     T next = visit((ASTNode) value, argument);
