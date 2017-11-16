@@ -18,10 +18,7 @@
 
 package org.ashlang.ash;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -60,6 +57,15 @@ public final class IOUtil {
     }
 
     public static ExecResult exec(Object command, Object... args) {
+        return execInDir(null, command, args);
+    }
+
+    public static ExecResult
+    execInDir(Path execDir, Object command, Object... args) {
+        File dir = execDir == null
+            ? null
+            : execDir.toFile();
+
         String[] cmd = new String[1 + args.length];
         cmd[0] = command.toString();
         for (int i = 0; i < args.length; i++) {
@@ -68,7 +74,7 @@ public final class IOUtil {
 
         Process process = null;
         try {
-            process = Runtime.getRuntime().exec(cmd);
+            process = Runtime.getRuntime().exec(cmd, null, dir);
             int exitCode = process.waitFor();
             String out = IOUtil.exhaustiveReadStreamUTF8(process.getInputStream());
             String err = IOUtil.exhaustiveReadStreamUTF8(process.getErrorStream());

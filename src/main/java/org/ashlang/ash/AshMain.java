@@ -36,6 +36,7 @@ import org.ashlang.gen.AshParser.FileContext;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -46,10 +47,14 @@ public final class AshMain {
     public static void main(String[] args) throws IOException {
         if (args.length < 1) {
             System.err.println("Usage: ashc <file>");
-            System.exit(1);
+            return;
         }
 
         Path inFile = Paths.get(args[0]).normalize();
+        if (Files.isDirectory(inFile)) {
+            System.err.println("Usage: ashc <file>");
+            return;
+        }
         CharStream in = CharStreams.fromPath(inFile, StandardCharsets.UTF_8);
         ErrorHandler errorHandler = new ConsoleErrorHandler();
 
@@ -63,15 +68,17 @@ public final class AshMain {
         String c11Src = translateToC11(rootNode);
         System.out.println("C11 source:\n==============");
         System.out.println(c11Src);
-        IOUtil.executeInTempDir(tmpDir -> {
-            Path out = tmpDir.resolve("out");
-            compileToNative(c11Src, out);
-            ExecResult exec = IOUtil.exec(out);
-            System.out.println("C11 output:\n==============");
-            System.out.println(exec.getOut());
-            System.out.println("C11 error:\n==============");
-            System.out.println(exec.getErr());
-        });
+        Path dir = inFile.getParent();
+        if (dir == null) {
+            throw new IllegalStateException();
+        }
+        Path out = dir.resolve("out");
+        compileToNative(c11Src, out, dir);
+        ExecResult exec = IOUtil.exec(out);
+        System.out.println("C11 output:\n==============");
+        System.out.println(exec.getOut());
+        System.out.println("C11 error:\n==============");
+        System.out.println(exec.getErr());
     }
 
     static ASTNode buildAST(String ashSrc, ErrorHandler errorHandler) {
@@ -119,6 +126,11 @@ public final class AshMain {
     }
 
     private static void compileToNative(String c11Src, Path outFile) {
+        compileToNative(c11Src, outFile, outFile.getParent());
+    }
+
+    private static void
+    compileToNative(String c11Src, Path outFile, Path workDir) {
         Path outDir = outFile.getParent();
         if (outDir == null) {
             throw new IllegalArgumentException(String.format(
@@ -128,12 +140,14 @@ public final class AshMain {
         Path tmpFile = outDir.resolve("main.c");
         IOUtil.writeUTF8(tmpFile, c11Src);
 
-        ExecResult gcc = IOUtil.exec(
+        ExecResult gcc = IOUtil.execInDir(
+            workDir,
             "gcc",
             "-std=c11",
             "-Wall",
             "-Wextra",
             "-pedantic",
+            "--save-temps",
             "-o",
             outFile.toAbsolutePath(),
             tmpFile.toAbsolutePath()
