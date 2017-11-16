@@ -24,8 +24,8 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 
-import static org.ashlang.ash.ast.ASTWalkUtil.getFieldValue;
-import static org.ashlang.ash.ast.ASTWalkUtil.recordHierarchy;
+import static org.ashlang.ash.util.ReflectionUtil.getFieldValue;
+import static org.ashlang.ash.util.ReflectionUtil.recordHierarchy;
 
 public interface ASTVisitor<T, A> {
 

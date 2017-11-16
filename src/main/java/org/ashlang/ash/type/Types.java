@@ -18,7 +18,7 @@
 
 package org.ashlang.ash.type;
 
-import org.ashlang.ash.ast.ASTWalkUtil;
+import org.ashlang.ash.util.ReflectionUtil;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -50,7 +50,7 @@ public interface Types {
 
     static <T extends Type>
     Collection<T> allSubTypes(Class<T> targetClass) {
-        return ASTWalkUtil.getAllStaticFields(Types.class, targetClass);
+        return ReflectionUtil.getAllStaticFields(Types.class, targetClass);
     }
 
     static <T extends Type>

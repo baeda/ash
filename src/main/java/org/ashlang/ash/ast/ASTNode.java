@@ -5,7 +5,7 @@ import org.ashlang.ash.ast.visitor.ASTVisitor;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static org.ashlang.ash.ast.ASTWalkUtil.*;
+import static org.ashlang.ash.util.ReflectionUtil.*;
 
 public abstract class ASTNode implements TokenRange {
 

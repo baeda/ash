@@ -16,7 +16,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.ast;
+package org.ashlang.ash.util;
+
+import org.ashlang.ash.ast.ASTNode;
 
 import java.lang.reflect.Field;
 import java.security.AccessController;
@@ -26,9 +28,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public final class ASTWalkUtil {
+public final class ReflectionUtil {
 
-    private ASTWalkUtil() { /**/ }
+    private ReflectionUtil() { /**/ }
 
     public static List<Class<?>> recordHierarchy(Class<?> startClass) {
         List<Class<?>> result = new ArrayList<>();

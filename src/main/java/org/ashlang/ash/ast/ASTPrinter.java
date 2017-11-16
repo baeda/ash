@@ -23,7 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static org.ashlang.ash.ast.ASTWalkUtil.*;
+import static org.ashlang.ash.util.ReflectionUtil.*;
 
 public final class ASTPrinter {
 

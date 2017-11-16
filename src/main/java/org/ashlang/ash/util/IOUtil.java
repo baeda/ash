@@ -16,7 +16,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash;
+package org.ashlang.ash.util;
+
+import org.ashlang.ash.ThrowingConsumer;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
