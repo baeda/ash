@@ -130,6 +130,20 @@ public class ConsoleErrorHandler implements ErrorHandler {
     }
 
     @Override
+    public void emitSymbolNotUsed(Token pos) {
+        emit(pos, "symbol '%s' is never used",
+            pos.getText());
+        numSemanticErrors++;
+    }
+
+    @Override
+    public void emitSymbolInitializedButNotUsed(Token pos) {
+        emit(pos, "symbol '%s' initialized but never used",
+            pos.getText());
+        numSemanticErrors++;
+    }
+
+    @Override
     public void emitDivisionByZero(TokenRange pos) {
         emit(pos, "division by zero");
     }

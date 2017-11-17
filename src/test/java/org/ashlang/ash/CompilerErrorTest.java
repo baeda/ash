@@ -52,6 +52,7 @@ public class CompilerErrorTest {
     public void invalidType() {
         assertThat("a : int;")
             .hasError(INVALID_TYPE).at(1, 5)
+            .hasError(SYMBOL_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 
@@ -63,6 +64,8 @@ public class CompilerErrorTest {
             "a = 1;",
             "b = a;")
             .hasError(TYPE_MISMATCH).at(4, 1)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 1)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(2, 1)
             .hasNoMoreErrors();
     }
 
@@ -84,6 +87,7 @@ public class CompilerErrorTest {
             "a : i32;",
             "a : i32;")
             .hasError(SYMBOL_ALREADY_DECLARED).at(2, 1)
+            .hasError(SYMBOL_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 
@@ -93,6 +97,7 @@ public class CompilerErrorTest {
             "a : i32;",
             "b = 12;")
             .hasError(SYMBOL_NOT_DECLARED).at(2, 1)
+            .hasError(SYMBOL_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 
@@ -102,6 +107,22 @@ public class CompilerErrorTest {
             "a : i32;",
             "dump a;")
             .hasError(SYMBOL_NOT_INITIALIZED).at(2, 6)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void symbolNotUsed() {
+        assertThat("a : i32;")
+            .hasError(SYMBOL_NOT_USED).at(1, 1)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void symbolInitializedButNotUsed() {
+        assertThat(
+            "a : i32;",
+            "a = 42;")
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 
@@ -118,6 +139,7 @@ public class CompilerErrorTest {
             "a : i32;",
             "a = 2147483648;")
             .hasError(INT_CONST_OVERFLOW).at(2, 5)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 
@@ -127,6 +149,7 @@ public class CompilerErrorTest {
             "a : u32;",
             "a = 4294967296;")
             .hasError(INT_CONST_OVERFLOW).at(2, 5)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 
@@ -136,6 +159,7 @@ public class CompilerErrorTest {
             "a : i32;",
             "a = 2147483647 + 1;")
             .hasError(INT_CONST_OVERFLOW).at(2, 5)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 
@@ -145,6 +169,7 @@ public class CompilerErrorTest {
             "a : u32;",
             "a = 4294967298 + 1;")
             .hasError(INT_CONST_OVERFLOW).at(2, 5)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 
@@ -154,6 +179,7 @@ public class CompilerErrorTest {
             "a : i32;",
             "a = -2147483649;")
             .hasError(INT_CONST_UNDERFLOW).at(2, 5)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 
@@ -164,6 +190,7 @@ public class CompilerErrorTest {
             "a : u32;",
             "a = -1;")
             .hasError(INT_CONST_UNDERFLOW).at(2, 5)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 
@@ -173,6 +200,7 @@ public class CompilerErrorTest {
             "a : i32;",
             "a = 0 - 2147483649;")
             .hasError(INT_CONST_UNDERFLOW).at(2, 5)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 
@@ -182,6 +210,7 @@ public class CompilerErrorTest {
             "a : u32;",
             "a = 0 - 1;")
             .hasError(INT_CONST_UNDERFLOW).at(2, 5)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 1)
             .hasNoMoreErrors();
     }
 

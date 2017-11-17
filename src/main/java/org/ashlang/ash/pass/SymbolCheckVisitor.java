@@ -18,9 +18,7 @@
 
 package org.ashlang.ash.pass;
 
-import org.ashlang.ash.ast.IdExpressionNode;
-import org.ashlang.ash.ast.VarAssignNode;
-import org.ashlang.ash.ast.VarDeclarationNode;
+import org.ashlang.ash.ast.*;
 import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
 import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.symbol.Symbol;
@@ -34,6 +32,22 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
     SymbolCheckVisitor(ErrorHandler errorHandler, SymbolTable symbolTable) {
         this.errorHandler = errorHandler;
         this.symbolTable = symbolTable;
+    }
+
+    @Override
+    protected void visitFileNode(FileNode node) {
+        visitChildren(node);
+
+        symbolTable.getDeclaredSymbols().stream()
+            .filter(sym -> !sym.isUsed())
+            .forEach(sym -> {
+                Token id = sym.getDeclSite().getIdentifierToken();
+                if (!sym.isInitialized()) {
+                    errorHandler.emitSymbolNotUsed(id);
+                } else {
+                    errorHandler.emitSymbolInitializedButNotUsed(id);
+                }
+            });
     }
 
     @Override
@@ -70,6 +84,13 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
     protected void visitIdExpressionNode(IdExpressionNode node) {
         String identifier = node.getValue().getText();
         Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
+
+        if (symbol == null) {
+            errorHandler.emitSymbolNotDeclared(node.getValue());
+            return;
+        }
+
+        symbol.use();
 
         if (!symbol.isInitialized()) {
             errorHandler.emitSymbolNotInitialized(

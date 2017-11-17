@@ -95,6 +95,16 @@ class TestErrorHandler implements ErrorHandler {
     }
 
     @Override
+    public void emitSymbolNotUsed(Token pos) {
+        addError(SYMBOL_NOT_USED, pos);
+    }
+
+    @Override
+    public void emitSymbolInitializedButNotUsed(Token pos) {
+        addError(SYMBOL_INITIALIZED_BUT_NOT_USED, pos);
+    }
+
+    @Override
     public void emitDivisionByZero(TokenRange pos) {
         addError(DIV_BY_ZERO, pos.getStartToken());
     }

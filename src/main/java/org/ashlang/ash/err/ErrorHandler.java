@@ -36,6 +36,8 @@ public interface ErrorHandler {
     void emitSymbolAlreadyDeclared(Token pos, Token declSite);
     void emitSymbolNotDeclared(Token pos);
     void emitSymbolNotInitialized(TokenRange pos, Token declSite);
+    void emitSymbolNotUsed(Token pos);
+    void emitSymbolInitializedButNotUsed(Token pos);
 
     void emitDivisionByZero(TokenRange pos);
     void emitIntConstantOverflow(TokenRange pos, Type have);

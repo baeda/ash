@@ -20,6 +20,7 @@ package org.ashlang.ash.symbol;
 
 import org.ashlang.ash.ast.VarDeclarationNode;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +51,10 @@ public class SymbolTable {
 
     public Symbol getDeclaredSymbol(String identifier) {
         return symbolTable.get(identifier);
+    }
+
+    public Collection<Symbol> getDeclaredSymbols() {
+        return symbolTable.values();
     }
 
 }

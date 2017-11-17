@@ -30,6 +30,7 @@ public class Symbol {
     private final VarDeclarationNode declSite;
 
     private boolean isInitialized;
+    private boolean isUsed;
 
     Symbol(VarDeclarationNode declSite) {
         this.declSite = declSite;
@@ -53,6 +54,14 @@ public class Symbol {
 
     public boolean isInitialized() {
         return isInitialized;
+    }
+
+    public void use() {
+        isUsed = true;
+    }
+
+    public boolean isUsed() {
+        return isUsed;
     }
 
     @Override

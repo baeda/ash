@@ -53,6 +53,11 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
     protected void visitIdExpressionNode(IdExpressionNode node) {
         String identifier = node.getValue().getText();
         Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
+
+        if (symbol == null) {
+            return;
+        }
+
         node.setType(symbol.getType());
     }
 
