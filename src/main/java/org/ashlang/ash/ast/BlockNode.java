@@ -16,22 +16,34 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.pass;
+package org.ashlang.ash.ast;
 
-public interface CompilerPasses {
+import org.ashlang.ash.ast.visitor.ASTVisitor;
 
-    CompilerPass SYMBOL_CHECK_PASS = (eh, st, tm, om, node) ->
-        new SymbolCheckVisitor(eh, st).visit(node);
+import java.util.List;
 
-    CompilerPass TYPE_ASSIGN_PASS = (eh, st, tm, om, node) ->
-        new TypeAssignVisitor(tm).visit(node);
+public class BlockNode extends ASTNode {
 
-    CompilerPass CONSTANT_RESOLVE_PASS = (eh, st, tm, om, node) -> {
-        new UntypedIntFoldVisitor(eh).visit(node);
-        new UntypedIntSolidifyVisitor(eh).visit(node);
-    };
+    private final List<StatementNode> statements;
 
-    CompilerPass TYPE_CHECK_PASS = (eh, st, tm, om, node) ->
-        new TypeCheckVisitor(eh, om).visit(node);
+    public BlockNode(List<StatementNode> statements,
+                     SourceProvider sourceProvider) {
+        super(
+            getFirstStartToken(statements),
+            getLastStopToken(statements),
+            sourceProvider
+        );
+
+        this.statements = statements;
+    }
+
+    public List<StatementNode> getStatements() {
+        return statements;
+    }
+
+    @Override
+    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+        return visitor.visitBlockNode(this, argument);
+    }
 
 }

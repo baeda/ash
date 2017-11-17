@@ -65,6 +65,11 @@ class C11Visitor extends ASTSingleVisitor<String> {
         return symbol.getIdentifier() + " = " + expression;
     }
 
+    @Override
+    protected String visitBlockNode(BlockNode node) {
+        return "{\n" + visitChildren(node) + "}\n";
+    }
+
     //region statement nodes
 
     @Override
@@ -80,11 +85,16 @@ class C11Visitor extends ASTSingleVisitor<String> {
     }
 
     @Override
+    protected String visitBlockStatementNode(BlockStatementNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
     public String visitDumpStatementNode(DumpStatementNode node) {
         String expression = visitChildren(node);
         Type type = node.getExpression().getType();
         String fmt = typeMap.getFormat(type);
-        return "printf(\"%\"" + fmt + "\"\", " + expression + ");\n";
+        return "printf(\"%\"" + fmt + ", " + expression + ");\n";
     }
 
     //endregion statement nodes

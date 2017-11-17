@@ -37,6 +37,11 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
         return visitChildren(node);
     }
 
+    @Override
+    protected T visitBlockNode(BlockNode node) {
+        return visitChildren(node);
+    }
+
     //region statement nodes
 
     @Override
@@ -46,6 +51,11 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
 
     @Override
     protected T visitVarAssignStatementNode(VarAssignStatementNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    protected T visitBlockStatementNode(BlockStatementNode node) {
         return visitChildren(node);
     }
 

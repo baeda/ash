@@ -24,6 +24,8 @@ import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.symbol.SymbolTable;
 
+import java.util.Collection;
+
 class SymbolCheckVisitor extends ASTVoidBaseVisitor {
 
     private final ErrorHandler errorHandler;
@@ -38,16 +40,7 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
     protected void visitFileNode(FileNode node) {
         visitChildren(node);
 
-        symbolTable.getDeclaredSymbols().stream()
-            .filter(sym -> !sym.isUsed())
-            .forEach(sym -> {
-                Token id = sym.getDeclSite().getIdentifierToken();
-                if (!sym.isInitialized()) {
-                    errorHandler.emitSymbolNotUsed(id);
-                } else {
-                    errorHandler.emitSymbolInitializedButNotUsed(id);
-                }
-            });
+        checkSymbolUsage(symbolTable.getDeclaredSymbols());
     }
 
     @Override
@@ -78,6 +71,17 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
         node.setSymbol(symbol);
     }
 
+    @Override
+    protected void visitBlockNode(BlockNode node) {
+        symbolTable.pushScope();
+
+        visitChildren(node);
+
+        checkSymbolUsage(symbolTable.getDeclaredSymbolsInCurrentScope());
+
+        symbolTable.popScope();
+    }
+
     //region expression nodes
 
     @Override
@@ -103,5 +107,18 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
     }
 
     //endregion expression nodes
+
+    private void checkSymbolUsage(Collection<Symbol> symbols) {
+        symbols.stream()
+            .filter(sym -> !sym.isUsed())
+            .forEach(sym -> {
+                Token id = sym.getDeclSite().getIdentifierToken();
+                if (!sym.isInitialized()) {
+                    errorHandler.emitSymbolNotUsed(id);
+                } else {
+                    errorHandler.emitSymbolInitializedButNotUsed(id);
+                }
+            });
+    }
 
 }

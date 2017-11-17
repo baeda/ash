@@ -30,9 +30,14 @@ varAssign
     : id=IDENTIFIER '=' value=expression
     ;
 
+block
+    : '{' statements+=statement* '}'
+    ;
+
 statement
     : ref=varDeclaration     ';' #VarDeclarationStatement
     | ref=varAssign          ';' #VarAssignStatement
+    | ref=block                  #BlockStatement
     | 'dump' expr=expression ';' #DumpStatement
     ;
 

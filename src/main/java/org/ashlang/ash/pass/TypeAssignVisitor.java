@@ -23,7 +23,6 @@ import org.ashlang.ash.ast.IntExpressionNode;
 import org.ashlang.ash.ast.VarDeclarationNode;
 import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
 import org.ashlang.ash.symbol.Symbol;
-import org.ashlang.ash.symbol.SymbolTable;
 import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.TypeMap;
 import org.ashlang.ash.type.UntypedInt;
@@ -32,11 +31,9 @@ import java.math.BigInteger;
 
 class TypeAssignVisitor extends ASTVoidBaseVisitor {
 
-    private final SymbolTable symbolTable;
     private final TypeMap typeMap;
 
-    TypeAssignVisitor(SymbolTable symbolTable, TypeMap typeMap) {
-        this.symbolTable = symbolTable;
+    TypeAssignVisitor(TypeMap typeMap) {
         this.typeMap = typeMap;
     }
 
@@ -51,8 +48,7 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
 
     @Override
     protected void visitIdExpressionNode(IdExpressionNode node) {
-        String identifier = node.getValue().getText();
-        Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
+        Symbol symbol = node.getSymbol();
 
         if (symbol == null) {
             return;

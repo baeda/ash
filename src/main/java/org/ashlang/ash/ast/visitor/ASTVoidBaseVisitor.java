@@ -34,6 +34,11 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
         visitChildren(node);
     }
 
+    @Override
+    protected void visitBlockNode(BlockNode node) {
+        visitChildren(node);
+    }
+
     //region statement nodes
 
     protected void visitVarDeclarationStatementNode(VarDeclarationStatementNode node) {
@@ -41,6 +46,11 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
     }
 
     protected void visitVarAssignStatementNode(VarAssignStatementNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void visitBlockStatementNode(BlockStatementNode node) {
         visitChildren(node);
     }
 

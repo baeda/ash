@@ -20,41 +20,70 @@ package org.ashlang.ash.symbol;
 
 import org.ashlang.ash.ast.VarDeclarationNode;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Deque;
+import java.util.stream.Collectors;
 
 public class SymbolTable {
 
-    private final Map<String, Symbol> symbolTable;
+    private final Deque<Scope> scopeStack;
 
     public SymbolTable() {
-        symbolTable = new HashMap<>();
+        scopeStack = new ArrayDeque<>();
+        // push global scope
+        scopeStack.push(new Scope());
+    }
+
+    public void pushScope() {
+        scopeStack.push(new Scope());
+    }
+
+    public void popScope() {
+        if (scopeStack.size() == 1) {
+            throw new IllegalStateException("must not pop global scope");
+        }
+        scopeStack.pop();
     }
 
     public Symbol declareSymbol(VarDeclarationNode declSite) {
-        String identifier = declSite.getIdentifierToken().getText();
-        Symbol symbol = symbolTable.get(identifier);
-        if (symbol != null) {
-            throw new IllegalStateException("Symbol " + symbol + " already declared.");
-        }
-
-        symbol = new Symbol(declSite);
-        symbolTable.put(identifier, symbol);
-        return symbol;
+        return currentScope().declareSymbol(declSite);
     }
 
     public Symbol getDeclaredSymbol(VarDeclarationNode declSite) {
-        String identifier = declSite.getIdentifierToken().getText();
-        return getDeclaredSymbol(identifier);
+        for (Scope scope : scopeStack) {
+            Symbol declaredSymbol = scope.getDeclaredSymbol(declSite);
+            if (declaredSymbol != null) {
+                return declaredSymbol;
+            }
+        }
+
+        return null;
     }
 
     public Symbol getDeclaredSymbol(String identifier) {
-        return symbolTable.get(identifier);
+        for (Scope scope : scopeStack) {
+            Symbol declaredSymbol = scope.getDeclaredSymbol(identifier);
+            if (declaredSymbol != null) {
+                return declaredSymbol;
+            }
+        }
+
+        return null;
+    }
+
+    public Collection<Symbol> getDeclaredSymbolsInCurrentScope() {
+        return currentScope().getDeclaredSymbols();
     }
 
     public Collection<Symbol> getDeclaredSymbols() {
-        return symbolTable.values();
+        return scopeStack.stream()
+            .flatMap(scope -> scope.getDeclaredSymbols().stream())
+            .collect(Collectors.toList());
+    }
+
+    private Scope currentScope() {
+        return scopeStack.peek();
     }
 
 }

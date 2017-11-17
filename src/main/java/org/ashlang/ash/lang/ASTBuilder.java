@@ -89,6 +89,21 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         );
     }
 
+    @Override
+    public BlockNode visitBlock(BlockContext ctx) {
+        List<StatementNode> statements = ctx.statements.stream()
+            .map(stmtCtx -> (StatementNode) visit(stmtCtx))
+            .collect(Collectors.toList());
+
+        return setParent(
+            new BlockNode(
+                statements,
+                sourceProvider
+            ),
+            statements
+        );
+    }
+
     //region statement nodes
 
     @Override
@@ -116,6 +131,20 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
                 sourceProvider
             ),
             varAssign
+        );
+    }
+
+    @Override
+    public BlockStatementNode
+    visitBlockStatement(BlockStatementContext ctx) {
+        BlockNode block = visitBlock(ctx.ref);
+        return setParent(
+            new BlockStatementNode(
+                block,
+                new Token(ctx.stop),
+                sourceProvider
+            ),
+            block
         );
     }
 
@@ -255,8 +284,9 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     @SafeVarargs
     private static <T extends ASTNode, U extends ASTNode>
-    T setParent(T parent, U... children) {
-        for (U child : children) {
+    T setParent(T parent, U firstChild, U... otherChildren) {
+        firstChild.setParent(parent);
+        for (U child : otherChildren) {
             child.setParent(parent);
         }
         return parent;

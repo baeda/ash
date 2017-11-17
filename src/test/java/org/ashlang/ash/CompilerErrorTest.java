@@ -92,12 +92,36 @@ public class CompilerErrorTest {
     }
 
     @Test
+    public void symbolAlreadyDeclared_inNewScope() {
+        assertThat(
+            "a : i32;",
+            "{",
+            "    a : i32;",
+            "}")
+            .hasError(SYMBOL_ALREADY_DECLARED).at(3, 5)
+            .hasError(SYMBOL_NOT_USED).at(1, 1)
+            .hasNoMoreErrors();
+    }
+
+    @Test
     public void symbolNotDeclared() {
         assertThat(
             "a : i32;",
             "b = 12;")
             .hasError(SYMBOL_NOT_DECLARED).at(2, 1)
             .hasError(SYMBOL_NOT_USED).at(1, 1)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void symbolNotDeclared_outsideScope() {
+        assertThat(
+            "{",
+            "    a : i32;",
+            "}",
+            "a = 12;")
+            .hasError(SYMBOL_NOT_DECLARED).at(4, 1)
+            .hasError(SYMBOL_NOT_USED).at(2, 5)
             .hasNoMoreErrors();
     }
 
@@ -111,9 +135,30 @@ public class CompilerErrorTest {
     }
 
     @Test
+    public void symbolNotInitialized_emittedOnScopeEnd() {
+        assertThat(
+            "{",
+            "    a : i32;",
+            "    dump a;",
+            "}")
+            .hasError(SYMBOL_NOT_INITIALIZED).at(3, 10)
+            .hasNoMoreErrors();
+    }
+
+    @Test
     public void symbolNotUsed() {
         assertThat("a : i32;")
             .hasError(SYMBOL_NOT_USED).at(1, 1)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void symbolNotUsed_emittedOnScopeEnd() {
+        assertThat(
+            "{",
+            "    a : i32;",
+            "}")
+            .hasError(SYMBOL_NOT_USED).at(2, 5)
             .hasNoMoreErrors();
     }
 
