@@ -71,6 +71,7 @@ public final class AshMain {
         ASTPrinter.print(rootNode);
 
         String c11Src = translateToC11(rootNode);
+        c11Src = IOUtil.tryIndent(c11Src);
         System.out.println("C11 source:\n==============");
         System.out.println(c11Src);
         Path dir = inFile.getParent();

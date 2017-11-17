@@ -19,16 +19,18 @@
 package org.ashlang.ash.util;
 
 @FunctionalInterface
-public interface ThrowingConsumer<T, X extends Throwable> {
+public interface ThrowingFunction<T, R, X extends Throwable> {
 
-    void accept(T t) throws X;
+    R apply(T t) throws X;
 
-    default <Y extends Throwable> ThrowingConsumer<T, Throwable>
-    andThen(ThrowingConsumer<? super T, Y> after) {
-        return (T t) -> {
-            accept(t);
-            after.accept(t);
-        };
+    default <V, Y extends Throwable> ThrowingFunction<V, R, Throwable>
+    compose(ThrowingFunction<? super V, ? extends T, Y> before) {
+        return (V v) -> apply(before.apply(v));
+    }
+
+    default <V, Y extends Throwable> ThrowingFunction<T, V, Throwable>
+    andThen(ThrowingFunction<? super R, ? extends V, Y> after) {
+        return (T t) -> after.apply(apply(t));
     }
 
 }

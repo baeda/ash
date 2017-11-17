@@ -86,11 +86,35 @@ public final class IOUtil {
         }
     }
 
+    public static <V, X extends Throwable> V
+    executeInTempDir(ThrowingFunction<Path, V, X> consumer) throws X {
+        Path tmpDir = null;
+        try {
+            tmpDir = Files.createTempDirectory(IOUtil.class.getCanonicalName())
+                .toAbsolutePath();
+            return consumer.apply(tmpDir);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (tmpDir != null) {
+                deleteRecursive(tmpDir);
+            }
+        }
+    }
+
     public static String exhaustiveReadStreamUTF8(InputStream in) {
         Scanner scanner = new Scanner(in, "UTF-8").useDelimiter("\\A+");
         return scanner.hasNext()
             ? scanner.next()
             : "";
+    }
+
+    public static String readUTF8(Path file) {
+        try {
+            return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void writeUTF8(Path path, String content) {
@@ -107,6 +131,26 @@ public final class IOUtil {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String tryIndent(String c11Src) {
+        return executeInTempDir(tmpDir -> {
+            Path outFile = tmpDir.resolve("main.c");
+            writeUTF8(outFile, c11Src);
+            ExecResult indent = exec(
+                "indent",
+                "-linux",
+                "-nut",
+                "-i4",
+                outFile.toAbsolutePath()
+            );
+
+            if (indent.isExceptional() || indent.hasErrors()) {
+                return c11Src;
+            }
+
+            return readUTF8(outFile);
+        });
     }
 
     private static class
