@@ -21,6 +21,7 @@ package org.ashlang.ash.ast;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 
 import static org.ashlang.ash.util.ReflectionUtil.*;
@@ -58,10 +59,28 @@ public final class ASTPrinter {
 
     private static void
     printField(Field field, ASTNode node, int level, int longestFieldName) {
+        if ("parent".equals(field.getName())) {
+            return;
+        }
+
         Object value = getFieldValue(field, node);
         if (value instanceof ASTNode) {
             return;
         }
+        if (value instanceof Collection<?>) {
+            boolean collectionOfAST = true;
+            for (Object obj : ((Collection<?>) value)) {
+                if (!(obj instanceof ASTNode)) {
+                    collectionOfAST = false;
+                    break;
+                }
+            }
+
+            if (collectionOfAST) {
+                return;
+            }
+        }
+
 
         String fieldName = field.getName();
         if (fieldName.equals("startToken") || fieldName.equals("stopToken")) {
@@ -73,9 +92,20 @@ public final class ASTPrinter {
     }
 
     private static void printFieldRec(Field field, ASTNode node, int level) {
+        if ("parent".equals(field.getName())) {
+            return;
+        }
+
         Object value = getFieldValue(field, node);
         if (value instanceof ASTNode) {
             print((ASTNode) value, level + 1);
+        }
+        if (value instanceof Collection<?>) {
+            for (Object obj : ((Collection<?>) value)) {
+                if (obj instanceof ASTNode) {
+                    print((ASTNode) obj, level + 1);
+                }
+            }
         }
     }
 
