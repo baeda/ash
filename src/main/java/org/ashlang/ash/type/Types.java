@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public interface Types {
 
     Type INVALID = new InvalidType();
+    Type VOID = new VoidType();
     Type I8 = new IntType(8, true);
     Type I16 = new IntType(16, true);
     Type I32 = new IntType(32, true);

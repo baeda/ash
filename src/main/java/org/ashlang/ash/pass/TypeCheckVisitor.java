@@ -26,8 +26,7 @@ import org.ashlang.ash.type.OperatorMap;
 import org.ashlang.ash.type.Type;
 
 import static org.ashlang.ash.type.Operator.*;
-import static org.ashlang.ash.type.Types.INVALID;
-import static org.ashlang.ash.type.Types.allValid;
+import static org.ashlang.ash.type.Types.*;
 
 class TypeCheckVisitor extends ASTVoidBaseVisitor {
 
@@ -42,6 +41,9 @@ class TypeCheckVisitor extends ASTVoidBaseVisitor {
     @Override
     protected void
     visitVarDeclarationNode(VarDeclarationNode node) {
+        if (VOID.equals(node.getType())) {
+            node.setType(INVALID);
+        }
         if (INVALID.equals(node.getType())) {
             errorHandler.emitInvalidType(node.getTypeToken());
         }
