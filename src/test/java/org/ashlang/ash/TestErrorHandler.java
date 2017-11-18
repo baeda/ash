@@ -65,6 +65,11 @@ class TestErrorHandler implements ErrorHandler {
     }
 
     @Override
+    public void emitInputMismatch(TokenRange pos, String expectedTokens) {
+        addError(INPUT_MISMATCH, pos.getStartToken());
+    }
+
+    @Override
     public void emitInvalidType(Token pos) {
         addError(INVALID_TYPE, pos);
     }
@@ -105,6 +110,12 @@ class TestErrorHandler implements ErrorHandler {
     }
 
     @Override
+    public void
+    emitFunctionAlreadyDeclared(Token pos, Token declSite) {
+        addError(FUNCTION_ALREADY_DECLARED, pos);
+    }
+
+    @Override
     public void emitDivisionByZero(TokenRange pos) {
         addError(DIV_BY_ZERO, pos.getStartToken());
     }
@@ -117,6 +128,11 @@ class TestErrorHandler implements ErrorHandler {
     @Override
     public void emitIntConstantUnderflow(TokenRange pos, Type have) {
         addError(INT_CONST_UNDERFLOW, pos.getStartToken());
+    }
+
+    @Override
+    public void emitNoEntryPoint(Token pos) {
+        addError(NO_ENTRY_POINT, pos);
     }
 
     private void addError(ErrorType errorType, Token pos) {

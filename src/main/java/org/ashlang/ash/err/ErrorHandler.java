@@ -30,6 +30,7 @@ public interface ErrorHandler {
     void emitUnknownToken(Token pos);
     void emitMissingToken(Token pos, String expectedTokens);
     void emitInputMismatch(Token pos, String expectedTokens);
+    void emitInputMismatch(TokenRange pos, String expectedTokens);
     void emitInvalidType(Token pos);
     void emitTypeMismatch(TokenRange pos, Type have, Type want);
     void emitInvalidOperator(Token pos, Type left, Type right);
@@ -38,9 +39,12 @@ public interface ErrorHandler {
     void emitSymbolNotInitialized(TokenRange pos, Token declSite);
     void emitSymbolNotUsed(Token pos);
     void emitSymbolInitializedButNotUsed(Token pos);
+    void emitFunctionAlreadyDeclared(Token pos, Token declSite);
 
     void emitDivisionByZero(TokenRange pos);
     void emitIntConstantOverflow(TokenRange pos, Type have);
     void emitIntConstantUnderflow(TokenRange pos, Type have);
+
+    void emitNoEntryPoint(Token pos);
 
 }

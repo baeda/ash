@@ -21,6 +21,7 @@ package org.ashlang.ash.pass;
 import org.ashlang.ash.ast.*;
 import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
 import org.ashlang.ash.err.ErrorHandler;
+import org.ashlang.ash.symbol.Function;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.symbol.SymbolTable;
 
@@ -41,6 +42,23 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
         visitChildren(node);
 
         checkSymbolUsage(symbolTable.getDeclaredSymbols());
+        assertMainFunctionPresent(node.getStopToken(), symbolTable.getDeclaredFunctions());
+    }
+
+    @Override
+    protected void visitFuncDeclarationNode(FuncDeclarationNode node) {
+        visitChildren(node);
+
+        Function function = symbolTable.getDeclaredFunction(node);
+        if (function != null) {
+            errorHandler.emitFunctionAlreadyDeclared(
+                node.getIdentifierToken(),
+                function.getDeclSite().getIdentifierToken());
+        } else {
+            function = symbolTable.declareFunction(node);
+        }
+
+        node.setFunction(function);
     }
 
     @Override
@@ -119,6 +137,17 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
                     errorHandler.emitSymbolInitializedButNotUsed(id);
                 }
             });
+    }
+
+    private void
+    assertMainFunctionPresent(Token pos, Collection<Function> functions) {
+        long numMainFunctions = functions.stream()
+            .filter(func -> "main".equals(func.getIdentifier()))
+            .count();
+
+        if (numMainFunctions <= 0L) {
+            errorHandler.emitNoEntryPoint(pos);
+        }
     }
 
 }

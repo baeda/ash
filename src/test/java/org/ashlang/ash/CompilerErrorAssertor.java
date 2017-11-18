@@ -24,7 +24,7 @@ import org.ashlang.ash.ast.Token;
 import org.ashlang.ash.err.ErrorHandler;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -105,16 +105,20 @@ class CompilerErrorAssertor {
             }
 
             if (matches.isEmpty()) {
-                Map<ErrorType, List<String>> errorMap = getErrors().stream()
-                    .collect(Collectors.toMap(
-                        Pair::getLeft,
-                        pair -> {
-                            String pos = String.format("%d:%d",
-                                pair.getRight().getLine() + 1,
-                                pair.getRight().getColumn() + 1);
-                            return Collections.singletonList(pos);
-                        }
-                    ));
+                Map<ErrorType, List<String>> errorMap = new HashMap<>();
+                getErrors().forEach(pair -> {
+                    ErrorType key = pair.getLeft();
+                    Token value = pair.getRight();
+                    String pos = String.format("%d:%d",
+                        value.getLine() + 1,
+                        value.getColumn() + 1);
+                    List<String> bucket = errorMap.computeIfAbsent(
+                        key,
+                        k -> new ArrayList<>()
+                    );
+
+                    bucket.add(pos);
+                });
 
                 StringBuilder buf = new StringBuilder();
                 errorMap.forEach((errorType, posList) -> {

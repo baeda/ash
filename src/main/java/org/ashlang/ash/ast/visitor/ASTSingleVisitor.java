@@ -23,6 +23,8 @@ import org.ashlang.ash.ast.*;
 public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
 
     protected abstract T visitFileNode(FileNode node);
+
+    protected abstract T visitFuncDeclarationNode(FuncDeclarationNode node);
     protected abstract T visitVarDeclarationNode(VarDeclarationNode node);
     protected abstract T visitVarAssignNode(VarAssignNode node);
     protected abstract T visitBlockNode(BlockNode node);
@@ -64,6 +66,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     public final T
     visitFileNode(FileNode node, Void argument) {
         return visitFileNode(node);
+    }
+
+    @Override
+    public final T
+    visitFuncDeclarationNode(FuncDeclarationNode node, Void argument) {
+        return visitFuncDeclarationNode(node);
     }
 
     @Override

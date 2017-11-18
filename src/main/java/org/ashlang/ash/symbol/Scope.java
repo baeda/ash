@@ -18,6 +18,7 @@
 
 package org.ashlang.ash.symbol;
 
+import org.ashlang.ash.ast.FuncDeclarationNode;
 import org.ashlang.ash.ast.VarDeclarationNode;
 
 import java.util.Collection;
@@ -27,9 +28,11 @@ import java.util.Map;
 class Scope {
 
     private final Map<String, Symbol> symbolTable;
+    private final Map<String, Function> functionTable;
 
     Scope() {
         symbolTable = new HashMap<>();
+        functionTable = new HashMap<>();
     }
 
     Symbol declareSymbol(VarDeclarationNode declSite) {
@@ -55,6 +58,31 @@ class Scope {
 
     Collection<Symbol> getDeclaredSymbols() {
         return symbolTable.values();
+    }
+
+    Function declareFunction(FuncDeclarationNode declSite) {
+        String identifier = declSite.getIdentifierToken().getText();
+        Function function = functionTable.get(identifier);
+        if (function != null) {
+            throw new IllegalStateException("Function " + function + " already declared.");
+        }
+
+        function = new Function(declSite);
+        functionTable.put(identifier, function);
+        return function;
+    }
+
+    Function getDeclaredFunction(FuncDeclarationNode declSite) {
+        String identifier = declSite.getIdentifierToken().getText();
+        return getDeclaredFunction(identifier);
+    }
+
+    Function getDeclaredFunction(String identifier) {
+        return functionTable.get(identifier);
+    }
+
+    Collection<Function> getDeclaredFunctions() {
+        return functionTable.values();
     }
 
 }

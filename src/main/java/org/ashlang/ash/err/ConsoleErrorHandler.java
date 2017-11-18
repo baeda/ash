@@ -89,6 +89,13 @@ public class ConsoleErrorHandler implements ErrorHandler {
     }
 
     @Override
+    public void emitInputMismatch(TokenRange pos, String expectedTokens) {
+        emit(pos, "mismatched input '%s' expecting %s",
+            pos.getText(), expectedTokens);
+        numSyntacticErrors++;
+    }
+
+    @Override
     public void emitInvalidType(Token pos) {
         emit(pos, "invalid type '%s'", pos.getText());
         numSemanticErrors++;
@@ -111,8 +118,8 @@ public class ConsoleErrorHandler implements ErrorHandler {
 
     @Override
     public void emitSymbolAlreadyDeclared(Token pos, Token declSite) {
-        emit(pos, "symbol '%s' already declared at %d:%d",
-            pos.getText(), declSite.getLine() + 1, declSite.getColumn() + 1);
+        emit(pos, "symbol '%s' already declared at %s",
+            pos.getText(), formatPosition(declSite));
         numSemanticErrors++;
     }
 
@@ -144,6 +151,14 @@ public class ConsoleErrorHandler implements ErrorHandler {
     }
 
     @Override
+    public void
+    emitFunctionAlreadyDeclared(Token pos, Token declSite) {
+        emit(pos, "function '%s' already declared at %s",
+            pos.getText(), formatPosition(declSite));
+        numSemanticErrors++;
+    }
+
+    @Override
     public void emitDivisionByZero(TokenRange pos) {
         emit(pos, "division by zero");
     }
@@ -158,6 +173,12 @@ public class ConsoleErrorHandler implements ErrorHandler {
     public void emitIntConstantUnderflow(TokenRange pos, Type have) {
         emit(pos, "integer constant '%s' underflows '%s'",
             pos.getText(), have.getId());
+        numSemanticErrors++;
+    }
+
+    @Override
+    public void emitNoEntryPoint(Token pos) {
+        emit(pos, "no entry point (main function) found");
         numSemanticErrors++;
     }
 

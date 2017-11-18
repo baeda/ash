@@ -143,7 +143,10 @@ public class CompilerSystemTest {
             ErrorHandler errorHandler = new ConsoleErrorHandler(errStream);
 
             // [ash compiler] Act
-            ASTNode rootNode = AshMain.buildAST(input, errorHandler);
+            ASTNode rootNode = AshMain.buildAST(
+                String.format("func main() : void { %s }", input),
+                errorHandler
+            );
 
             // [ash compiler] Assert
             assertThat(errorHandler.hasErrors())

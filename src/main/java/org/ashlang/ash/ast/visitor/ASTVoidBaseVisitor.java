@@ -22,14 +22,22 @@ import org.ashlang.ash.ast.*;
 
 public class ASTVoidBaseVisitor extends ASTVoidVisitor {
 
+    @Override
     protected void visitFileNode(FileNode node) {
         visitChildren(node);
     }
 
+    @Override
+    protected void visitFuncDeclarationNode(FuncDeclarationNode node) {
+        visitChildren(node);
+    }
+
+    @Override
     protected void visitVarDeclarationNode(VarDeclarationNode node) {
         visitChildren(node);
     }
 
+    @Override
     protected void visitVarAssignNode(VarAssignNode node) {
         visitChildren(node);
     }
@@ -41,10 +49,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
 
     //region statement nodes
 
+    @Override
     protected void visitVarDeclarationStatementNode(VarDeclarationStatementNode node) {
         visitChildren(node);
     }
 
+    @Override
     protected void visitVarAssignStatementNode(VarAssignStatementNode node) {
         visitChildren(node);
     }
@@ -54,6 +64,7 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
         visitChildren(node);
     }
 
+    @Override
     protected void visitDumpStatementNode(DumpStatementNode node) {
         visitChildren(node);
     }
@@ -62,34 +73,42 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
 
     //region expression nodes
 
+    @Override
     protected void visitParenExpressionNode(ParenExpressionNode node) {
         visitChildren(node);
     }
 
+    @Override
     protected void visitAddExpressionNode(AddExpressionNode node) {
         visitChildren(node);
     }
 
+    @Override
     protected void visitSubExpressionNode(SubExpressionNode node) {
         visitChildren(node);
     }
 
+    @Override
     protected void visitMulExpressionNode(MulExpressionNode node) {
         visitChildren(node);
     }
 
+    @Override
     protected void visitDivExpressionNode(DivExpressionNode node) {
         visitChildren(node);
     }
 
+    @Override
     protected void visitModExpressionNode(ModExpressionNode node) {
         visitChildren(node);
     }
 
+    @Override
     protected void visitIdExpressionNode(IdExpressionNode node) {
         visitChildren(node);
     }
 
+    @Override
     protected void visitIntExpressionNode(IntExpressionNode node) {
         visitChildren(node);
     }

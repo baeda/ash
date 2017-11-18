@@ -28,6 +28,11 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
     }
 
     @Override
+    public T visitFuncDeclarationNode(FuncDeclarationNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
     public T visitVarDeclarationNode(VarDeclarationNode node, A argument) {
         return visitChildren(node, argument);
     }

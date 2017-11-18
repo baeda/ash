@@ -26,11 +26,12 @@ public class BlockNode extends ASTNode {
 
     private final List<StatementNode> statements;
 
-    public BlockNode(List<StatementNode> statements,
+    public BlockNode(Token startToken, Token stopToken,
+                     List<StatementNode> statements,
                      SourceProvider sourceProvider) {
         super(
-            getFirstStartToken(statements),
-            getLastStopToken(statements),
+            startToken,
+            stopToken,
             sourceProvider
         );
 

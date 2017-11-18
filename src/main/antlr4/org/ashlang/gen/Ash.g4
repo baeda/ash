@@ -19,7 +19,11 @@
 grammar Ash;
 
 file
-    : statement+
+    : functions+=funcDeclaration+
+    ;
+
+funcDeclaration
+    : 'func' id=IDENTIFIER '('')' ':' type=IDENTIFIER body=block
     ;
 
 varDeclaration
@@ -60,6 +64,7 @@ R_PAREN   : ')' ;
 SEMICOLON : ';' ;
 COLON     : ':' ;
 
+KW_FUNC : 'func' ;
 KW_DUMP : 'dump' ;
 
 INTEGER    : [0-9]+                        ;

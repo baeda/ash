@@ -6,21 +6,21 @@ import java.util.List;
 
 public class FileNode extends ASTNode {
 
-    private final List<StatementNode> statements;
+    private final List<FuncDeclarationNode> functions;
 
-    public FileNode(List<StatementNode> statements,
+    public FileNode(List<FuncDeclarationNode> functions,
                     SourceProvider sourceProvider) {
         super(
-            getFirstStartToken(statements),
-            getLastStopToken(statements),
+            getFirstStartToken(functions),
+            getLastStopToken(functions),
             sourceProvider
         );
 
-        this.statements = statements;
+        this.functions = functions;
     }
 
-    public List<StatementNode> getStatements() {
-        return statements;
+    public List<FuncDeclarationNode> getFunctions() {
+        return functions;
     }
 
     @Override

@@ -54,16 +54,31 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     @Override
     public FileNode visitFile(FileContext ctx) {
-        List<StatementNode> statements = ctx.statement().stream()
-            .map(stmtCtx -> (StatementNode) visit(stmtCtx))
+        List<FuncDeclarationNode> functions = ctx.functions.stream()
+            .map(funcDeclCtx -> (FuncDeclarationNode) visit(funcDeclCtx))
             .collect(Collectors.toList());
 
         return setParent(
             new FileNode(
-                statements,
+                functions,
                 sourceProvider
             ),
-            statements
+            functions
+        );
+    }
+
+    @Override
+    public FuncDeclarationNode visitFuncDeclaration(FuncDeclarationContext ctx) {
+        BlockNode body = visitBlock(ctx.body);
+
+        return setParent(
+            new FuncDeclarationNode(
+                new Token(ctx.id),
+                new Token(ctx.type),
+                body,
+                sourceProvider
+            ),
+            body
         );
     }
 
@@ -97,6 +112,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
         return setParent(
             new BlockNode(
+                new Token(ctx.start),
+                new Token(ctx.stop),
                 statements,
                 sourceProvider
             ),
@@ -294,7 +311,9 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     private static <T extends ASTNode, U extends ASTNode>
     T setParent(T parent, Collection<U> children) {
-        children.forEach(child -> child.setParent(parent));
+        children.stream()
+            .filter(Objects::nonNull)
+            .forEach(child -> child.setParent(parent));
         return parent;
     }
 

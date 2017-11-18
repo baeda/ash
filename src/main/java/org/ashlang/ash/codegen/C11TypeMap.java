@@ -27,24 +27,26 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class C11TypeMap {
+class C11TypeMap {
 
     private final Map<Type, Pair<String, String>> typeMap;
 
-    public C11TypeMap() {
+    C11TypeMap() {
         typeMap = Types.allSubTypes(IntType.class)
             .stream()
             .collect(Collectors.toMap(
                 Function.identity(),
                 type -> Pair.of(cType(type), cFormat(type))
             ));
+
+        typeMap.put(Types.VOID, Pair.of("void", ""));
     }
 
-    public String getType(Type type) {
+    String getType(Type type) {
         return typeMap.get(type).getLeft();
     }
 
-    public String getFormat(Type type) {
+    String getFormat(Type type) {
         return typeMap.get(type).getRight();
     }
 

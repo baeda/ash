@@ -18,6 +18,7 @@
 
 package org.ashlang.ash.pass;
 
+import org.ashlang.ash.ast.FuncDeclarationNode;
 import org.ashlang.ash.ast.IdExpressionNode;
 import org.ashlang.ash.ast.IntExpressionNode;
 import org.ashlang.ash.ast.VarDeclarationNode;
@@ -25,6 +26,7 @@ import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.TypeMap;
+import org.ashlang.ash.type.Types;
 import org.ashlang.ash.type.UntypedInt;
 
 import java.math.BigInteger;
@@ -35,6 +37,19 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
 
     TypeAssignVisitor(TypeMap typeMap) {
         this.typeMap = typeMap;
+    }
+
+    @Override
+    protected void visitFuncDeclarationNode(FuncDeclarationNode node) {
+        visitChildren(node);
+
+        String typeString = node.getTypeToken().getText();
+        Type type = typeMap.resolve(typeString);
+        if (Types.VOID != type) {
+            throw new IllegalStateException("cannot use anything else than void functions atm.");
+        }
+
+        node.setType(type);
     }
 
     @Override

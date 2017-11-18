@@ -28,6 +28,11 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
     }
 
     @Override
+    protected T visitFuncDeclarationNode(FuncDeclarationNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
     protected T visitVarDeclarationNode(VarDeclarationNode node) {
         return visitChildren(node);
     }

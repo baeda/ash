@@ -35,20 +35,36 @@ class C11Visitor extends ASTSingleVisitor<String> {
 
     @Override
     public String visitFileNode(FileNode node) {
-        return String.join(
-            "\n",
+        return String.join("\n",
             "#include <stdio.h>",
             "#include <stdint.h>",
             "#include <inttypes.h>",
             "",
-            "int main(int argc, char **argv) {",
-            "  (void) argc;",
-            "  (void) argv;",
-            "",
             visitChildren(node),
-            "  return 0;",
-            "}",
             "");
+    }
+
+    @Override
+    protected String visitFuncDeclarationNode(FuncDeclarationNode node) {
+        String body = visit(node.getBody());
+        String cType = typeMap.getType(node.getType());
+        String identifier = node.getIdentifierToken().getText();
+
+        if ("main".equals(identifier)) {
+            return String.join("\n",
+                "static inline " + cType + " __ash_main()" + body,
+                "int main(int argc, char **argv) {",
+                "    (void) argc;",
+                "    (void) argv;",
+                "",
+                "    __ash_main();",
+                "",
+                "    return 0;",
+                "}"
+            );
+        }
+
+        return cType + " " + identifier + "()" + body;
     }
 
     @Override

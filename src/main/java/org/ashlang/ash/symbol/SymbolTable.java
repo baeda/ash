@@ -18,6 +18,7 @@
 
 package org.ashlang.ash.symbol;
 
+import org.ashlang.ash.ast.FuncDeclarationNode;
 import org.ashlang.ash.ast.VarDeclarationNode;
 
 import java.util.ArrayDeque;
@@ -79,6 +80,38 @@ public class SymbolTable {
     public Collection<Symbol> getDeclaredSymbols() {
         return scopeStack.stream()
             .flatMap(scope -> scope.getDeclaredSymbols().stream())
+            .collect(Collectors.toList());
+    }
+
+    public Function declareFunction(FuncDeclarationNode declSite) {
+        return currentScope().declareFunction(declSite);
+    }
+
+    public Function getDeclaredFunction(FuncDeclarationNode declSite) {
+        for (Scope scope : scopeStack) {
+            Function declaredFunction = scope.getDeclaredFunction(declSite);
+            if (declaredFunction != null) {
+                return declaredFunction;
+            }
+        }
+
+        return null;
+    }
+
+    public Function getDeclaredFunction(String identifier) {
+        for (Scope scope : scopeStack) {
+            Function declaredFunction = scope.getDeclaredFunction(identifier);
+            if (declaredFunction != null) {
+                return declaredFunction;
+            }
+        }
+
+        return null;
+    }
+
+    public Collection<Function> getDeclaredFunctions() {
+        return scopeStack.stream()
+            .flatMap(scope -> scope.getDeclaredFunctions().stream())
             .collect(Collectors.toList());
     }
 

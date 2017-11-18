@@ -19,7 +19,9 @@
 package org.ashlang.ash.lang;
 
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.Interval;
 import org.ashlang.ash.ast.Token;
+import org.ashlang.ash.ast.TokenRange;
 import org.ashlang.ash.err.ErrorHandler;
 
 public class ParserErrorListener extends BaseErrorListener {
@@ -47,14 +49,50 @@ public class ParserErrorListener extends BaseErrorListener {
         if (e instanceof InputMismatchException) {
             errorHandler.emitInputMismatch(position, expectedTokens);
         } else if (e instanceof NoViableAltException) {
-            new ConsoleErrorListener()
-                .syntaxError(recognizer, offendingSymbol, line, column, msg, e);
+            NoViableAltException nva = (NoViableAltException) e;
+
+            TokenRange range = createRange(
+                parser,
+                nva.getStartToken(),
+                nva.getOffendingToken()
+            );
+
+            errorHandler.emitInputMismatch(range, expectedTokens);
         } else if (e instanceof FailedPredicateException) {
-            new ConsoleErrorListener()
-                .syntaxError(recognizer, offendingSymbol, line, column, msg, e);
+            throw e;
         } else {
             errorHandler.emitMissingToken(position, expectedTokens);
         }
+    }
+
+    private TokenRange createRange(
+        Parser parser,
+        org.antlr.v4.runtime.Token start,
+        org.antlr.v4.runtime.Token stop
+    ) {
+        return new TokenRange() {
+            @Override
+            public Token getStartToken() {
+                return new Token(start);
+            }
+
+            @Override
+            public Token getStopToken() {
+                return new Token(stop);
+            }
+
+            @Override
+            public String getText() {
+                return parser
+                    .getInputStream()
+                    .getTokenSource()
+                    .getInputStream()
+                    .getText(Interval.of(
+                        start.getStartIndex(),
+                        stop.getStopIndex()
+                    ));
+            }
+        };
     }
 
 }
