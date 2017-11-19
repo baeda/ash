@@ -134,7 +134,9 @@ public class CompilerSystemTest {
             {"func main() : void { a:i32; b:i32; a=12; b=5; dump a+b; }", "17"},
 
             {"func rnd() : i32 { return 42; } func main() : void { dump rnd(); }", "42"},
+            {"func main() : void { dump rnd(); } func rnd() : i32 { return 42; }", "42"},
             {"func run() : void { dump 42; } func main() : void { run(); }", "42"},
+            {"func main() : void { run(); } func run() : void { dump 42; }", "42"},
         };
     }
 

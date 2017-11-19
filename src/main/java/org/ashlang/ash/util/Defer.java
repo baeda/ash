@@ -16,18 +16,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.codegen;
+package org.ashlang.ash.util;
 
-public interface CodeGenerators {
+import java.util.ArrayList;
+import java.util.List;
 
-    CodeGenerator<String> C_11 = root -> {
-        C11TypeMap typeMap = new C11TypeMap();
-        return String.join("\n",
-            "/* INCLUDES & DECLARATIONS */",
-            new C11DeclVisitor(typeMap).visit(root, null),
-            "/* IMPLEMENTATION */",
-            new C11ImplVisitor(typeMap).visit(root, null)
-        );
-    };
+public class Defer {
+
+    private final List<Runnable> actions;
+
+    public Defer() {
+        actions = new ArrayList<>();
+    }
+
+    public void record(Runnable action) {
+        actions.add(action);
+    }
+
+    public void runAll() {
+        actions.forEach(Runnable::run);
+        actions.clear();
+    }
 
 }

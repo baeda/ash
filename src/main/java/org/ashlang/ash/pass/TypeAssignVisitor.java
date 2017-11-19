@@ -25,26 +25,39 @@ import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.TypeMap;
 import org.ashlang.ash.type.UntypedInt;
+import org.ashlang.ash.util.Defer;
 
 import java.math.BigInteger;
 
 class TypeAssignVisitor extends ASTVoidBaseVisitor {
 
     private final TypeMap typeMap;
+    private final Defer defer;
 
     TypeAssignVisitor(TypeMap typeMap) {
         this.typeMap = typeMap;
+
+        defer = new Defer();
+    }
+
+    @Override
+    protected void
+    visitFileNode(FileNode node) {
+        visitChildren(node);
+
+        defer.runAll();
     }
 
     @Override
     protected void
     visitFuncDeclarationNode(FuncDeclarationNode node) {
-        visitChildren(node);
-
         String typeString = node.getTypeToken().getText();
         Type type = typeMap.resolve(typeString);
 
         node.setType(type);
+        // we first want to record and type-assign all function
+        // signatures and then resolve their implementations
+        defer.record(() -> visitChildren(node));
     }
 
     @Override

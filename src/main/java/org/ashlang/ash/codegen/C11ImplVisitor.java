@@ -19,33 +19,21 @@
 package org.ashlang.ash.codegen;
 
 import org.ashlang.ash.ast.*;
-import org.ashlang.ash.ast.visitor.ASTSingleVisitor;
+import org.ashlang.ash.ast.visitor.ASTSingleBaseVisitor;
 import org.ashlang.ash.symbol.Function;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 
 import java.math.BigInteger;
 
-class C11Visitor extends ASTSingleVisitor<String> {
+import static org.ashlang.ash.codegen.C11DeclVisitor.FUNC;
 
-    private static final String FUNC = "_a$h_";
+class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
 
     private final C11TypeMap typeMap;
 
-    C11Visitor() {
-        typeMap = new C11TypeMap();
-    }
-
-    @Override
-    protected String
-    visitFileNode(FileNode node) {
-        return String.join("\n",
-            "#include <stdio.h>",
-            "#include <stdint.h>",
-            "#include <inttypes.h>",
-            "",
-            visitChildren(node),
-            "");
+    C11ImplVisitor(C11TypeMap typeMap) {
+        this.typeMap = typeMap;
     }
 
     @Override
@@ -57,12 +45,12 @@ class C11Visitor extends ASTSingleVisitor<String> {
 
         if ("main".equals(identifier)) {
             return String.join("\n",
-                "static inline " + cType + " " + FUNC + "ash_main()" + body,
+                "static inline " + cType + " " + FUNC + "main()" + body,
                 "int main(int argc, char **argv) {",
                 "    (void) argc;",
                 "    (void) argv;",
                 "",
-                "    " + FUNC + "ash_main();",
+                "    " + FUNC + "main();",
                 "",
                 "    return 0;",
                 "}"
@@ -113,12 +101,6 @@ class C11Visitor extends ASTSingleVisitor<String> {
     protected String
     visitVarAssignStatementNode(VarAssignStatementNode node) {
         return visitChildren(node) + ";\n";
-    }
-
-    @Override
-    protected String
-    visitBlockStatementNode(BlockStatementNode node) {
-        return visitChildren(node);
     }
 
     @Override
@@ -190,12 +172,6 @@ class C11Visitor extends ASTSingleVisitor<String> {
         String lhs = visit(node.getLhs());
         String rhs = visit(node.getRhs());
         return "(" + lhs + "%" + rhs + ")";
-    }
-
-    @Override
-    protected String
-    visitFuncCallExpressionNode(FuncCallExpressionNode node) {
-        return visitChildren(node);
     }
 
     @Override

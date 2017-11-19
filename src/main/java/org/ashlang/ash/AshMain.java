@@ -129,7 +129,7 @@ public final class AshMain {
     }
 
     private static String translateToC11(ASTNode rootNode) {
-        return CodeGenerators.c11().generate(rootNode);
+        return CodeGenerators.C_11.generate(rootNode);
     }
 
     private static void compileToNative(String c11Src, Path outFile) {

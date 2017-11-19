@@ -24,6 +24,7 @@ import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.symbol.Function;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.symbol.SymbolTable;
+import org.ashlang.ash.util.Defer;
 
 import java.util.Collection;
 
@@ -31,10 +32,13 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
 
     private final ErrorHandler errorHandler;
     private final SymbolTable symbolTable;
+    private final Defer defer;
 
     SymbolCheckVisitor(ErrorHandler errorHandler, SymbolTable symbolTable) {
         this.errorHandler = errorHandler;
         this.symbolTable = symbolTable;
+
+        defer = new Defer();
     }
 
     @Override
@@ -44,6 +48,8 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
 
         checkSymbolUsage(symbolTable.getDeclaredSymbols());
         assertMainFunctionPresent(node.getStopToken(), symbolTable.getDeclaredFunctions());
+
+        defer.runAll();
         return null;
     }
 
@@ -116,15 +122,20 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
     @Override
     public Void
     visitFuncCallNode(FuncCallNode node, Function func) {
-        visitChildren(node, func);
-
         String identifier = node.getIdentifierToken().getText();
-        Function declaredFunction = symbolTable.getDeclaredFunction(identifier);
-        if (declaredFunction == null) {
-            errorHandler.emitFunctionNotDeclared(node.getIdentifierToken());
-        }
 
-        node.setFunction(declaredFunction);
+        // check function calls last, when we have
+        // discovered all visible function signatures
+        defer.record(() -> {
+            visitChildren(node, func);
+
+            Function declaredFunction = symbolTable.getDeclaredFunction(identifier);
+            if (declaredFunction == null) {
+                errorHandler.emitFunctionNotDeclared(node.getIdentifierToken());
+            }
+
+            node.setFunction(declaredFunction);
+        });
 
         return null;
     }
