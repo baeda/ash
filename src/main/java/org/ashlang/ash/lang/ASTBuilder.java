@@ -126,6 +126,20 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         );
     }
 
+    @Override
+    public ASTNode
+    visitExpressionStatement(ExpressionStatementContext ctx) {
+        ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
+
+        return setParent(
+            new ExpressionStatementNode(
+                expression,
+                sourceProvider
+            ),
+            expression
+        );
+    }
+
     //region statement nodes
 
     @Override

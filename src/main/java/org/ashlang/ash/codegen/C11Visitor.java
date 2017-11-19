@@ -113,6 +113,12 @@ class C11Visitor extends ASTSingleVisitor<String> {
 
     @Override
     protected String
+    visitExpressionStatementNode(ExpressionStatementNode node) {
+        return visitChildren(node) + ";\n";
+    }
+
+    @Override
+    protected String
     visitDumpStatementNode(DumpStatementNode node) {
         String expression = visitChildren(node);
         Type type = node.getExpression().getType();

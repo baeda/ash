@@ -113,6 +113,18 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
 
     //region statement nodes
 
+
+    @Override
+    public Void
+    visitExpressionStatementNode(ExpressionStatementNode node, Function func) {
+        visitChildren(node, func);
+
+        // for now, all expression statements are illegal.
+        errorHandler.emitIllegalStatement(node);
+
+        return null;
+    }
+
     @Override
     public Void
     visitReturnStatementNode(ReturnStatementNode node, Function func) {

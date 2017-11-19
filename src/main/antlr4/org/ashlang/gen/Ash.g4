@@ -42,6 +42,7 @@ statement
     : ref=varDeclaration        ';' #VarDeclarationStatement
     | ref=varAssign             ';' #VarAssignStatement
     | ref=block                     #BlockStatement
+    | expr=expression           ';' #ExpressionStatement
     | 'return' expr=expression? ';' #ReturnStatement
     | 'dump' expr=expression    ';' #DumpStatement
     ;

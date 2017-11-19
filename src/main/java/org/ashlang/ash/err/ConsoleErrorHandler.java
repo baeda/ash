@@ -58,51 +58,59 @@ public class ConsoleErrorHandler implements ErrorHandler {
     }
 
     @Override
-    public boolean hasErrors() {
+    public boolean
+    hasErrors() {
         return numLexicalErrors != 0
             || numSyntacticErrors != 0
             || numSemanticErrors != 0;
     }
 
     @Override
-    public void flush() {
+    public void
+    flush() {
         out.flush();
     }
 
     @Override
-    public void emitUnknownToken(Token pos) {
+    public void
+    emitUnknownToken(Token pos) {
         emit(pos, "unknown token '%s'", pos.getText());
         numLexicalErrors++;
     }
 
     @Override
-    public void emitMissingToken(Token pos, String expectedTokens) {
+    public void
+    emitMissingToken(Token pos, String expectedTokens) {
         emit(pos, "missing %s at '%s'", expectedTokens, pos.getText());
         numSyntacticErrors++;
     }
 
     @Override
-    public void emitInputMismatch(Token pos, String expectedTokens) {
+    public void
+    emitInputMismatch(Token pos, String expectedTokens) {
         emit(pos, "mismatched input '%s' expecting %s",
             pos.getText(), expectedTokens);
         numSyntacticErrors++;
     }
 
     @Override
-    public void emitInputMismatch(TokenRange pos, String expectedTokens) {
+    public void
+    emitInputMismatch(TokenRange pos, String expectedTokens) {
         emit(pos, "mismatched input '%s' expecting %s",
             pos.getText(), expectedTokens);
         numSyntacticErrors++;
     }
 
     @Override
-    public void emitInvalidType(Token pos) {
+    public void
+    emitInvalidType(Token pos) {
         emit(pos, "invalid type '%s'", pos.getText());
         numSemanticErrors++;
     }
 
     @Override
-    public void emitTypeMismatch(TokenRange pos, Type have, Type want) {
+    public void
+    emitTypeMismatch(TokenRange pos, Type have, Type want) {
         emit(pos, "type mismatch - have '%s' want '%s'",
             have.getId(), want.getId());
         numSemanticErrors++;
@@ -117,34 +125,39 @@ public class ConsoleErrorHandler implements ErrorHandler {
     }
 
     @Override
-    public void emitSymbolAlreadyDeclared(Token pos, Token declSite) {
+    public void
+    emitSymbolAlreadyDeclared(Token pos, Token declSite) {
         emit(pos, "symbol '%s' already declared at %s",
             pos.getText(), formatPosition(declSite));
         numSemanticErrors++;
     }
 
     @Override
-    public void emitSymbolNotDeclared(Token pos) {
+    public void
+    emitSymbolNotDeclared(Token pos) {
         emit(pos, "symbol '%s' is not declared", pos.getText());
         numSemanticErrors++;
     }
 
     @Override
-    public void emitSymbolNotInitialized(TokenRange pos, Token declSite) {
+    public void
+    emitSymbolNotInitialized(TokenRange pos, Token declSite) {
         emit(pos, "symbol '%s' not initialized - declared in %s",
             declSite.getText(), formatPosition(declSite));
         numSemanticErrors++;
     }
 
     @Override
-    public void emitSymbolNotUsed(Token pos) {
+    public void
+    emitSymbolNotUsed(Token pos) {
         emit(pos, "symbol '%s' is never used",
             pos.getText());
         numSemanticErrors++;
     }
 
     @Override
-    public void emitSymbolInitializedButNotUsed(Token pos) {
+    public void
+    emitSymbolInitializedButNotUsed(Token pos) {
         emit(pos, "symbol '%s' initialized but never used",
             pos.getText());
         numSemanticErrors++;
@@ -159,44 +172,60 @@ public class ConsoleErrorHandler implements ErrorHandler {
     }
 
     @Override
-    public void emitDivisionByZero(TokenRange pos) {
+    public void
+    emitIllegalStatement(TokenRange pos) {
+        emit(pos, "illegal statement '%s'",
+            pos.getText());
+        numSemanticErrors++;
+    }
+
+    @Override
+    public void
+    emitDivisionByZero(TokenRange pos) {
         emit(pos, "division by zero");
     }
 
     @Override
-    public void emitIntConstantOverflow(TokenRange pos, Type have) {
+    public void
+    emitIntConstantOverflow(TokenRange pos, Type have) {
         emit(pos, "integer constant overflows '%s'", have.getId());
         numSemanticErrors++;
     }
 
     @Override
-    public void emitIntConstantUnderflow(TokenRange pos, Type have) {
+    public void
+    emitIntConstantUnderflow(TokenRange pos, Type have) {
         emit(pos, "integer constant '%s' underflows '%s'",
             pos.getText(), have.getId());
         numSemanticErrors++;
     }
 
     @Override
-    public void emitNoEntryPoint(Token pos) {
+    public void
+    emitNoEntryPoint(Token pos) {
         emit(pos, "no entry point (main function) found");
         numSemanticErrors++;
     }
 
-    private void emit(TokenRange pos, String format, Object... args) {
+    private void
+    emit(TokenRange pos, String format, Object... args) {
         emitError(pos.getStartToken(), format, args);
     }
 
-    private void emit(Token pos, String format, Object... args) {
+    private void
+    emit(Token pos, String format, Object... args) {
         emitError(pos, format, args);
     }
 
-    private void emitError(Token pos, String format, Object... args) {
+    private void
+    emitError(Token pos, String format, Object... args) {
         String position = formatDebugPosition(pos);
         String message = String.format(format, args);
         out.printf("%s: error: %s\n", position, message);
     }
 
-    private String formatDebugPosition(Token pos) {
+    private String
+    formatDebugPosition(Token pos) {
         String codePos = "";
         if (debug) {
             codePos = Thread.currentThread().getStackTrace()[5] + " :: ";
@@ -205,12 +234,14 @@ public class ConsoleErrorHandler implements ErrorHandler {
         return String.format("%s%s", codePos, formatPosition(pos));
     }
 
-    private String formatPosition(Token pos) {
+    private String
+    formatPosition(Token pos) {
         return String.format("%s:%d:%d",
             pos.getSourceName(), pos.getLine() + 1, pos.getColumn() + 1);
     }
 
-    private static PrintStream createPrintStream(OutputStream outStream) {
+    private static PrintStream
+    createPrintStream(OutputStream outStream) {
         try {
             return new PrintStream(outStream, false, "UTF-8");
         } catch (UnsupportedEncodingException e) {

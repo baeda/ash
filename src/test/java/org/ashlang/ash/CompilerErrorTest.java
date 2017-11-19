@@ -249,6 +249,30 @@ public class CompilerErrorTest {
     }
 
     @Test
+    public void illegalStatement_arithmeticExpression() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    1+2;",
+            "}")
+            .hasError(ILLEGAL_STATEMENT).at(3, 5)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void illegalStatement_identifierExpression() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    a : i32;",
+            "    a = 0;",
+            "    a;",
+            "}")
+            .hasError(ILLEGAL_STATEMENT).at(5, 5)
+            .hasNoMoreErrors();
+    }
+
+    @Test
     public void divisionByZero() {
         assertThat(
             "func main() : void",

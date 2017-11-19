@@ -42,70 +42,84 @@ class TestErrorHandler implements ErrorHandler {
     }
 
     @Override
-    public boolean hasErrors() {
+    public boolean
+    hasErrors() {
         return !errors.isEmpty();
     }
 
     @Override
-    public void flush() { /* no-op */ }
+    public void
+    flush() { /* no-op */ }
 
     @Override
-    public void emitUnknownToken(Token pos) {
+    public void
+    emitUnknownToken(Token pos) {
         addError(UNKNOWN_TOKEN, pos);
     }
 
     @Override
-    public void emitMissingToken(Token pos, String expectedTokens) {
+    public void
+    emitMissingToken(Token pos, String expectedTokens) {
         addError(MISSING_TOKEN, pos);
     }
 
     @Override
-    public void emitInputMismatch(Token pos, String expectedTokens) {
+    public void
+    emitInputMismatch(Token pos, String expectedTokens) {
         addError(INPUT_MISMATCH, pos);
     }
 
     @Override
-    public void emitInputMismatch(TokenRange pos, String expectedTokens) {
+    public void
+    emitInputMismatch(TokenRange pos, String expectedTokens) {
         addError(INPUT_MISMATCH, pos.getStartToken());
     }
 
     @Override
-    public void emitInvalidType(Token pos) {
+    public void
+    emitInvalidType(Token pos) {
         addError(INVALID_TYPE, pos);
     }
 
     @Override
-    public void emitTypeMismatch(TokenRange pos, Type have, Type want) {
+    public void
+    emitTypeMismatch(TokenRange pos, Type have, Type want) {
         addError(TYPE_MISMATCH, pos.getStartToken());
     }
 
     @Override
-    public void emitInvalidOperator(Token pos, Type left, Type right) {
+    public void
+    emitInvalidOperator(Token pos, Type left, Type right) {
         addError(INVALID_OPERATOR, pos);
     }
 
     @Override
-    public void emitSymbolAlreadyDeclared(Token pos, Token declSite) {
+    public void
+    emitSymbolAlreadyDeclared(Token pos, Token declSite) {
         addError(SYMBOL_ALREADY_DECLARED, pos);
     }
 
     @Override
-    public void emitSymbolNotDeclared(Token pos) {
+    public void
+    emitSymbolNotDeclared(Token pos) {
         addError(SYMBOL_NOT_DECLARED, pos);
     }
 
     @Override
-    public void emitSymbolNotInitialized(TokenRange pos, Token declSite) {
+    public void
+    emitSymbolNotInitialized(TokenRange pos, Token declSite) {
         addError(SYMBOL_NOT_INITIALIZED, pos.getStartToken());
     }
 
     @Override
-    public void emitSymbolNotUsed(Token pos) {
+    public void
+    emitSymbolNotUsed(Token pos) {
         addError(SYMBOL_NOT_USED, pos);
     }
 
     @Override
-    public void emitSymbolInitializedButNotUsed(Token pos) {
+    public void
+    emitSymbolInitializedButNotUsed(Token pos) {
         addError(SYMBOL_INITIALIZED_BUT_NOT_USED, pos);
     }
 
@@ -116,26 +130,37 @@ class TestErrorHandler implements ErrorHandler {
     }
 
     @Override
-    public void emitDivisionByZero(TokenRange pos) {
+    public void
+    emitIllegalStatement(TokenRange pos) {
+        addError(ILLEGAL_STATEMENT, pos.getStartToken());
+    }
+
+    @Override
+    public void
+    emitDivisionByZero(TokenRange pos) {
         addError(DIV_BY_ZERO, pos.getStartToken());
     }
 
     @Override
-    public void emitIntConstantOverflow(TokenRange pos, Type have) {
+    public void
+    emitIntConstantOverflow(TokenRange pos, Type have) {
         addError(INT_CONST_OVERFLOW, pos.getStartToken());
     }
 
     @Override
-    public void emitIntConstantUnderflow(TokenRange pos, Type have) {
+    public void
+    emitIntConstantUnderflow(TokenRange pos, Type have) {
         addError(INT_CONST_UNDERFLOW, pos.getStartToken());
     }
 
     @Override
-    public void emitNoEntryPoint(Token pos) {
+    public void
+    emitNoEntryPoint(Token pos) {
         addError(NO_ENTRY_POINT, pos);
     }
 
-    private void addError(ErrorType errorType, Token pos) {
+    private void
+    addError(ErrorType errorType, Token pos) {
         errors.add(Pair.of(errorType, pos));
     }
 

@@ -74,6 +74,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
 
     @Override
     protected void
+    visitExpressionStatementNode(ExpressionStatementNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
     visitDumpStatementNode(DumpStatementNode node) {
         visitChildren(node);
     }

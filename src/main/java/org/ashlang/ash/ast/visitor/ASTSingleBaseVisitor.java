@@ -74,6 +74,12 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
 
     @Override
     protected T
+    visitExpressionStatementNode(ExpressionStatementNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    protected T
     visitDumpStatementNode(DumpStatementNode node) {
         return visitChildren(node);
     }

@@ -74,6 +74,12 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
 
     @Override
     public T
+    visitExpressionStatementNode(ExpressionStatementNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
+    public T
     visitDumpStatementNode(DumpStatementNode node, A argument) {
         return visitChildren(node, argument);
     }
