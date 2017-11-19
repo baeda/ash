@@ -23,35 +23,40 @@ import org.ashlang.ash.ast.*;
 public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
 
     @Override
-    public T visitFileNode(FileNode node, A argument) {
+    public T
+    visitFileNode(FileNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitFuncDeclarationNode(FuncDeclarationNode node, A argument) {
+    public T
+    visitFuncDeclarationNode(FuncDeclarationNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitVarDeclarationNode(VarDeclarationNode node, A argument) {
+    public T
+    visitVarDeclarationNode(VarDeclarationNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitVarAssignNode(VarAssignNode node, A argument) {
+    public T
+    visitVarAssignNode(VarAssignNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitBlockNode(BlockNode node, A argument) {
+    public T
+    visitBlockNode(BlockNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     //region statement nodes
 
     @Override
-    public T visitVarDeclarationStatementNode(VarDeclarationStatementNode node,
-                                              A argument) {
+    public T
+    visitVarDeclarationStatementNode(VarDeclarationStatementNode node, A argument) {
         return visitChildren(node, argument);
     }
 
@@ -62,12 +67,20 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
     }
 
     @Override
-    public T visitBlockStatementNode(BlockStatementNode node, A argument) {
+    public T
+    visitBlockStatementNode(BlockStatementNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitDumpStatementNode(DumpStatementNode node, A argument) {
+    public T
+    visitDumpStatementNode(DumpStatementNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
+    public T
+    visitReturnStatementNode(ReturnStatementNode node, A argument) {
         return visitChildren(node, argument);
     }
 
@@ -76,42 +89,50 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
     //region expression nodes
 
     @Override
-    public T visitParenExpressionNode(ParenExpressionNode node, A argument) {
+    public T
+    visitParenExpressionNode(ParenExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitAddExpressionNode(AddExpressionNode node, A argument) {
+    public T
+    visitAddExpressionNode(AddExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitSubExpressionNode(SubExpressionNode node, A argument) {
+    public T
+    visitSubExpressionNode(SubExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitMulExpressionNode(MulExpressionNode node, A argument) {
+    public T
+    visitMulExpressionNode(MulExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitDivExpressionNode(DivExpressionNode node, A argument) {
+    public T
+    visitDivExpressionNode(DivExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitModExpressionNode(ModExpressionNode node, A argument) {
+    public T
+    visitModExpressionNode(ModExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitIdExpressionNode(IdExpressionNode node, A argument) {
+    public T
+    visitIdExpressionNode(IdExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }
 
     @Override
-    public T visitIntExpressionNode(IntExpressionNode node, A argument) {
+    public T
+    visitIntExpressionNode(IntExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }
 

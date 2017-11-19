@@ -19,7 +19,7 @@
 package org.ashlang.ash.pass;
 
 import org.ashlang.ash.ast.*;
-import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
+import org.ashlang.ash.ast.visitor.ASTBaseVisitor;
 import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.symbol.Function;
 import org.ashlang.ash.symbol.Symbol;
@@ -27,7 +27,7 @@ import org.ashlang.ash.symbol.SymbolTable;
 
 import java.util.Collection;
 
-class SymbolCheckVisitor extends ASTVoidBaseVisitor {
+class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
 
     private final ErrorHandler errorHandler;
     private final SymbolTable symbolTable;
@@ -38,17 +38,18 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitFileNode(FileNode node) {
-        visitChildren(node);
+    public Void
+    visitFileNode(FileNode node, Function func) {
+        visitChildren(node, func);
 
         checkSymbolUsage(symbolTable.getDeclaredSymbols());
         assertMainFunctionPresent(node.getStopToken(), symbolTable.getDeclaredFunctions());
+        return null;
     }
 
     @Override
-    protected void visitFuncDeclarationNode(FuncDeclarationNode node) {
-        visitChildren(node);
-
+    public Void
+    visitFuncDeclarationNode(FuncDeclarationNode node, Function func) {
         Function function = symbolTable.getDeclaredFunction(node);
         if (function != null) {
             errorHandler.emitFunctionAlreadyDeclared(
@@ -59,11 +60,15 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
         }
 
         node.setFunction(function);
+
+        visitChildren(node, function);
+
+        return null;
     }
 
     @Override
-    protected void
-    visitVarDeclarationNode(VarDeclarationNode node) {
+    public Void
+    visitVarDeclarationNode(VarDeclarationNode node, Function func) {
         Symbol symbol = symbolTable.getDeclaredSymbol(node);
         if (symbol != null) {
             errorHandler.emitSymbolAlreadyDeclared(
@@ -74,10 +79,12 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
         }
 
         node.setSymbol(symbol);
+        return null;
     }
 
     @Override
-    protected void visitVarAssignNode(VarAssignNode node) {
+    public Void
+    visitVarAssignNode(VarAssignNode node, Function func) {
         String identifier = node.getIdentifierToken().getText();
         Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
         if (symbol == null) {
@@ -87,29 +94,49 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
         }
 
         node.setSymbol(symbol);
+        return null;
     }
 
     @Override
-    protected void visitBlockNode(BlockNode node) {
+    public Void
+    visitBlockNode(BlockNode node, Function func) {
         symbolTable.pushScope();
 
-        visitChildren(node);
+        visitChildren(node, func);
 
         checkSymbolUsage(symbolTable.getDeclaredSymbolsInCurrentScope());
 
         symbolTable.popScope();
+
+        return null;
     }
+
+    //region statement nodes
+
+    @Override
+    public Void
+    visitReturnStatementNode(ReturnStatementNode node, Function func) {
+        node.setFunction(func);
+
+        visitChildren(node, func);
+
+        return null;
+    }
+
+
+    //endregion statement nodes
 
     //region expression nodes
 
     @Override
-    protected void visitIdExpressionNode(IdExpressionNode node) {
+    public Void
+    visitIdExpressionNode(IdExpressionNode node, Function func) {
         String identifier = node.getValue().getText();
         Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
 
         if (symbol == null) {
             errorHandler.emitSymbolNotDeclared(node.getValue());
-            return;
+            return null;
         }
 
         symbol.use();
@@ -122,11 +149,13 @@ class SymbolCheckVisitor extends ASTVoidBaseVisitor {
         }
 
         node.setSymbol(symbol);
+        return null;
     }
 
     //endregion expression nodes
 
-    private void checkSymbolUsage(Collection<Symbol> symbols) {
+    private void
+    checkSymbolUsage(Collection<Symbol> symbols) {
         symbols.stream()
             .filter(sym -> !sym.isUsed())
             .forEach(sym -> {

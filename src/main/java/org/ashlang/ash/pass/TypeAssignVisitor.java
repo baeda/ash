@@ -26,7 +26,6 @@ import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.TypeMap;
-import org.ashlang.ash.type.Types;
 import org.ashlang.ash.type.UntypedInt;
 
 import java.math.BigInteger;
@@ -45,9 +44,6 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
 
         String typeString = node.getTypeToken().getText();
         Type type = typeMap.resolve(typeString);
-        if (Types.VOID != type) {
-            throw new IllegalStateException("cannot use anything else than void functions atm.");
-        }
 
         node.setType(type);
     }

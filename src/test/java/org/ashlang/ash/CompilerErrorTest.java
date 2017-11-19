@@ -89,6 +89,24 @@ public class CompilerErrorTest {
     }
 
     @Test
+    public void typeMismatch_returnType() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    return 0;",
+            "}")
+            .hasError(TYPE_MISMATCH).at(3, 5)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void typeMismatch_malformedEntryPoint() {
+        assertThat("func main() : i32 {}")
+            .hasError(TYPE_MISMATCH).at(1, 6)
+            .hasNoMoreErrors();
+    }
+
+    @Test
     public void invalidOperator() {
         assertThat(
             "func main() : void",

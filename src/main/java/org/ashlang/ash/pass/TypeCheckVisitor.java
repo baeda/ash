@@ -21,6 +21,7 @@ package org.ashlang.ash.pass;
 import org.ashlang.ash.ast.*;
 import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
 import org.ashlang.ash.err.ErrorHandler;
+import org.ashlang.ash.symbol.Function;
 import org.ashlang.ash.type.Operator;
 import org.ashlang.ash.type.OperatorMap;
 import org.ashlang.ash.type.Type;
@@ -68,6 +69,48 @@ class TypeCheckVisitor extends ASTVoidBaseVisitor {
             errorHandler.emitTypeMismatch(node, rhsType, lhsType);
         }
     }
+
+    @Override
+    protected void visitFuncDeclarationNode(FuncDeclarationNode node) {
+        visitChildren(node);
+
+        Function function = node.getFunction();
+        if (!"main".equals(function.getIdentifier())) {
+            return;
+        }
+
+        if (!VOID.equals(function.getType())) {
+            errorHandler.emitTypeMismatch(node, function.getType(), VOID);
+        }
+    }
+
+    //region statement nodes
+
+    @Override
+    protected void visitReturnStatementNode(ReturnStatementNode node) {
+        visitChildren(node);
+
+        Type returnType = node.getFunction().getType();
+        ExpressionNode expression = node.getExpression();
+
+        if (VOID.equals(returnType) && expression == null) {
+            // blank 'return;' from void function.
+            // valid
+            return;
+        }
+
+        Type exprType = expression.getType();
+
+        if (INVALID.equals(exprType) || INVALID.equals(returnType)) {
+            return;
+        }
+
+        if (!returnType.equals(exprType)) {
+            errorHandler.emitTypeMismatch(node, exprType, returnType);
+        }
+    }
+
+    //endregion statement nodes
 
     //region expression nodes
 

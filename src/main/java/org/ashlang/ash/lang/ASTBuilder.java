@@ -53,7 +53,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
-    public FileNode visitFile(FileContext ctx) {
+    public FileNode
+    visitFile(FileContext ctx) {
         List<FuncDeclarationNode> functions = ctx.functions.stream()
             .map(funcDeclCtx -> (FuncDeclarationNode) visit(funcDeclCtx))
             .collect(Collectors.toList());
@@ -68,7 +69,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
-    public FuncDeclarationNode visitFuncDeclaration(FuncDeclarationContext ctx) {
+    public FuncDeclarationNode
+    visitFuncDeclaration(FuncDeclarationContext ctx) {
         BlockNode body = visitBlock(ctx.body);
 
         return setParent(
@@ -83,7 +85,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
-    public VarDeclarationNode visitVarDeclaration(VarDeclarationContext ctx) {
+    public VarDeclarationNode
+    visitVarDeclaration(VarDeclarationContext ctx) {
         return new VarDeclarationNode(
             new Token(ctx.id),
             new Token(ctx.type),
@@ -92,7 +95,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
-    public VarAssignNode visitVarAssign(VarAssignContext ctx) {
+    public VarAssignNode
+    visitVarAssign(VarAssignContext ctx) {
         ExpressionNode expression = (ExpressionNode) visit(ctx.value);
         return setParent(
             new VarAssignNode(
@@ -105,7 +109,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
-    public BlockNode visitBlock(BlockContext ctx) {
+    public BlockNode
+    visitBlock(BlockContext ctx) {
         List<StatementNode> statements = ctx.statements.stream()
             .map(stmtCtx -> (StatementNode) visit(stmtCtx))
             .collect(Collectors.toList());
@@ -166,7 +171,23 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode visitDumpStatement(DumpStatementContext ctx) {
+    public ReturnStatementNode
+    visitReturnStatement(ReturnStatementContext ctx) {
+        ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
+        return setParent(
+            new ReturnStatementNode(
+                new Token(ctx.start),
+                new Token(ctx.stop),
+                expression,
+                sourceProvider
+            ),
+            expression
+        );
+    }
+
+    @Override
+    public DumpStatementNode
+    visitDumpStatement(DumpStatementContext ctx) {
         ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
         return setParent(
             new DumpStatementNode(
@@ -184,7 +205,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     //region expression nodes
 
     @Override
-    public ASTNode visitParenExpression(ParenExpressionContext ctx) {
+    public ParenExpressionNode
+    visitParenExpression(ParenExpressionContext ctx) {
         ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
         return setParent(
             new ParenExpressionNode(
@@ -198,7 +220,8 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ExpressionNode visitArithmeticExpression(ArithmeticExpressionContext ctx) {
+    public ExpressionNode
+    visitArithmeticExpression(ArithmeticExpressionContext ctx) {
         ExpressionNode lhs = (ExpressionNode) visit(ctx.lhs);
         ExpressionNode rhs = (ExpressionNode) visit(ctx.rhs);
         ExpressionNode node;
@@ -294,7 +317,10 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     @Override
     public ASTNode visit(ParseTree tree) {
-        return Objects.requireNonNull(tree, "ParseTree").accept(this);
+        if (tree == null) {
+            return null;
+        }
+        return tree.accept(this);
     }
 
     //endregion ANTLR visitor default overrides
@@ -302,9 +328,13 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     @SafeVarargs
     private static <T extends ASTNode, U extends ASTNode>
     T setParent(T parent, U firstChild, U... otherChildren) {
-        firstChild.setParent(parent);
+        if (firstChild != null) {
+            firstChild.setParent(parent);
+        }
         for (U child : otherChildren) {
-            child.setParent(parent);
+            if (child != null) {
+                child.setParent(parent);
+            }
         }
         return parent;
     }

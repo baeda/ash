@@ -35,6 +35,7 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitVarAssignStatementNode(VarAssignStatementNode node);
     protected abstract T visitBlockStatementNode(BlockStatementNode node);
     protected abstract T visitDumpStatementNode(DumpStatementNode node);
+    protected abstract T visitReturnStatementNode(ReturnStatementNode node);
 
     //endregion statement nodes
 
@@ -116,6 +117,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     public final T
     visitDumpStatementNode(DumpStatementNode node, Void argument) {
         return visitDumpStatementNode(node);
+    }
+
+    @Override
+    public final T
+    visitReturnStatementNode(ReturnStatementNode node, Void argument) {
+        return visitReturnStatementNode(node);
     }
 
     //endregion statement nodes

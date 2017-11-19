@@ -39,10 +39,11 @@ block
     ;
 
 statement
-    : ref=varDeclaration     ';' #VarDeclarationStatement
-    | ref=varAssign          ';' #VarAssignStatement
-    | ref=block                  #BlockStatement
-    | 'dump' expr=expression ';' #DumpStatement
+    : ref=varDeclaration        ';' #VarDeclarationStatement
+    | ref=varAssign             ';' #VarAssignStatement
+    | ref=block                     #BlockStatement
+    | 'return' expr=expression? ';' #ReturnStatement
+    | 'dump' expr=expression    ';' #DumpStatement
     ;
 
 expression

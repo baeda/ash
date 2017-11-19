@@ -34,7 +34,8 @@ class C11Visitor extends ASTSingleVisitor<String> {
     }
 
     @Override
-    public String visitFileNode(FileNode node) {
+    protected String
+    visitFileNode(FileNode node) {
         return String.join("\n",
             "#include <stdio.h>",
             "#include <stdint.h>",
@@ -45,7 +46,8 @@ class C11Visitor extends ASTSingleVisitor<String> {
     }
 
     @Override
-    protected String visitFuncDeclarationNode(FuncDeclarationNode node) {
+    protected String
+    visitFuncDeclarationNode(FuncDeclarationNode node) {
         String body = visit(node.getBody());
         String cType = typeMap.getType(node.getType());
         String identifier = node.getIdentifierToken().getText();
@@ -68,49 +70,60 @@ class C11Visitor extends ASTSingleVisitor<String> {
     }
 
     @Override
-    public String visitVarDeclarationNode(VarDeclarationNode node) {
+    protected String
+    visitVarDeclarationNode(VarDeclarationNode node) {
         Symbol symbol = node.getSymbol();
         String cType = typeMap.getType(symbol.getType());
         return cType + " " + symbol.getIdentifier();
     }
 
     @Override
-    public String visitVarAssignNode(VarAssignNode node) {
+    protected String
+    visitVarAssignNode(VarAssignNode node) {
         Symbol symbol = node.getSymbol();
         String expression = visit(node.getExpression());
         return symbol.getIdentifier() + " = " + expression;
     }
 
     @Override
-    protected String visitBlockNode(BlockNode node) {
+    protected String
+    visitBlockNode(BlockNode node) {
         return "{\n" + visitChildren(node) + "}\n";
     }
 
     //region statement nodes
 
     @Override
-    public String
+    protected String
     visitVarDeclarationStatementNode(VarDeclarationStatementNode node) {
         return visitChildren(node) + ";\n";
     }
 
     @Override
-    public String
+    protected String
     visitVarAssignStatementNode(VarAssignStatementNode node) {
         return visitChildren(node) + ";\n";
     }
 
     @Override
-    protected String visitBlockStatementNode(BlockStatementNode node) {
+    protected String
+    visitBlockStatementNode(BlockStatementNode node) {
         return visitChildren(node);
     }
 
     @Override
-    public String visitDumpStatementNode(DumpStatementNode node) {
+    protected String
+    visitDumpStatementNode(DumpStatementNode node) {
         String expression = visitChildren(node);
         Type type = node.getExpression().getType();
         String fmt = typeMap.getFormat(type);
         return "printf(\"%\"" + fmt + ", " + expression + ");\n";
+    }
+
+    @Override
+    protected String
+    visitReturnStatementNode(ReturnStatementNode node) {
+        return "return " + visitChildren(node) + ";\n";
     }
 
     //endregion statement nodes
@@ -118,52 +131,60 @@ class C11Visitor extends ASTSingleVisitor<String> {
     //region expression nodes
 
     @Override
-    public String visitParenExpressionNode(ParenExpressionNode node) {
+    protected String
+    visitParenExpressionNode(ParenExpressionNode node) {
         return "(" + visitChildren(node) + ")";
     }
 
     @Override
-    public String visitAddExpressionNode(AddExpressionNode node) {
+    protected String
+    visitAddExpressionNode(AddExpressionNode node) {
         String lhs = visit(node.getLhs());
         String rhs = visit(node.getRhs());
         return "(" + lhs + "+" + rhs + ")";
     }
 
     @Override
-    public String visitSubExpressionNode(SubExpressionNode node) {
+    protected String
+    visitSubExpressionNode(SubExpressionNode node) {
         String lhs = visit(node.getLhs());
         String rhs = visit(node.getRhs());
         return "(" + lhs + "-" + rhs + ")";
     }
 
     @Override
-    public String visitMulExpressionNode(MulExpressionNode node) {
+    protected String
+    visitMulExpressionNode(MulExpressionNode node) {
         String lhs = visit(node.getLhs());
         String rhs = visit(node.getRhs());
         return "(" + lhs + "*" + rhs + ")";
     }
 
     @Override
-    public String visitDivExpressionNode(DivExpressionNode node) {
+    protected String
+    visitDivExpressionNode(DivExpressionNode node) {
         String lhs = visit(node.getLhs());
         String rhs = visit(node.getRhs());
         return "(" + lhs + "/" + rhs + ")";
     }
 
     @Override
-    public String visitModExpressionNode(ModExpressionNode node) {
+    protected String
+    visitModExpressionNode(ModExpressionNode node) {
         String lhs = visit(node.getLhs());
         String rhs = visit(node.getRhs());
         return "(" + lhs + "%" + rhs + ")";
     }
 
     @Override
-    public String visitIdExpressionNode(IdExpressionNode node) {
+    protected String
+    visitIdExpressionNode(IdExpressionNode node) {
         return node.getValue().getText();
     }
 
     @Override
-    public String visitIntExpressionNode(IntExpressionNode node) {
+    protected String
+    visitIntExpressionNode(IntExpressionNode node) {
         BigInteger value = (BigInteger) node.getValue();
         Type type = node.getType();
         String cType = typeMap.getType(type);
@@ -173,7 +194,8 @@ class C11Visitor extends ASTSingleVisitor<String> {
     //endregion expression nodes
 
     @Override
-    public String aggregate(String aggregate, String next) {
+    public String
+    aggregate(String aggregate, String next) {
         if (aggregate == null) {
             return next;
         }
@@ -184,7 +206,8 @@ class C11Visitor extends ASTSingleVisitor<String> {
     }
 
     @Override
-    public String defaultResult() {
+    public String
+    defaultResult() {
         return "";
     }
 

@@ -35,6 +35,7 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     protected abstract void visitVarAssignStatementNode(VarAssignStatementNode node);
     protected abstract void visitBlockStatementNode(BlockStatementNode node);
     protected abstract void visitDumpStatementNode(DumpStatementNode node);
+    protected abstract void visitReturnStatementNode(ReturnStatementNode node);
 
     //endregion statement nodes
 
@@ -90,7 +91,8 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     }
 
     @Override
-    public final Void visitBlockNode(BlockNode node, Void argument) {
+    public final Void
+    visitBlockNode(BlockNode node, Void argument) {
         visitBlockNode(node);
         return null;
     }
@@ -122,6 +124,13 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     public final Void
     visitDumpStatementNode(DumpStatementNode node, Void argument) {
         visitDumpStatementNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
+    visitReturnStatementNode(ReturnStatementNode node, Void argument) {
+        visitReturnStatementNode(node);
         return null;
     }
 

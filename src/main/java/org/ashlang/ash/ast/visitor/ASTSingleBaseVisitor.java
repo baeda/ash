@@ -23,49 +23,64 @@ import org.ashlang.ash.ast.*;
 public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
 
     @Override
-    protected T visitFileNode(FileNode node) {
+    protected T
+    visitFileNode(FileNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitFuncDeclarationNode(FuncDeclarationNode node) {
+    protected T
+    visitFuncDeclarationNode(FuncDeclarationNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitVarDeclarationNode(VarDeclarationNode node) {
+    protected T
+    visitVarDeclarationNode(VarDeclarationNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitVarAssignNode(VarAssignNode node) {
+    protected T
+    visitVarAssignNode(VarAssignNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitBlockNode(BlockNode node) {
+    protected T
+    visitBlockNode(BlockNode node) {
         return visitChildren(node);
     }
 
     //region statement nodes
 
     @Override
-    protected T visitVarDeclarationStatementNode(VarDeclarationStatementNode node) {
+    protected T
+    visitVarDeclarationStatementNode(VarDeclarationStatementNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitVarAssignStatementNode(VarAssignStatementNode node) {
+    protected T
+    visitVarAssignStatementNode(VarAssignStatementNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitBlockStatementNode(BlockStatementNode node) {
+    protected T
+    visitBlockStatementNode(BlockStatementNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitDumpStatementNode(DumpStatementNode node) {
+    protected T
+    visitDumpStatementNode(DumpStatementNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    protected T
+    visitReturnStatementNode(ReturnStatementNode node) {
         return visitChildren(node);
     }
 
@@ -74,42 +89,50 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
     //region expression nodes
 
     @Override
-    protected T visitParenExpressionNode(ParenExpressionNode node) {
+    protected T
+    visitParenExpressionNode(ParenExpressionNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitAddExpressionNode(AddExpressionNode node) {
+    protected T
+    visitAddExpressionNode(AddExpressionNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitSubExpressionNode(SubExpressionNode node) {
+    protected T
+    visitSubExpressionNode(SubExpressionNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitMulExpressionNode(MulExpressionNode node) {
+    protected T
+    visitMulExpressionNode(MulExpressionNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitDivExpressionNode(DivExpressionNode node) {
+    protected T
+    visitDivExpressionNode(DivExpressionNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitModExpressionNode(ModExpressionNode node) {
+    protected T
+    visitModExpressionNode(ModExpressionNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitIdExpressionNode(IdExpressionNode node) {
+    protected T
+    visitIdExpressionNode(IdExpressionNode node) {
         return visitChildren(node);
     }
 
     @Override
-    protected T visitIntExpressionNode(IntExpressionNode node) {
+    protected T
+    visitIntExpressionNode(IntExpressionNode node) {
         return visitChildren(node);
     }
 

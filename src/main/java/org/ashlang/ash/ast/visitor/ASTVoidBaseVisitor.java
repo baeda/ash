@@ -23,49 +23,64 @@ import org.ashlang.ash.ast.*;
 public class ASTVoidBaseVisitor extends ASTVoidVisitor {
 
     @Override
-    protected void visitFileNode(FileNode node) {
+    protected void
+    visitFileNode(FileNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitFuncDeclarationNode(FuncDeclarationNode node) {
+    protected void
+    visitFuncDeclarationNode(FuncDeclarationNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitVarDeclarationNode(VarDeclarationNode node) {
+    protected void
+    visitVarDeclarationNode(VarDeclarationNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitVarAssignNode(VarAssignNode node) {
+    protected void
+    visitVarAssignNode(VarAssignNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitBlockNode(BlockNode node) {
+    protected void
+    visitBlockNode(BlockNode node) {
         visitChildren(node);
     }
 
     //region statement nodes
 
     @Override
-    protected void visitVarDeclarationStatementNode(VarDeclarationStatementNode node) {
+    protected void
+    visitVarDeclarationStatementNode(VarDeclarationStatementNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitVarAssignStatementNode(VarAssignStatementNode node) {
+    protected void
+    visitVarAssignStatementNode(VarAssignStatementNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitBlockStatementNode(BlockStatementNode node) {
+    protected void
+    visitBlockStatementNode(BlockStatementNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitDumpStatementNode(DumpStatementNode node) {
+    protected void
+    visitDumpStatementNode(DumpStatementNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
+    visitReturnStatementNode(ReturnStatementNode node) {
         visitChildren(node);
     }
 
@@ -74,42 +89,50 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
     //region expression nodes
 
     @Override
-    protected void visitParenExpressionNode(ParenExpressionNode node) {
+    protected void
+    visitParenExpressionNode(ParenExpressionNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitAddExpressionNode(AddExpressionNode node) {
+    protected void
+    visitAddExpressionNode(AddExpressionNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitSubExpressionNode(SubExpressionNode node) {
+    protected void
+    visitSubExpressionNode(SubExpressionNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitMulExpressionNode(MulExpressionNode node) {
+    protected void
+    visitMulExpressionNode(MulExpressionNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitDivExpressionNode(DivExpressionNode node) {
+    protected void
+    visitDivExpressionNode(DivExpressionNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitModExpressionNode(ModExpressionNode node) {
+    protected void
+    visitModExpressionNode(ModExpressionNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitIdExpressionNode(IdExpressionNode node) {
+    protected void
+    visitIdExpressionNode(IdExpressionNode node) {
         visitChildren(node);
     }
 
     @Override
-    protected void visitIntExpressionNode(IntExpressionNode node) {
+    protected void
+    visitIntExpressionNode(IntExpressionNode node) {
         visitChildren(node);
     }
 
