@@ -19,31 +19,34 @@
 package org.ashlang.ash.ast;
 
 import org.ashlang.ash.ast.visitor.ASTVisitor;
+import org.ashlang.ash.symbol.Function;
 
-public class ExpressionStatementNode extends StatementNode {
+public class FuncCallNode extends ASTNode {
 
-    private final ExpressionNode expression;
+    private Function function;
 
-    public ExpressionStatementNode(
-        ExpressionNode expression,
+    public FuncCallNode(
+        Token startToken, Token stopToken,
         SourceProvider sourceProvider
     ) {
-        super(
-            expression.getStartToken(),
-            expression.getStopToken(),
-            sourceProvider
-        );
-
-        this.expression = expression;
+        super(startToken, stopToken, sourceProvider);
     }
 
-    public ExpressionNode getExpression() {
-        return expression;
+    public Token getIdentifierToken() {
+        return getStartToken();
+    }
+
+    public Function getFunction() {
+        return function;
+    }
+
+    public void setFunction(Function function) {
+        this.function = function;
     }
 
     @Override
     public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
-        return visitor.visitExpressionStatementNode(this, argument);
+        return visitor.visitFuncCallNode(this, argument);
     }
 
 }

@@ -16,25 +16,34 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash;
+package org.ashlang.ash.ast;
 
-enum ErrorType {
-    UNKNOWN_TOKEN,
-    MISSING_TOKEN,
-    INPUT_MISMATCH,
-    INVALID_TYPE,
-    TYPE_MISMATCH,
-    INVALID_OPERATOR,
-    SYMBOL_ALREADY_DECLARED,
-    SYMBOL_NOT_DECLARED,
-    SYMBOL_NOT_INITIALIZED,
-    SYMBOL_NOT_USED,
-    SYMBOL_INITIALIZED_BUT_NOT_USED,
-    FUNCTION_ALREADY_DECLARED,
-    FUNCTION_NOT_DECLARED,
-    ILLEGAL_STATEMENT,
-    DIV_BY_ZERO,
-    INT_CONST_OVERFLOW,
-    INT_CONST_UNDERFLOW,
-    NO_ENTRY_POINT
+import org.ashlang.ash.ast.visitor.ASTVisitor;
+
+public class FuncCallExpressionNode extends ExpressionNode {
+
+    private final FuncCallNode funcCall;
+
+    public FuncCallExpressionNode(
+        FuncCallNode funcCall,
+        SourceProvider sourceProvider
+    ) {
+        super(
+            funcCall.getStartToken(),
+            funcCall.getStopToken(),
+            sourceProvider
+        );
+
+        this.funcCall = funcCall;
+    }
+
+    public FuncCallNode getFuncCall() {
+        return funcCall;
+    }
+
+    @Override
+    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+        return visitor.visitFuncCallExpressionNode(this, argument);
+    }
+
 }

@@ -85,6 +85,8 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
     @Override
     public Void
     visitVarAssignNode(VarAssignNode node, Function func) {
+        visitChildren(node, func);
+
         String identifier = node.getIdentifierToken().getText();
         Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
         if (symbol == null) {
@@ -111,16 +113,33 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
         return null;
     }
 
-    //region statement nodes
+    @Override
+    public Void
+    visitFuncCallNode(FuncCallNode node, Function func) {
+        visitChildren(node, func);
 
+        String identifier = node.getIdentifierToken().getText();
+        Function declaredFunction = symbolTable.getDeclaredFunction(identifier);
+        if (declaredFunction == null) {
+            errorHandler.emitFunctionNotDeclared(node.getIdentifierToken());
+        }
+
+        node.setFunction(declaredFunction);
+
+        return null;
+    }
+
+    //region statement nodes
 
     @Override
     public Void
     visitExpressionStatementNode(ExpressionStatementNode node, Function func) {
         visitChildren(node, func);
 
-        // for now, all expression statements are illegal.
-        errorHandler.emitIllegalStatement(node);
+        ExpressionNode expression = node.getExpression();
+        if (!(expression instanceof FuncCallExpressionNode)) {
+            errorHandler.emitIllegalStatement(node);
+        }
 
         return null;
     }

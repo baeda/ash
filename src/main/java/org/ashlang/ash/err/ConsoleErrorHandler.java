@@ -135,7 +135,7 @@ public class ConsoleErrorHandler implements ErrorHandler {
     @Override
     public void
     emitSymbolNotDeclared(Token pos) {
-        emit(pos, "symbol '%s' is not declared", pos.getText());
+        emit(pos, "symbol '%s' not declared", pos.getText());
         numSemanticErrors++;
     }
 
@@ -168,6 +168,13 @@ public class ConsoleErrorHandler implements ErrorHandler {
     emitFunctionAlreadyDeclared(Token pos, Token declSite) {
         emit(pos, "function '%s' already declared at %s",
             pos.getText(), formatPosition(declSite));
+        numSemanticErrors++;
+    }
+
+    @Override
+    public void
+    emitFunctionNotDeclared(Token pos) {
+        emit(pos, "function '%s' not declared", pos.getText());
         numSemanticErrors++;
     }
 

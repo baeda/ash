@@ -52,6 +52,12 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
         return visitChildren(node);
     }
 
+    @Override
+    protected T
+    visitFuncCallNode(FuncCallNode node) {
+        return visitChildren(node);
+    }
+
     //region statement nodes
 
     @Override
@@ -127,6 +133,12 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
     @Override
     protected T
     visitModExpressionNode(ModExpressionNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    protected T
+    visitFuncCallExpressionNode(FuncCallExpressionNode node) {
         return visitChildren(node);
     }
 

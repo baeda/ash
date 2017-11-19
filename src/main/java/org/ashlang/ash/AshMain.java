@@ -157,7 +157,6 @@ public final class AshMain {
             "-pedantic",
             "-Wno-pedantic-ms-format",
             "--save-temps",
-            "-O3",
             "-o",
             outFile.toAbsolutePath(),
             tmpFile.toAbsolutePath()

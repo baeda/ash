@@ -131,6 +131,12 @@ class TestErrorHandler implements ErrorHandler {
 
     @Override
     public void
+    emitFunctionNotDeclared(Token pos) {
+        addError(FUNCTION_NOT_DECLARED, pos);
+    }
+
+    @Override
+    public void
     emitIllegalStatement(TokenRange pos) {
         addError(ILLEGAL_STATEMENT, pos.getStartToken());
     }

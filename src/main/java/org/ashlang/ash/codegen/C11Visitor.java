@@ -20,12 +20,15 @@ package org.ashlang.ash.codegen;
 
 import org.ashlang.ash.ast.*;
 import org.ashlang.ash.ast.visitor.ASTSingleVisitor;
+import org.ashlang.ash.symbol.Function;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 
 import java.math.BigInteger;
 
 class C11Visitor extends ASTSingleVisitor<String> {
+
+    private static final String FUNC = "_a$h_";
 
     private final C11TypeMap typeMap;
 
@@ -54,19 +57,19 @@ class C11Visitor extends ASTSingleVisitor<String> {
 
         if ("main".equals(identifier)) {
             return String.join("\n",
-                "static inline " + cType + " __ash_main()" + body,
+                "static inline " + cType + " " + FUNC + "ash_main()" + body,
                 "int main(int argc, char **argv) {",
                 "    (void) argc;",
                 "    (void) argv;",
                 "",
-                "    __ash_main();",
+                "    " + FUNC + "ash_main();",
                 "",
                 "    return 0;",
                 "}"
             );
         }
 
-        return cType + " " + identifier + "()" + body;
+        return cType + " " + FUNC + identifier + "()" + body;
     }
 
     @Override
@@ -89,6 +92,13 @@ class C11Visitor extends ASTSingleVisitor<String> {
     protected String
     visitBlockNode(BlockNode node) {
         return "{\n" + visitChildren(node) + "}\n";
+    }
+
+    @Override
+    protected String
+    visitFuncCallNode(FuncCallNode node) {
+        Function func = node.getFunction();
+        return FUNC + func.getIdentifier() + "()";
     }
 
     //region statement nodes
@@ -180,6 +190,12 @@ class C11Visitor extends ASTSingleVisitor<String> {
         String lhs = visit(node.getLhs());
         String rhs = visit(node.getRhs());
         return "(" + lhs + "%" + rhs + ")";
+    }
+
+    @Override
+    protected String
+    visitFuncCallExpressionNode(FuncCallExpressionNode node) {
+        return visitChildren(node);
     }
 
     @Override

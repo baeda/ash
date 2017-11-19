@@ -35,6 +35,7 @@ public interface ASTVisitor<T, A> {
     T visitVarDeclarationNode(VarDeclarationNode node, A argument);
     T visitVarAssignNode(VarAssignNode node, A argument);
     T visitBlockNode(BlockNode node, A argument);
+    T visitFuncCallNode(FuncCallNode node, A argument);
 
     T visitVarDeclarationStatementNode(VarDeclarationStatementNode node, A argument);
     T visitVarAssignStatementNode(VarAssignStatementNode node, A argument);
@@ -49,6 +50,7 @@ public interface ASTVisitor<T, A> {
     T visitMulExpressionNode(MulExpressionNode node, A argument);
     T visitDivExpressionNode(DivExpressionNode node, A argument);
     T visitModExpressionNode(ModExpressionNode node, A argument);
+    T visitFuncCallExpressionNode(FuncCallExpressionNode node, A argument);
     T visitIdExpressionNode(IdExpressionNode node, A argument);
     T visitIntExpressionNode(IntExpressionNode node, A argument);
 

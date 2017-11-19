@@ -28,6 +28,7 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitVarDeclarationNode(VarDeclarationNode node);
     protected abstract T visitVarAssignNode(VarAssignNode node);
     protected abstract T visitBlockNode(BlockNode node);
+    protected abstract T visitFuncCallNode(FuncCallNode node);
 
     //region statement nodes
 
@@ -48,6 +49,7 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitMulExpressionNode(MulExpressionNode node);
     protected abstract T visitDivExpressionNode(DivExpressionNode node);
     protected abstract T visitModExpressionNode(ModExpressionNode node);
+    protected abstract T visitFuncCallExpressionNode(FuncCallExpressionNode node);
     protected abstract T visitIdExpressionNode(IdExpressionNode node);
     protected abstract T visitIntExpressionNode(IntExpressionNode node);
 
@@ -92,6 +94,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     public final T
     visitBlockNode(BlockNode node, Void argument) {
         return visitBlockNode(node);
+    }
+
+    @Override
+    public final T
+    visitFuncCallNode(FuncCallNode node, Void argument) {
+        return visitFuncCallNode(node);
     }
 
     //region statement nodes
@@ -170,6 +178,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     public final T
     visitModExpressionNode(ModExpressionNode node, Void argument) {
         return visitModExpressionNode(node);
+    }
+
+    @Override
+    public final T
+    visitFuncCallExpressionNode(FuncCallExpressionNode node, Void argument) {
+        return visitFuncCallExpressionNode(node);
     }
 
     @Override

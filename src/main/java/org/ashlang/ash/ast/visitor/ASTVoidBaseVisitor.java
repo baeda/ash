@@ -52,6 +52,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
         visitChildren(node);
     }
 
+    @Override
+    protected void
+    visitFuncCallNode(FuncCallNode node) {
+        visitChildren(node);
+    }
+
     //region statement nodes
 
     @Override
@@ -127,6 +133,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
     @Override
     protected void
     visitModExpressionNode(ModExpressionNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
+    visitFuncCallExpressionNode(FuncCallExpressionNode node) {
         visitChildren(node);
     }
 

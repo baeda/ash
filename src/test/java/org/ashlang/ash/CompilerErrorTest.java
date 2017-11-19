@@ -83,7 +83,6 @@ public class CompilerErrorTest {
             "    b = a;",
             "}")
             .hasError(TYPE_MISMATCH).at(6, 5)
-            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(3, 5)
             .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(4, 5)
             .hasNoMoreErrors();
     }
@@ -245,6 +244,17 @@ public class CompilerErrorTest {
             "func main() : void {}",
             "func main() : void {}")
             .hasError(FUNCTION_ALREADY_DECLARED).at(2, 6)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void functionNotDeclared() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    dump x();",
+            "}")
+            .hasError(FUNCTION_NOT_DECLARED).at(3, 10)
             .hasNoMoreErrors();
     }
 

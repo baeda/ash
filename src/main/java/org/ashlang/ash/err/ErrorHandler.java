@@ -40,6 +40,7 @@ public interface ErrorHandler {
     void emitSymbolNotUsed(Token pos);
     void emitSymbolInitializedButNotUsed(Token pos);
     void emitFunctionAlreadyDeclared(Token pos, Token declSite);
+    void emitFunctionNotDeclared(Token pos);
 
     void emitIllegalStatement(TokenRange pos);
 

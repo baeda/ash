@@ -127,7 +127,19 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ASTNode
+    public FuncCallNode
+    visitFuncCall(FuncCallContext ctx) {
+        return new FuncCallNode(
+            new Token(ctx.id),
+            new Token(ctx.stop),
+            sourceProvider
+        );
+    }
+
+    //region statement nodes
+
+    @Override
+    public ExpressionStatementNode
     visitExpressionStatement(ExpressionStatementContext ctx) {
         ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
 
@@ -139,8 +151,6 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
             expression
         );
     }
-
-    //region statement nodes
 
     @Override
     public VarDeclarationStatementNode
@@ -183,6 +193,7 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
             block
         );
     }
+
 
     @Override
     public ReturnStatementNode
@@ -288,6 +299,20 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
             node,
             lhs,
             rhs
+        );
+    }
+
+    @Override
+    public FuncCallExpressionNode
+    visitFuncCallExpression(FuncCallExpressionContext ctx) {
+        FuncCallNode funcCall = (FuncCallNode) visit(ctx.call);
+
+        return setParent(
+            new FuncCallExpressionNode(
+                funcCall,
+                sourceProvider
+            ),
+            funcCall
         );
     }
 

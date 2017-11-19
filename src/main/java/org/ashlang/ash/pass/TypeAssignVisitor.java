@@ -18,11 +18,9 @@
 
 package org.ashlang.ash.pass;
 
-import org.ashlang.ash.ast.FuncDeclarationNode;
-import org.ashlang.ash.ast.IdExpressionNode;
-import org.ashlang.ash.ast.IntExpressionNode;
-import org.ashlang.ash.ast.VarDeclarationNode;
+import org.ashlang.ash.ast.*;
 import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
+import org.ashlang.ash.symbol.Function;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.TypeMap;
@@ -39,7 +37,8 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitFuncDeclarationNode(FuncDeclarationNode node) {
+    protected void
+    visitFuncDeclarationNode(FuncDeclarationNode node) {
         visitChildren(node);
 
         String typeString = node.getTypeToken().getText();
@@ -49,7 +48,8 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitVarDeclarationNode(VarDeclarationNode node) {
+    protected void
+    visitVarDeclarationNode(VarDeclarationNode node) {
         String typeString = node.getTypeToken().getText();
         Type type = typeMap.resolve(typeString);
         node.setType(type);
@@ -57,8 +57,23 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
 
     //region expression nodes
 
+
     @Override
-    protected void visitIdExpressionNode(IdExpressionNode node) {
+    protected void
+    visitFuncCallExpressionNode(FuncCallExpressionNode node) {
+        visitChildren(node);
+
+        Function func = node.getFuncCall().getFunction();
+        if (func == null) {
+            return;
+        }
+
+        node.setType(func.getType());
+    }
+
+    @Override
+    protected void
+    visitIdExpressionNode(IdExpressionNode node) {
         Symbol symbol = node.getSymbol();
 
         if (symbol == null) {
@@ -69,7 +84,8 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitIntExpressionNode(IntExpressionNode node) {
+    protected void
+    visitIntExpressionNode(IntExpressionNode node) {
         BigInteger value = new BigInteger(node.getValueToken().getText());
         node.setType(new UntypedInt(value));
         node.setValue(value);

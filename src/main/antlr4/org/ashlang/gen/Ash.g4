@@ -38,6 +38,10 @@ block
     : '{' statements+=statement* '}'
     ;
 
+funcCall
+    : id=IDENTIFIER '('')'
+    ;
+
 statement
     : ref=varDeclaration        ';' #VarDeclarationStatement
     | ref=varAssign             ';' #VarAssignStatement
@@ -51,6 +55,7 @@ expression
     : '(' expr=expression ')'                        #ParenExpression
     | lhs=expression op=('/'|'*'|'%') rhs=expression #ArithmeticExpression
     | lhs=expression op=('-'|'+')     rhs=expression #ArithmeticExpression
+    | call=funcCall                                  #FuncCallExpression
     | value=IDENTIFIER                               #IdExpression
     | value=INTEGER                                  #IntExpression
     ;
