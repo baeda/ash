@@ -60,13 +60,16 @@ ASTERISK  : '*' ;
 SLASH     : '/' ;
 PERCENT   : '%' ;
 EQUALS    : '=' ;
+L_BRACE   : '{' ;
+R_BRACE   : '}' ;
 L_PAREN   : '(' ;
 R_PAREN   : ')' ;
 SEMICOLON : ';' ;
 COLON     : ':' ;
 
-KW_FUNC : 'func' ;
-KW_DUMP : 'dump' ;
+KW_FUNC   : 'func'   ;
+KW_RETURN : 'return' ;
+KW_DUMP   : 'dump'   ;
 
 INTEGER    : [0-9]+                        ;
 IDENTIFIER : [a-z][a-zA-Z0-9_]*            ;
