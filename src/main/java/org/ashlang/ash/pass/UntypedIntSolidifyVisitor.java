@@ -156,6 +156,28 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
 
     //endregion expression nodes
 
+    //region statement nodes
+
+    @Override
+    protected void
+    visitReturnStatementNode(ReturnStatementNode node) {
+        visitChildren(node);
+
+        ExpressionNode expression = node.getExpression();
+        if (expression == null) {
+            // empty return statement, nothing to do.
+            return;
+        }
+
+        solidifyUntypedIntRight(
+            node.getFunction().getType(),
+            expression
+        );
+    }
+
+
+    //endregion statement nodes
+
     private void solidifyUntypedInt(Type lhs, ExpressionNode rhsNode) {
         solidifyUntypedIntRight(lhs, rhsNode);
     }
