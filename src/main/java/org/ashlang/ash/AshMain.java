@@ -31,6 +31,7 @@ import org.ashlang.ash.pass.CompilerPassChain;
 import org.ashlang.ash.pass.CompilerPasses;
 import org.ashlang.ash.util.ExecResult;
 import org.ashlang.ash.util.IOUtil;
+import org.ashlang.ash.util.Version;
 import org.ashlang.gen.AshParser.FileContext;
 
 import java.io.IOException;
@@ -38,6 +39,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.locks.LockSupport;
 
 public final class AshMain {
 
@@ -52,11 +54,6 @@ public final class AshMain {
         Path inFile = Paths.get(args[0]).normalize();
         if (Files.isDirectory(inFile)) {
             System.err.println("Usage: ashc <file>");
-            return;
-        }
-
-        if (gccMajorVersion() < 6) {
-            System.err.println("GCC version 6 or greater required.");
             return;
         }
 
@@ -85,6 +82,8 @@ public final class AshMain {
         System.out.println(exec.getOut());
         System.out.println("C11 error:\n==============");
         System.out.println(exec.getErr());
+
+        LockSupport.parkNanos(1000000L);
     }
 
     static ASTNode buildAST(String ashSrc, ErrorHandler errorHandler) {
@@ -147,6 +146,16 @@ public final class AshMain {
         Path tmpFile = outDir.resolve("main.c");
         IOUtil.writeUTF8(tmpFile, c11Src);
 
+        Version gccVersion = IOUtil.gccVersion();
+        if (gccVersion == null) {
+            throw new IllegalStateException("gcc not found in path.");
+        }
+        if (gccVersion.lessThan(4, 8, 0)) {
+            throw new IllegalStateException(
+                "gcc version 4.8 or greater required."
+            );
+        }
+
         ExecResult gcc = IOUtil.execInDir(
             workDir,
             "gcc",
@@ -166,20 +175,6 @@ public final class AshMain {
             throw new IllegalStateException(
                 "ASH -> Native(C11) Compilation failed!\n" + gcc.getErr());
         }
-    }
-
-    private static int gccMajorVersion() {
-        ExecResult gccVersion = IOUtil.exec("gcc", "-dumpversion");
-        if (gccVersion.isExceptional()) {
-            System.err.println(gccVersion.getException().getMessage());
-            return -1;
-        }
-        if (gccVersion.hasErrors()) {
-            System.err.println(gccVersion.getErr());
-            return -1;
-        }
-
-        return Integer.parseInt(gccVersion.getOut().split("\\.")[0]);
     }
 
 }

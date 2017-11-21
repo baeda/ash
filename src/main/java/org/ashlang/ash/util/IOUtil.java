@@ -33,6 +33,42 @@ public final class IOUtil {
 
     private IOUtil() { /**/ }
 
+    public static Version gccVersion() {
+        ExecResult gccVersion = IOUtil.exec("gcc", "-dumpversion");
+        if (gccVersion.isExceptional()) {
+            System.err.println(gccVersion.getException().getMessage());
+            return null;
+        }
+        if (gccVersion.hasErrors()) {
+            System.err.println(gccVersion.getErr());
+            return null;
+        }
+
+        String[] versionStrings = gccVersion.getOut().split("\\.");
+
+        return new Version(
+            safeToInt(versionStrings, 0),
+            safeToInt(versionStrings, 1),
+            safeToInt(versionStrings, 2)
+        );
+    }
+
+    private static int safeToInt(String[] tokens, int index) {
+        if (tokens.length <= index) {
+            return 0;
+        }
+
+        try {
+            String token = tokens[index];
+            if (token == null) {
+                return 0;
+            }
+            return Integer.parseInt(token.trim());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
     public static ExecResult exec(Path executable, Object... args) {
         String command = executable.toAbsolutePath().toString();
         return exec(command, args);
