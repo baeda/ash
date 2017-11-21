@@ -96,7 +96,7 @@
                 <executions>
                     <execution>
                         <id>analyze</id>
-                        <phase>package</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>analyze</goal>
                         </goals>
@@ -145,7 +145,7 @@
                 <executions>
                     <execution>
                         <id>max-effort</id>
-                        <phase>verify</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
