@@ -56,6 +56,7 @@ expression
     | lhs=expression op=('/'|'*'|'%') rhs=expression #ArithmeticExpression
     | lhs=expression op=('-'|'+')     rhs=expression #ArithmeticExpression
     | call=funcCall                                  #FuncCallExpression
+    | value=('true'|'false')                         #BoolLiteralExpression
     | value=IDENTIFIER                               #IdExpression
     | value=INTEGER                                  #IntExpression
     ;
@@ -76,6 +77,8 @@ COLON     : ':' ;
 KW_FUNC   : 'func'   ;
 KW_RETURN : 'return' ;
 KW_DUMP   : 'dump'   ;
+KW_TRUE   : 'true'   ;
+KW_FALSE  : 'false'  ;
 
 INTEGER    : [0-9]+                        ;
 IDENTIFIER : [a-z][a-zA-Z0-9_]*            ;

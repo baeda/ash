@@ -115,7 +115,8 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
         String expression = visitChildren(node);
         Type type = node.getExpression().getType();
         String fmt = typeMap.getFormat(type);
-        return "printf(\"%\"" + fmt + ", " + expression + ");\n";
+        String expr = typeMap.formatExpression(type, expression);
+        return "printf(\"" + fmt + "\", " + expr + ");\n";
     }
 
     @Override
@@ -176,8 +177,14 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
 
     @Override
     protected String
+    visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node) {
+        return node.getValue().toString();
+    }
+
+    @Override
+    protected String
     visitIdExpressionNode(IdExpressionNode node) {
-        return node.getValue().getText();
+        return node.getValueToken().getText();
     }
 
     @Override

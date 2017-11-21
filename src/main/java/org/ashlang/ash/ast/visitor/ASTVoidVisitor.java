@@ -50,6 +50,7 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     protected abstract void visitDivExpressionNode(DivExpressionNode node);
     protected abstract void visitModExpressionNode(ModExpressionNode node);
     protected abstract void visitFuncCallExpressionNode(FuncCallExpressionNode node);
+    protected abstract void visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node);
     protected abstract void visitIdExpressionNode(IdExpressionNode node);
     protected abstract void visitIntExpressionNode(IntExpressionNode node);
 
@@ -201,6 +202,13 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     public final Void
     visitFuncCallExpressionNode(FuncCallExpressionNode node, Void argument) {
         visitFuncCallExpressionNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
+    visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node, Void argument) {
+        visitBoolLiteralExpressionNode(node);
         return null;
     }
 

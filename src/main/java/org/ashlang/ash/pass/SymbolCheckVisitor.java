@@ -173,11 +173,12 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
     @Override
     public Void
     visitIdExpressionNode(IdExpressionNode node, Function func) {
-        String identifier = node.getValue().getText();
+        Token valueToken = node.getValueToken();
+        String identifier = valueToken.getText();
         Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
 
         if (symbol == null) {
-            errorHandler.emitSymbolNotDeclared(node.getValue());
+            errorHandler.emitSymbolNotDeclared(valueToken);
             return null;
         }
 

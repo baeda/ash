@@ -16,34 +16,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.ast;
+package org.ashlang.ash.type;
 
-import org.ashlang.ash.ast.visitor.ASTVisitor;
-import org.ashlang.ash.symbol.Symbol;
+class BoolType extends Type {
 
-public class IdExpressionNode extends ExpressionNode {
-
-    private Symbol symbol;
-
-    public IdExpressionNode(Token value, SourceProvider sourceProvider) {
-        super(value, value, sourceProvider);
-    }
-
-    public Token getValueToken() {
-        return getStartToken();
-    }
-
-    public Symbol getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(Symbol symbol) {
-        this.symbol = symbol;
-    }
-
-    @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
-        return visitor.visitIdExpressionNode(this, argument);
+    BoolType() {
+        super("bool", 8);
     }
 
 }

@@ -18,7 +18,7 @@
 
 package org.ashlang.ash.codegen;
 
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.ashlang.ash.type.IntType;
 import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.Types;
@@ -29,17 +29,18 @@ import java.util.stream.Collectors;
 
 class C11TypeMap {
 
-    private final Map<Type, Pair<String, String>> typeMap;
+    private final Map<Type, Triple<String, String, String>> typeMap;
 
     C11TypeMap() {
         typeMap = Types.allSubTypes(IntType.class)
             .stream()
             .collect(Collectors.toMap(
                 Function.identity(),
-                type -> Pair.of(cType(type), cFormat(type))
+                type -> Triple.of(cType(type), cFormat(type), "{{expr}}")
             ));
 
-        typeMap.put(Types.VOID, Pair.of("void", ""));
+        typeMap.put(Types.VOID, Triple.of("void", "", "{{expr}}"));
+        typeMap.put(Types.BOOL, Triple.of("bool", "%s", "({{expr}} ? \"true\" : \"false\")"));
     }
 
     String getType(Type type) {
@@ -47,7 +48,12 @@ class C11TypeMap {
     }
 
     String getFormat(Type type) {
-        return typeMap.get(type).getRight();
+        return typeMap.get(type).getMiddle();
+    }
+
+    String formatExpression(Type type, String expression) {
+        String fmt = typeMap.get(type).getRight();
+        return fmt.replace("{{expr}}", expression);
     }
 
     private static String cType(IntType type) {
@@ -62,7 +68,7 @@ class C11TypeMap {
         String classifier = type.isSigned()
             ? "d"
             : "u";
-        return String.format("PRI%s%d", classifier, type.getBitSize());
+        return String.format("%%\"PRI%s%d\"", classifier, type.getBitSize());
     }
 
 }

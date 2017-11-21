@@ -50,6 +50,7 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitDivExpressionNode(DivExpressionNode node);
     protected abstract T visitModExpressionNode(ModExpressionNode node);
     protected abstract T visitFuncCallExpressionNode(FuncCallExpressionNode node);
+    protected abstract T visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node);
     protected abstract T visitIdExpressionNode(IdExpressionNode node);
     protected abstract T visitIntExpressionNode(IntExpressionNode node);
 
@@ -184,6 +185,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     public final T
     visitFuncCallExpressionNode(FuncCallExpressionNode node, Void argument) {
         return visitFuncCallExpressionNode(node);
+    }
+
+    @Override
+    public final T
+    visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node, Void argument) {
+        return visitBoolLiteralExpressionNode(node);
     }
 
     @Override

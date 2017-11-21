@@ -19,31 +19,21 @@
 package org.ashlang.ash.ast;
 
 import org.ashlang.ash.ast.visitor.ASTVisitor;
-import org.ashlang.ash.symbol.Symbol;
 
-public class IdExpressionNode extends ExpressionNode {
+public class BoolLiteralExpressionNode extends ExpressionNode {
 
-    private Symbol symbol;
-
-    public IdExpressionNode(Token value, SourceProvider sourceProvider) {
-        super(value, value, sourceProvider);
+    public BoolLiteralExpressionNode(Token valueToken,
+                                     SourceProvider sourceProvider) {
+        super(valueToken, valueToken, sourceProvider);
     }
 
     public Token getValueToken() {
         return getStartToken();
     }
 
-    public Symbol getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(Symbol symbol) {
-        this.symbol = symbol;
-    }
-
     @Override
     public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
-        return visitor.visitIdExpressionNode(this, argument);
+        return visitor.visitBoolLiteralExpressionNode(this, argument);
     }
 
 }

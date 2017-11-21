@@ -107,6 +107,8 @@ public class CompilerSystemTest {
             {"func main() : void { a:u16; b:u16; a=1; b=2; dump a+b; }", "3"},
             {"func main() : void { a:u32; b:u32; a=1; b=2; dump a+b; }", "3"},
             {"func main() : void { a:u64; b:u64; a=1; b=2; dump a+b; }", "3"},
+            {"func main() : void { a:bool; a=true; dump a; }", "true"},
+            {"func main() : void { a:bool; a=false; dump a; }", "false"},
 
             {"func main() : void { a:i8;  b:i8;  { a=1; b=2; } dump a+b; }", "3"},
             {"func main() : void { a:i16; b:i16; { a=1; b=2; } dump a+b; }", "3"},

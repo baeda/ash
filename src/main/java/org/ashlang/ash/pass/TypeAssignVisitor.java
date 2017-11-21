@@ -24,6 +24,7 @@ import org.ashlang.ash.symbol.Function;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.TypeMap;
+import org.ashlang.ash.type.Types;
 import org.ashlang.ash.type.UntypedInt;
 import org.ashlang.ash.util.Defer;
 
@@ -82,6 +83,14 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
         }
 
         node.setType(func.getType());
+    }
+
+    @Override
+    protected void
+    visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node) {
+        boolean value = Boolean.parseBoolean(node.getValueToken().getText());
+        node.setType(Types.BOOL);
+        node.setValue(value);
     }
 
     @Override

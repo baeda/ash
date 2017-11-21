@@ -144,6 +144,12 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
 
     @Override
     public T
+    visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
+    public T
     visitIdExpressionNode(IdExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }

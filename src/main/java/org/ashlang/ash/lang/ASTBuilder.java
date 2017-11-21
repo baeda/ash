@@ -317,6 +317,15 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
+    public ASTNode
+    visitBoolLiteralExpression(BoolLiteralExpressionContext ctx) {
+        return new BoolLiteralExpressionNode(
+            new Token(ctx.value),
+            sourceProvider
+        );
+    }
+
+    @Override
     public IdExpressionNode visitIdExpression(IdExpressionContext ctx) {
         return new IdExpressionNode(
             new Token(ctx.value),

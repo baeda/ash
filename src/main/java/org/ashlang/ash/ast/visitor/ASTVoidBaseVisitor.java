@@ -144,6 +144,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
 
     @Override
     protected void
+    visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
     visitIdExpressionNode(IdExpressionNode node) {
         visitChildren(node);
     }

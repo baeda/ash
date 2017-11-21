@@ -36,6 +36,7 @@ class C11DeclVisitor extends ASTSingleBaseVisitor<String> {
     protected String
     visitFileNode(FileNode node) {
         return String.join("\n",
+            "#include <stdbool.h>",
             "#include <stdio.h>",
             "#include <stdint.h>",
             "#include <inttypes.h>",

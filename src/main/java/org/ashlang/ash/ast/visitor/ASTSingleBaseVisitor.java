@@ -144,6 +144,12 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
 
     @Override
     protected T
+    visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    protected T
     visitIdExpressionNode(IdExpressionNode node) {
         return visitChildren(node);
     }
