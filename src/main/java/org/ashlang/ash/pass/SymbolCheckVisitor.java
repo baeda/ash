@@ -67,8 +67,30 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
 
         node.setFunction(function);
 
+        symbolTable.pushScope();
+
         visitChildren(node, function);
 
+        symbolTable.popScope();
+
+        return null;
+    }
+
+    @Override
+    public Void
+    visitParamDeclarationNode(ParamDeclarationNode node, Function func) {
+        Symbol symbol = symbolTable.getDeclaredSymbol(node);
+        if (symbol != null) {
+            errorHandler.emitSymbolAlreadyDeclared(
+                node.getIdentifierToken(),
+                symbol.getDeclSite().getIdentifierToken());
+        } else {
+            symbol = symbolTable.declareSymbol(node);
+            symbol.initialize();
+        }
+
+        func.getParameters().add(symbol);
+        node.setSymbol(symbol);
         return null;
     }
 
@@ -130,7 +152,14 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
             visitChildren(node, func);
 
             Function declaredFunction = symbolTable.getDeclaredFunction(identifier);
-            if (declaredFunction == null) {
+            if (declaredFunction != null) {
+                if (!declaredFunction.getParameters().isEmpty()) {
+                    throw new IllegalStateException(
+                        "calling functions that take arguments " +
+                            "is not yet implemented"
+                    );
+                }
+            } else {
                 errorHandler.emitFunctionNotDeclared(node.getIdentifierToken());
             }
 

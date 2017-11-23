@@ -25,18 +25,28 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.ashlang.ash.ast.FuncDeclarationNode;
 import org.ashlang.ash.type.Type;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Function {
 
     private final FuncDeclarationNode declSite;
+    private final List<Symbol> parameters;
 
     private boolean isUsed;
 
     Function(FuncDeclarationNode declSite) {
         this.declSite = declSite;
+
+        parameters = new ArrayList<>();
     }
 
     public FuncDeclarationNode getDeclSite() {
         return declSite;
+    }
+
+    public List<Symbol> getParameters() {
+        return parameters;
     }
 
     public String getIdentifier() {
@@ -81,6 +91,7 @@ public class Function {
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
             .append("identifier", getIdentifier())
+            .append("parameters", getParameters())
             .append("type", getType())
             .build();
     }

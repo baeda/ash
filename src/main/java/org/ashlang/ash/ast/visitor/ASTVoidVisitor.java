@@ -25,6 +25,7 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     protected abstract void visitFileNode(FileNode node);
 
     protected abstract void visitFuncDeclarationNode(FuncDeclarationNode node);
+    protected abstract void visitParamDeclarationNode(ParamDeclarationNode node);
     protected abstract void visitVarDeclarationNode(VarDeclarationNode node);
     protected abstract void visitVarAssignNode(VarAssignNode node);
     protected abstract void visitBlockNode(BlockNode node);
@@ -77,6 +78,13 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     public final Void
     visitFuncDeclarationNode(FuncDeclarationNode node, Void argument) {
         visitFuncDeclarationNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
+    visitParamDeclarationNode(ParamDeclarationNode node, Void argument) {
+        visitParamDeclarationNode(node);
         return null;
     }
 

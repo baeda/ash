@@ -18,8 +18,9 @@
 
 package org.ashlang.ash.symbol;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.ashlang.ash.ast.DeclarationNode;
 import org.ashlang.ash.ast.FuncDeclarationNode;
-import org.ashlang.ash.ast.VarDeclarationNode;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ class Scope {
         functionTable = new HashMap<>();
     }
 
-    Symbol declareSymbol(VarDeclarationNode declSite) {
+    Symbol declareSymbol(DeclarationNode declSite) {
         String identifier = declSite.getIdentifierToken().getText();
         Symbol symbol = symbolTable.get(identifier);
         if (symbol != null) {
@@ -47,7 +48,7 @@ class Scope {
         return symbol;
     }
 
-    Symbol getDeclaredSymbol(VarDeclarationNode declSite) {
+    Symbol getDeclaredSymbol(DeclarationNode declSite) {
         String identifier = declSite.getIdentifierToken().getText();
         return getDeclaredSymbol(identifier);
     }
@@ -85,4 +86,11 @@ class Scope {
         return functionTable.values();
     }
 
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+            .append("symbolTable", symbolTable)
+            .append("functionTable", functionTable)
+            .toString();
+    }
 }

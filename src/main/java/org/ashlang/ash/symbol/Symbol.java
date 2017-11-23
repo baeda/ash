@@ -22,21 +22,21 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.ashlang.ash.ast.VarDeclarationNode;
+import org.ashlang.ash.ast.DeclarationNode;
 import org.ashlang.ash.type.Type;
 
 public class Symbol {
 
-    private final VarDeclarationNode declSite;
+    private final DeclarationNode declSite;
 
     private boolean isInitialized;
     private boolean isUsed;
 
-    Symbol(VarDeclarationNode declSite) {
+    Symbol(DeclarationNode declSite) {
         this.declSite = declSite;
     }
 
-    public VarDeclarationNode getDeclSite() {
+    public DeclarationNode getDeclSite() {
         return declSite;
     }
 

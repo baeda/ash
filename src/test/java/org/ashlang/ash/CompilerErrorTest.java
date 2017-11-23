@@ -149,6 +149,15 @@ public class CompilerErrorTest {
     }
 
     @Test
+    public void symbolAlreadyDeclared_inParameterList() {
+        assertThat(
+            "func main() : void {}",
+            "func two_i32(a : i32, a : i32) : void {}")
+            .hasError(SYMBOL_ALREADY_DECLARED).at(2, 23)
+            .hasNoMoreErrors();
+    }
+
+    @Test
     public void symbolNotDeclared() {
         assertThat(
             "func main() : void",

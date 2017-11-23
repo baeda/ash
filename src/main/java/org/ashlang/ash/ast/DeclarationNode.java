@@ -18,18 +18,41 @@
 
 package org.ashlang.ash.ast;
 
-import org.ashlang.ash.ast.visitor.ASTVisitor;
+import org.ashlang.ash.symbol.Symbol;
+import org.ashlang.ash.type.Type;
 
-public class VarDeclarationNode extends DeclarationNode {
+public abstract class DeclarationNode extends ASTNode {
 
-    public VarDeclarationNode(Token identifier, Token type,
-                              SourceProvider sourceProvider) {
+    private Type type;
+    private Symbol symbol;
+
+    public DeclarationNode(Token identifier, Token type,
+                           SourceProvider sourceProvider) {
         super(identifier, type, sourceProvider);
     }
 
-    @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
-        return visitor.visitVarDeclarationNode(this, argument);
+    public Token getIdentifierToken() {
+        return getStartToken();
+    }
+
+    public Token getTypeToken() {
+        return getStopToken();
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public Symbol getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(Symbol symbol) {
+        this.symbol = symbol;
     }
 
 }

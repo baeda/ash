@@ -23,7 +23,16 @@ file
     ;
 
 funcDeclaration
-    : 'func' id=IDENTIFIER '('')' ':' type=IDENTIFIER body=block
+    : 'func' id=IDENTIFIER '(' params=paramList? ')'
+      ':' type=IDENTIFIER body=block
+    ;
+
+paramList
+    : paramDeclaration (',' paramDeclaration)*
+    ;
+
+paramDeclaration
+    : id=IDENTIFIER ':' type=IDENTIFIER
     ;
 
 varDeclaration

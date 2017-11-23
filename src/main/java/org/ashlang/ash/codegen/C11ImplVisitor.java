@@ -25,6 +25,7 @@ import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Type;
 
 import java.math.BigInteger;
+import java.util.stream.Collectors;
 
 import static org.ashlang.ash.codegen.C11DeclVisitor.FUNC;
 
@@ -43,9 +44,18 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
         String cType = typeMap.getType(node.getType());
         String identifier = node.getIdentifierToken().getText();
 
+        String params = node.getParams().stream()
+            .map(this::visit)
+            .collect(Collectors.joining(","));
+
+        String func = String.format(
+            "%s %s%s(%s)%s",
+            cType, FUNC, identifier, params, body
+        );
+
         if ("main".equals(identifier)) {
             return String.join("\n",
-                "static inline " + cType + " " + FUNC + "main()" + body,
+                "static inline " + func,
                 "int main(int argc, char **argv) {",
                 "    (void) argc;",
                 "    (void) argv;",
@@ -57,7 +67,15 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
             );
         }
 
-        return cType + " " + FUNC + identifier + "()" + body;
+        return func;
+    }
+
+    @Override
+    protected String
+    visitParamDeclarationNode(ParamDeclarationNode node) {
+        Symbol symbol = node.getSymbol();
+        String cType = typeMap.getType(symbol.getType());
+        return cType + " " + symbol.getIdentifier();
     }
 
     @Override

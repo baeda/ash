@@ -20,7 +20,11 @@ package org.ashlang.ash.codegen;
 
 import org.ashlang.ash.ast.FileNode;
 import org.ashlang.ash.ast.FuncDeclarationNode;
+import org.ashlang.ash.ast.ParamDeclarationNode;
 import org.ashlang.ash.ast.visitor.ASTSingleBaseVisitor;
+import org.ashlang.ash.symbol.Symbol;
+
+import java.util.stream.Collectors;
 
 class C11DeclVisitor extends ASTSingleBaseVisitor<String> {
 
@@ -56,7 +60,19 @@ class C11DeclVisitor extends ASTSingleBaseVisitor<String> {
             return defaultResult();
         }
 
-        return cType + " " + FUNC + identifier + "();\n";
+        String params = node.getParams().stream()
+            .map(this::visit)
+            .collect(Collectors.joining(","));
+
+        return cType + " " + FUNC + identifier + "(" + params + ");\n ";
+    }
+
+    @Override
+    protected String
+    visitParamDeclarationNode(ParamDeclarationNode node) {
+        Symbol symbol = node.getSymbol();
+        String cType = typeMap.getType(symbol.getType());
+        return cType + " " + symbol.getIdentifier();
     }
 
     @Override

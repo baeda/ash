@@ -25,16 +25,12 @@ import org.ashlang.ash.ast.*;
 import org.ashlang.gen.AshBaseVisitor;
 import org.ashlang.gen.AshParser.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static org.ashlang.gen.AshLexer.ASTERISK;
-import static org.ashlang.gen.AshLexer.MINUS;
-import static org.ashlang.gen.AshLexer.PERCENT;
-import static org.ashlang.gen.AshLexer.PLUS;
-import static org.ashlang.gen.AshLexer.SLASH;
+import static org.ashlang.gen.AshLexer.*;
 
 public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
@@ -73,14 +69,32 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     visitFuncDeclaration(FuncDeclarationContext ctx) {
         BlockNode body = visitBlock(ctx.body);
 
+        List<ParamDeclarationNode> params = new ArrayList<>();
+        if (ctx.params != null) {
+            ctx.params.paramDeclaration().stream()
+                .map(stmtCtx -> (ParamDeclarationNode) visit(stmtCtx))
+                .forEach(params::add);
+        }
+
         return setParent(
             new FuncDeclarationNode(
                 new Token(ctx.id),
                 new Token(ctx.type),
-                body,
+                params, body,
                 sourceProvider
             ),
-            body
+            body,
+            params
+        );
+    }
+
+    @Override
+    public ParamDeclarationNode
+    visitParamDeclaration(ParamDeclarationContext ctx) {
+        return new ParamDeclarationNode(
+            new Token(ctx.id),
+            new Token(ctx.type),
+            sourceProvider
         );
     }
 
@@ -373,25 +387,32 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
     //endregion ANTLR visitor default overrides
 
-    @SafeVarargs
-    private static <T extends ASTNode, U extends ASTNode>
-    T setParent(T parent, U firstChild, U... otherChildren) {
-        if (firstChild != null) {
-            firstChild.setParent(parent);
+    private static <T extends ASTNode>
+    T setParent(T parent, Object firstChild, Object... otherChildren) {
+        setParent(parent, firstChild);
+
+        for (Object child : otherChildren) {
+            setParent(parent, child);
         }
-        for (U child : otherChildren) {
-            if (child != null) {
-                child.setParent(parent);
-            }
-        }
+
         return parent;
     }
 
-    private static <T extends ASTNode, U extends ASTNode>
-    T setParent(T parent, Collection<U> children) {
-        children.stream()
-            .filter(Objects::nonNull)
-            .forEach(child -> child.setParent(parent));
+    private static <T extends ASTNode> T
+    setParent(T parent, Object child) {
+        if (child instanceof Collection<?>) {
+            for (Object obj : (Collection<?>) child) {
+                setParent(parent, obj);
+            }
+            return parent;
+        }
+
+        if (!(child instanceof ASTNode)) {
+            throw new IllegalStateException();
+        }
+
+        ((ASTNode) child).setParent(parent);
+
         return parent;
     }
 

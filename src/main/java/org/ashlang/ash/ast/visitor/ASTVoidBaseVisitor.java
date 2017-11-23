@@ -36,6 +36,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
 
     @Override
     protected void
+    visitParamDeclarationNode(ParamDeclarationNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
     visitVarDeclarationNode(VarDeclarationNode node) {
         visitChildren(node);
     }

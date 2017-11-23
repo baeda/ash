@@ -63,6 +63,14 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
 
     @Override
     protected void
+    visitParamDeclarationNode(ParamDeclarationNode node) {
+        String typeString = node.getTypeToken().getText();
+        Type type = typeMap.resolve(typeString);
+        node.setType(type);
+    }
+
+    @Override
+    protected void
     visitVarDeclarationNode(VarDeclarationNode node) {
         String typeString = node.getTypeToken().getText();
         Type type = typeMap.resolve(typeString);

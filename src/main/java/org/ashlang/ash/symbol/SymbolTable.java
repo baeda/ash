@@ -18,8 +18,8 @@
 
 package org.ashlang.ash.symbol;
 
+import org.ashlang.ash.ast.DeclarationNode;
 import org.ashlang.ash.ast.FuncDeclarationNode;
-import org.ashlang.ash.ast.VarDeclarationNode;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
@@ -47,11 +47,11 @@ public class SymbolTable {
         scopeStack.pop();
     }
 
-    public Symbol declareSymbol(VarDeclarationNode declSite) {
+    public Symbol declareSymbol(DeclarationNode declSite) {
         return currentScope().declareSymbol(declSite);
     }
 
-    public Symbol getDeclaredSymbol(VarDeclarationNode declSite) {
+    public Symbol getDeclaredSymbol(DeclarationNode declSite) {
         for (Scope scope : scopeStack) {
             Symbol declaredSymbol = scope.getDeclaredSymbol(declSite);
             if (declaredSymbol != null) {

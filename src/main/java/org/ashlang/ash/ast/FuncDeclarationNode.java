@@ -22,16 +22,20 @@ import org.ashlang.ash.ast.visitor.ASTVisitor;
 import org.ashlang.ash.symbol.Function;
 import org.ashlang.ash.type.Type;
 
+import java.util.List;
+
 public class FuncDeclarationNode extends ASTNode {
 
     private final Token typeToken;
+    private final List<ParamDeclarationNode> params;
     private final BlockNode body;
 
     private Type type;
     private Function function;
 
     public FuncDeclarationNode(Token identifier, Token typeToken,
-                               BlockNode body, SourceProvider sourceProvider) {
+                               List<ParamDeclarationNode> params, BlockNode body,
+                               SourceProvider sourceProvider) {
         super(
             identifier,
             body.getStopToken(),
@@ -39,6 +43,7 @@ public class FuncDeclarationNode extends ASTNode {
         );
 
         this.typeToken = typeToken;
+        this.params = params;
         this.body = body;
     }
 
@@ -48,6 +53,10 @@ public class FuncDeclarationNode extends ASTNode {
 
     public Token getTypeToken() {
         return typeToken;
+    }
+
+    public List<ParamDeclarationNode> getParams() {
+        return params;
     }
 
     public BlockNode getBody() {

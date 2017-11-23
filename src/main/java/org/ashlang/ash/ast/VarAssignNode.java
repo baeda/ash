@@ -21,7 +21,7 @@ package org.ashlang.ash.ast;
 import org.ashlang.ash.ast.visitor.ASTVisitor;
 import org.ashlang.ash.symbol.Symbol;
 
-public class VarAssignNode extends StatementNode {
+public class VarAssignNode extends ASTNode {
 
     private final ExpressionNode expression;
 
