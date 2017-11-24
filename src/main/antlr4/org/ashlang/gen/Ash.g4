@@ -48,7 +48,15 @@ block
     ;
 
 funcCall
-    : id=IDENTIFIER '('')'
+    : id=IDENTIFIER '(' args=argumentList? ')'
+    ;
+
+argumentList
+    : argument (',' argument)*
+    ;
+
+argument
+    : expr=expression
     ;
 
 statement

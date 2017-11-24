@@ -70,6 +70,7 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
         symbolTable.pushScope();
 
         visitChildren(node, function);
+        checkSymbolUsage(symbolTable.getDeclaredSymbolsInCurrentScope());
 
         symbolTable.popScope();
 
@@ -146,20 +147,13 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
     visitFuncCallNode(FuncCallNode node, Function func) {
         String identifier = node.getIdentifierToken().getText();
 
+        visitChildren(node, func);
+
         // check function calls last, when we have
         // discovered all visible function signatures
         defer.record(() -> {
-            visitChildren(node, func);
-
             Function declaredFunction = symbolTable.getDeclaredFunction(identifier);
-            if (declaredFunction != null) {
-                if (!declaredFunction.getParameters().isEmpty()) {
-                    throw new IllegalStateException(
-                        "calling functions that take arguments " +
-                            "is not yet implemented"
-                    );
-                }
-            } else {
+            if (declaredFunction == null) {
                 errorHandler.emitFunctionNotDeclared(node.getIdentifierToken());
             }
 

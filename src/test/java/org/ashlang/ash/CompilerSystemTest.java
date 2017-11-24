@@ -141,6 +141,9 @@ public class CompilerSystemTest {
             {"func main() : void { run(); } func run() : void { dump 42; }", "42"},
 
             {"func main() : void { } func add(x : i32, y : i32) : i32 { return x+y; }", ""},
+            {"func main() : void { dump add(2, 3); } func add(x : i32, y : i32) : i32 { return x+y; }", "5"},
+            {"func main() : void { a:i32; a=2; dump add(a, 3); } func add(x : i32, y : i32) : i32 { return x+y; }", "5"},
+            {"func main() : void { a:i32; b:i32; a=2; b=3; dump add(a, b); } func add(x : i32, y : i32) : i32 { return x+y; }", "5"},
         };
     }
 

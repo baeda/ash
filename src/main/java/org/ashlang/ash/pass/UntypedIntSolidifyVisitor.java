@@ -21,10 +21,14 @@ package org.ashlang.ash.pass;
 import org.ashlang.ash.ast.*;
 import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
 import org.ashlang.ash.err.ErrorHandler;
+import org.ashlang.ash.symbol.Function;
+import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.IntType;
 import org.ashlang.ash.type.Type;
 import org.ashlang.ash.type.Types;
 import org.ashlang.ash.type.UntypedInt;
+
+import java.util.List;
 
 class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
 
@@ -46,6 +50,31 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
             node.getSymbol().getType(),
             node.getExpression()
         );
+    }
+
+    @Override
+    protected void visitFuncCallNode(FuncCallNode node) {
+        visitChildren(node);
+
+        Function func = node.getFunction();
+        if (func == null) {
+            // call of undeclared function
+            return;
+        }
+
+        List<Symbol> params = func.getParameters();
+        List<ArgumentNode> args = node.getArguments();
+
+        int N = Math.min(params.size(), args.size());
+        for (int i = 0; i < N; i++) {
+            Symbol param = params.get(i);
+            ArgumentNode arg = args.get(i);
+
+            solidifyUntypedIntRight(
+                param.getType(),
+                arg.getExpression()
+            );
+        }
     }
 
     //region statement nodes

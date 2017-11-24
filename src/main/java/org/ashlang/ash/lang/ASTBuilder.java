@@ -30,7 +30,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.ashlang.gen.AshLexer.*;
+import static org.ashlang.gen.AshLexer.ASTERISK;
+import static org.ashlang.gen.AshLexer.MINUS;
+import static org.ashlang.gen.AshLexer.PERCENT;
+import static org.ashlang.gen.AshLexer.PLUS;
+import static org.ashlang.gen.AshLexer.SLASH;
 
 public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
@@ -143,10 +147,35 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     @Override
     public FuncCallNode
     visitFuncCall(FuncCallContext ctx) {
-        return new FuncCallNode(
-            new Token(ctx.id),
-            new Token(ctx.stop),
-            sourceProvider
+        List<ArgumentNode> args = new ArrayList<>();
+        if (ctx.args != null) {
+            ctx.args.argument().stream()
+                .map(stmtCtx -> (ArgumentNode) visit(stmtCtx))
+                .forEach(args::add);
+        }
+
+        return setParent(
+            new FuncCallNode(
+                new Token(ctx.id),
+                new Token(ctx.stop),
+                args,
+                sourceProvider
+            ),
+            args
+        );
+    }
+
+    @Override
+    public ArgumentNode
+    visitArgument(ArgumentContext ctx) {
+        ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
+
+        return setParent(
+            new ArgumentNode(
+                expression,
+                sourceProvider
+            ),
+            expression
         );
     }
 

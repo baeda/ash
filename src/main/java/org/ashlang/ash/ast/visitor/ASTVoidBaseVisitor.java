@@ -64,6 +64,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
         visitChildren(node);
     }
 
+    @Override
+    protected void
+    visitArgumentNode(ArgumentNode node) {
+        visitChildren(node);
+    }
+
     //region statement nodes
 
     @Override

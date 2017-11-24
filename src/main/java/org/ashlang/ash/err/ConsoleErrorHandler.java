@@ -180,6 +180,14 @@ public class ConsoleErrorHandler implements ErrorHandler {
 
     @Override
     public void
+    emitFunctionArgumentCountMismatch(TokenRange pos, int have, int want) {
+        emit(pos, "function argument count mismatch - have %d want %d",
+            have, want);
+        numSemanticErrors++;
+    }
+
+    @Override
+    public void
     emitIllegalStatement(TokenRange pos) {
         emit(pos, "illegal statement '%s'",
             pos.getText());

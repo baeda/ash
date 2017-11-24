@@ -64,6 +64,12 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
         return visitChildren(node);
     }
 
+    @Override
+    protected T
+    visitArgumentNode(ArgumentNode node) {
+        return visitChildren(node);
+    }
+
     //region statement nodes
 
     @Override

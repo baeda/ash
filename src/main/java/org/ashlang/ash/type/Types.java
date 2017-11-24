@@ -46,6 +46,10 @@ public interface Types {
         return true;
     }
 
+    static boolean anyInvalid(Type... types) {
+        return !allValid(types);
+    }
+
     static Collection<Type> allTypes() {
         return allSubTypes(Type.class);
     }

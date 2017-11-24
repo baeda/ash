@@ -21,19 +21,30 @@ package org.ashlang.ash.ast;
 import org.ashlang.ash.ast.visitor.ASTVisitor;
 import org.ashlang.ash.symbol.Function;
 
+import java.util.List;
+
 public class FuncCallNode extends ASTNode {
+
+    private final List<ArgumentNode> arguments;
 
     private Function function;
 
     public FuncCallNode(
         Token startToken, Token stopToken,
+        List<ArgumentNode> arguments,
         SourceProvider sourceProvider
     ) {
         super(startToken, stopToken, sourceProvider);
+
+        this.arguments = arguments;
     }
 
     public Token getIdentifierToken() {
         return getStartToken();
+    }
+
+    public List<ArgumentNode> getArguments() {
+        return arguments;
     }
 
     public Function getFunction() {

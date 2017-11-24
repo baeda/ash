@@ -137,6 +137,12 @@ class TestErrorHandler implements ErrorHandler {
 
     @Override
     public void
+    emitFunctionArgumentCountMismatch(TokenRange pos, int have, int want) {
+        addError(FUNCTION_ARGUMENT_COUNT_MISMATCH, pos.getStartToken());
+    }
+
+    @Override
+    public void
     emitIllegalStatement(TokenRange pos) {
         addError(ILLEGAL_STATEMENT, pos.getStartToken());
     }

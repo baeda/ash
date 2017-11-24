@@ -22,9 +22,13 @@ import org.ashlang.ash.ast.*;
 import org.ashlang.ash.ast.visitor.ASTVoidBaseVisitor;
 import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.symbol.Function;
+import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.type.Operator;
 import org.ashlang.ash.type.OperatorMap;
 import org.ashlang.ash.type.Type;
+import org.ashlang.ash.type.Types;
+
+import java.util.List;
 
 import static org.ashlang.ash.type.Operator.*;
 import static org.ashlang.ash.type.Types.*;
@@ -51,7 +55,8 @@ class TypeCheckVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitVarAssignNode(VarAssignNode node) {
+    protected void
+    visitVarAssignNode(VarAssignNode node) {
         visitChildren(node);
 
         if (node.getSymbol() == null) {
@@ -71,23 +76,83 @@ class TypeCheckVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitFuncDeclarationNode(FuncDeclarationNode node) {
+    protected void
+    visitFuncDeclarationNode(FuncDeclarationNode node) {
         visitChildren(node);
 
-        Function function = node.getFunction();
-        if (!"main".equals(function.getIdentifier())) {
+        Function func = node.getFunction();
+        List<Symbol> params = func.getParameters();
+
+        if ("main".equals(func.getIdentifier())) {
+            if (!VOID.equals(func.getType())) {
+                errorHandler.emitTypeMismatch(node, func.getType(), VOID);
+            }
+            if (!params.isEmpty()) {
+                errorHandler.emitFunctionArgumentCountMismatch(
+                    TokenRange.ofSymbols(params),
+                    params.size(),
+                    0
+                );
+            }
+        }
+
+        for (Symbol param : params) {
+            if (INVALID.equals(param.getType())) {
+                errorHandler.emitInvalidType(param.getDeclSite().getTypeToken());
+            }
+        }
+    }
+
+    @Override
+    protected void
+    visitFuncCallNode(FuncCallNode node) {
+        visitChildren(node);
+
+        Function func = node.getFunction();
+
+        if (func == null) {
+            // call to undeclared function
             return;
         }
 
-        if (!VOID.equals(function.getType())) {
-            errorHandler.emitTypeMismatch(node, function.getType(), VOID);
+        List<Symbol> params = func.getParameters();
+        List<ArgumentNode> args = node.getArguments();
+
+        if (args.size() != params.size()) {
+            TokenRange pos = args.isEmpty()
+                ? TokenRange.ofToken(node.getStopToken())
+                : TokenRange.ofNodes(args);
+
+            errorHandler.emitFunctionArgumentCountMismatch(
+                pos,
+                args.size(),
+                params.size()
+            );
+        }
+
+        int N = Math.min(params.size(), args.size());
+        for (int i = 0; i < N; i++) {
+            Symbol param = params.get(i);
+            ExpressionNode expr = args.get(i).getExpression();
+
+            Type want = param.getType();
+            Type have = expr.getType();
+
+            if (Types.anyInvalid(want, have)) {
+                continue;
+            }
+
+            if (!have.equals(want)) {
+                errorHandler.emitTypeMismatch(expr, have, want);
+            }
         }
     }
 
     //region statement nodes
 
     @Override
-    protected void visitReturnStatementNode(ReturnStatementNode node) {
+    protected void
+    visitReturnStatementNode(ReturnStatementNode node) {
         visitChildren(node);
 
         Type returnType = node.getFunction().getType();
@@ -106,7 +171,11 @@ class TypeCheckVisitor extends ASTVoidBaseVisitor {
         }
 
         if (!returnType.equals(exprType)) {
-            errorHandler.emitTypeMismatch(node, exprType, returnType);
+            errorHandler.emitTypeMismatch(
+                node.getExpression(),
+                exprType,
+                returnType
+            );
         }
     }
 
@@ -115,34 +184,40 @@ class TypeCheckVisitor extends ASTVoidBaseVisitor {
     //region expression nodes
 
     @Override
-    protected void visitParenExpressionNode(ParenExpressionNode node) {
+    protected void
+    visitParenExpressionNode(ParenExpressionNode node) {
         visitChildren(node);
         Type type = node.getExpression().getType();
         node.setType(type);
     }
 
     @Override
-    protected void visitAddExpressionNode(AddExpressionNode node) {
+    protected void
+    visitAddExpressionNode(AddExpressionNode node) {
         setResultTypeOfOperation(node, ADD);
     }
 
     @Override
-    protected void visitSubExpressionNode(SubExpressionNode node) {
+    protected void
+    visitSubExpressionNode(SubExpressionNode node) {
         setResultTypeOfOperation(node, SUB);
     }
 
     @Override
-    protected void visitMulExpressionNode(MulExpressionNode node) {
+    protected void
+    visitMulExpressionNode(MulExpressionNode node) {
         setResultTypeOfOperation(node, MUL);
     }
 
     @Override
-    protected void visitDivExpressionNode(DivExpressionNode node) {
+    protected void
+    visitDivExpressionNode(DivExpressionNode node) {
         setResultTypeOfOperation(node, DIV);
     }
 
     @Override
-    protected void visitModExpressionNode(ModExpressionNode node) {
+    protected void
+    visitModExpressionNode(ModExpressionNode node) {
         setResultTypeOfOperation(node, MOD);
     }
 

@@ -41,6 +41,7 @@ public interface ErrorHandler {
     void emitSymbolInitializedButNotUsed(Token pos);
     void emitFunctionAlreadyDeclared(Token pos, Token declSite);
     void emitFunctionNotDeclared(Token pos);
+    void emitFunctionArgumentCountMismatch(TokenRange pos, int have, int want);
 
     void emitIllegalStatement(TokenRange pos);
 

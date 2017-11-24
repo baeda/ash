@@ -30,6 +30,7 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     protected abstract void visitVarAssignNode(VarAssignNode node);
     protected abstract void visitBlockNode(BlockNode node);
     protected abstract void visitFuncCallNode(FuncCallNode node);
+    protected abstract void visitArgumentNode(ArgumentNode node);
 
     //region statement nodes
 
@@ -113,6 +114,13 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     public final Void
     visitFuncCallNode(FuncCallNode node, Void argument) {
         visitFuncCallNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
+    visitArgumentNode(ArgumentNode node, Void argument) {
+        visitArgumentNode(node);
         return null;
     }
 

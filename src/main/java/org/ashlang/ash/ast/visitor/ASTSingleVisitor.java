@@ -30,6 +30,7 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitVarAssignNode(VarAssignNode node);
     protected abstract T visitBlockNode(BlockNode node);
     protected abstract T visitFuncCallNode(FuncCallNode node);
+    protected abstract T visitArgumentNode(ArgumentNode node);
 
     //region statement nodes
 
@@ -108,6 +109,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     public final T
     visitFuncCallNode(FuncCallNode node, Void argument) {
         return visitFuncCallNode(node);
+    }
+
+    @Override
+    public final T
+    visitArgumentNode(ArgumentNode node, Void argument) {
+        return visitArgumentNode(node);
     }
 
     //region statement nodes

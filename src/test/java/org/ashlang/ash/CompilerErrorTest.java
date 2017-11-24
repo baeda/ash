@@ -94,14 +94,52 @@ public class CompilerErrorTest {
             "{",
             "    return 0;",
             "}")
-            .hasError(TYPE_MISMATCH).at(3, 5)
+            .hasError(TYPE_MISMATCH).at(3, 12)
             .hasNoMoreErrors();
     }
 
     @Test
-    public void typeMismatch_malformedEntryPoint() {
+    public void typeMismatch_malformedEntryPoint_invalidReturnType() {
         assertThat("func main() : i32 {}")
             .hasError(TYPE_MISMATCH).at(1, 6)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void typeMismatch_malformedEntryPoint_invalidParameters() {
+        assertThat("func main(x : i32) : void {}")
+            .hasError(FUNCTION_ARGUMENT_COUNT_MISMATCH).at(1, 11)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 11)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void typeMismatch_functionParameter() {
+        assertThat(
+            "func main() : void {}",
+            "func add(x : i32, y : i8) : i32",
+            "{",
+            "    return y;",
+            "}")
+            .hasError(TYPE_MISMATCH).at(4, 12)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(2, 10)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void typeMismatch_functionArgument() {
+        assertThat(
+            "func add(x : i32, y : i32) : i32",
+            "{",
+            "    return x + y;",
+            "}",
+            "func main() : void",
+            "{",
+            "    a : i8;",
+            "    a = 1;",
+            "    add(a, 1);",
+            "}")
+            .hasError(TYPE_MISMATCH).at(9, 9)
             .hasNoMoreErrors();
     }
 
@@ -154,6 +192,7 @@ public class CompilerErrorTest {
             "func main() : void {}",
             "func two_i32(a : i32, a : i32) : void {}")
             .hasError(SYMBOL_ALREADY_DECLARED).at(2, 23)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(2, 14)
             .hasNoMoreErrors();
     }
 
@@ -264,6 +303,51 @@ public class CompilerErrorTest {
             "    dump x();",
             "}")
             .hasError(FUNCTION_NOT_DECLARED).at(3, 10)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void functionArgumentCountMismatch_have0_want2() {
+        assertThat(
+            "func add(x : i32, y : i32) : i32",
+            "{",
+            "    return x + y;",
+            "}",
+            "func main() : void",
+            "{",
+            "    add();",
+            "}")
+            .hasError(FUNCTION_ARGUMENT_COUNT_MISMATCH).at(7, 9)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void functionArgumentCountMismatch_have1_want2() {
+        assertThat(
+            "func add(x : i32, y : i32) : i32",
+            "{",
+            "    return x + y;",
+            "}",
+            "func main() : void",
+            "{",
+            "    add(1);",
+            "}")
+            .hasError(FUNCTION_ARGUMENT_COUNT_MISMATCH).at(7, 9)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void functionArgumentCountMismatch_have3_want2() {
+        assertThat(
+            "func add(x : i32, y : i32) : i32",
+            "{",
+            "    return x + y;",
+            "}",
+            "func main() : void",
+            "{",
+            "    add(1, 2, 3);",
+            "}")
+            .hasError(FUNCTION_ARGUMENT_COUNT_MISMATCH).at(7, 9)
             .hasNoMoreErrors();
     }
 

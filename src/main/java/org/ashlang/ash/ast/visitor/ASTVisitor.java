@@ -37,6 +37,7 @@ public interface ASTVisitor<T, A> {
     T visitVarAssignNode(VarAssignNode node, A argument);
     T visitBlockNode(BlockNode node, A argument);
     T visitFuncCallNode(FuncCallNode node, A argument);
+    T visitArgumentNode(ArgumentNode node, A argument);
 
     T visitVarDeclarationStatementNode(VarDeclarationStatementNode node, A argument);
     T visitVarAssignStatementNode(VarAssignStatementNode node, A argument);

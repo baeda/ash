@@ -103,8 +103,11 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
     @Override
     protected String
     visitFuncCallNode(FuncCallNode node) {
+        String args = node.getArguments().stream()
+            .map(arg -> visit(arg.getExpression()))
+            .collect(Collectors.joining(", "));
         Function func = node.getFunction();
-        return FUNC + func.getIdentifier() + "()";
+        return FUNC + func.getIdentifier() + "(" + args + ")";
     }
 
     //region statement nodes

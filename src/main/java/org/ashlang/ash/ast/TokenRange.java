@@ -18,10 +18,74 @@
 
 package org.ashlang.ash.ast;
 
+import org.ashlang.ash.symbol.Symbol;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 public interface TokenRange {
 
     Token getStartToken();
     Token getStopToken();
     String getText();
+
+    static TokenRange
+    ofToken(Token token) {
+        return new TokenRange() {
+            @Override
+            public Token getStartToken() {
+                return token;
+            }
+
+            @Override
+            public Token getStopToken() {
+                return token;
+            }
+
+            @Override
+            public String getText() {
+                return token.getText();
+            }
+        };
+    }
+
+    static TokenRange
+    ofSymbols(List<? extends Symbol> symbols) {
+        return ofNodes(
+            symbols.stream()
+                .map(Symbol::getDeclSite)
+                .collect(Collectors.toList())
+        );
+    }
+
+    static TokenRange
+    ofNodes(List<? extends ASTNode> nodes) {
+        if (nodes == null || nodes.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
+        ASTNode startNode = nodes.get(0);
+        TokenRange stopNode = nodes.get(nodes.size() - 1);
+
+        SourceProvider sourceProvider = startNode.getSourceProvider();
+        Token startToken = startNode.getStartToken();
+        Token stopToken = stopNode.getStartToken();
+        return new TokenRange() {
+            @Override
+            public Token getStartToken() {
+                return startToken;
+            }
+
+            @Override
+            public Token getStopToken() {
+                return stopToken;
+            }
+
+            @Override
+            public String getText() {
+                return sourceProvider.apply(startToken, stopToken);
+            }
+        };
+    }
 
 }

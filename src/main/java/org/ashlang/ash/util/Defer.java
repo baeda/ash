@@ -18,15 +18,15 @@
 
 package org.ashlang.ash.util;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Defer {
 
     private final List<Runnable> actions;
 
     public Defer() {
-        actions = new ArrayList<>();
+        actions = new CopyOnWriteArrayList<>();
     }
 
     public void record(Runnable action) {
