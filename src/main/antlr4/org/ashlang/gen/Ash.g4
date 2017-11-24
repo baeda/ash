@@ -88,6 +88,7 @@ L_BRACE   : '{' ;
 R_BRACE   : '}' ;
 L_PAREN   : '(' ;
 R_PAREN   : ')' ;
+COMMA     : ',' ;
 SEMICOLON : ';' ;
 COLON     : ':' ;
 
