@@ -24,188 +24,79 @@ import org.ashlang.ash.err.ErrorHandler;
 import org.ashlang.ash.symbol.Function;
 import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.symbol.SymbolTable;
-import org.ashlang.ash.util.Defer;
+import org.ashlang.ash.symbol.SymbolTableSnapshot;
 
 import java.util.Collection;
 
-class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
+class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
 
     private final ErrorHandler errorHandler;
     private final SymbolTable symbolTable;
-    private final Defer defer;
 
     SymbolCheckVisitor(ErrorHandler errorHandler, SymbolTable symbolTable) {
         this.errorHandler = errorHandler;
         this.symbolTable = symbolTable;
-
-        defer = new Defer();
     }
 
     @Override
     public Void
-    visitFileNode(FileNode node, Function func) {
-        symbolTable.pushScope();
+    visitFileNode(FileNode node, Void argument) {
+        visitChildren(node, argument);
 
-        visitChildren(node, func);
-
-        checkSymbolUsage(symbolTable.getDeclaredSymbols());
-        assertMainFunctionPresent(node.getStopToken(), symbolTable.getDeclaredFunctions());
-
-        defer.runAll();
-
-        symbolTable.popScope(node);
-        return null;
-    }
-
-    @Override
-    public Void
-    visitFuncDeclarationNode(FuncDeclarationNode node, Function func) {
-        Function function = symbolTable.getDeclaredFunction(node);
-        if (function != null) {
-            errorHandler.emitFunctionAlreadyDeclared(
-                node.getIdentifierToken(),
-                function.getDeclSite().getIdentifierToken());
-        } else {
-            function = symbolTable.declareFunction(node);
-        }
-
-        node.setFunction(function);
-
-        symbolTable.pushScope();
-
-        visitChildren(node, function);
-        checkSymbolUsage(symbolTable.getDeclaredSymbolsInCurrentScope());
-
-        symbolTable.popScope(node);
+        SymbolTableSnapshot snapshot = symbolTable.recall(node);
+        checkSymbolUsage(snapshot.getDeclaredSymbols());
+        assertMainFunctionPresent(node.getStopToken(), snapshot.getDeclaredFunctions());
 
         return null;
     }
 
     @Override
     public Void
-    visitParamDeclarationNode(ParamDeclarationNode node, Function func) {
-        Symbol symbol = symbolTable.getDeclaredSymbol(node);
-        if (symbol != null) {
-            errorHandler.emitSymbolAlreadyDeclared(
-                node.getIdentifierToken(),
-                symbol.getDeclSite().getIdentifierToken());
-        } else {
-            symbol = symbolTable.declareSymbol(node);
-            symbol.initialize();
-        }
+    visitFuncDeclarationNode(FuncDeclarationNode node, Void argument) {
+        visitChildren(node, argument);
 
-        func.getParameters().add(symbol);
-        node.setSymbol(symbol);
+        SymbolTableSnapshot snapshot = symbolTable.recall(node);
+        checkSymbolUsage(snapshot.getDeclaredSymbolsInCurrentScope());
+
         return null;
     }
 
     @Override
     public Void
-    visitVarDeclarationNode(VarDeclarationNode node, Function func) {
-        Symbol symbol = symbolTable.getDeclaredSymbol(node);
-        if (symbol != null) {
-            errorHandler.emitSymbolAlreadyDeclared(
-                node.getIdentifierToken(),
-                symbol.getDeclSite().getIdentifierToken());
-        } else {
-            symbol = symbolTable.declareSymbol(node);
-        }
+    visitVarAssignNode(VarAssignNode node, Void argument) {
+        visitChildren(node, argument);
 
-        node.setSymbol(symbol);
-        return null;
-    }
-
-    @Override
-    public Void
-    visitVarAssignNode(VarAssignNode node, Function func) {
-        visitChildren(node, func);
-
-        String identifier = node.getIdentifierToken().getText();
-        Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
+        Symbol symbol = node.getSymbol();
         if (symbol == null) {
-            errorHandler.emitSymbolNotDeclared(node.getIdentifierToken());
-        } else {
-            symbol.initialize();
+            // Symbol not declared.
+            return null;
         }
 
-        node.setSymbol(symbol);
-        return null;
-    }
-
-    @Override
-    public Void
-    visitBlockNode(BlockNode node, Function func) {
-        symbolTable.pushScope();
-
-        visitChildren(node, func);
-
-        checkSymbolUsage(symbolTable.getDeclaredSymbolsInCurrentScope());
-
-        symbolTable.popScope(node);
+        symbol.initialize();
 
         return null;
     }
 
     @Override
     public Void
-    visitFuncCallNode(FuncCallNode node, Function func) {
-        String identifier = node.getIdentifierToken().getText();
+    visitBlockNode(BlockNode node, Void argument) {
+        visitChildren(node, argument);
 
-        visitChildren(node, func);
-
-        // check function calls last, when we have
-        // discovered all visible function signatures
-        defer.record(() -> {
-            Function declaredFunction = symbolTable.getDeclaredFunction(identifier);
-            if (declaredFunction == null) {
-                errorHandler.emitFunctionNotDeclared(node.getIdentifierToken());
-            }
-
-            node.setFunction(declaredFunction);
-        });
+        SymbolTableSnapshot snapshot = symbolTable.recall(node);
+        checkSymbolUsage(snapshot.getDeclaredSymbolsInCurrentScope());
 
         return null;
     }
-
-    //region statement nodes
-
-    @Override
-    public Void
-    visitExpressionStatementNode(ExpressionStatementNode node, Function func) {
-        visitChildren(node, func);
-
-        ExpressionNode expression = node.getExpression();
-        if (!(expression instanceof FuncCallExpressionNode)) {
-            errorHandler.emitIllegalStatement(node);
-        }
-
-        return null;
-    }
-
-    @Override
-    public Void
-    visitReturnStatementNode(ReturnStatementNode node, Function func) {
-        node.setFunction(func);
-
-        visitChildren(node, func);
-
-        return null;
-    }
-
-
-    //endregion statement nodes
 
     //region expression nodes
 
     @Override
     public Void
-    visitIdExpressionNode(IdExpressionNode node, Function func) {
-        Token valueToken = node.getValueToken();
-        String identifier = valueToken.getText();
-        Symbol symbol = symbolTable.getDeclaredSymbol(identifier);
+    visitIdExpressionNode(IdExpressionNode node, Void argument) {
+        Symbol symbol = node.getSymbol();
 
         if (symbol == null) {
-            errorHandler.emitSymbolNotDeclared(valueToken);
+            // Symbol not declared.
             return null;
         }
 
@@ -218,7 +109,6 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
             );
         }
 
-        node.setSymbol(symbol);
         return null;
     }
 

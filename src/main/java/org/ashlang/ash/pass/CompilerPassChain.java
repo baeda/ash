@@ -32,18 +32,12 @@ public class CompilerPassChain {
     }
 
     private final ErrorHandler errorHandler;
-    private final SymbolTable symbolTable;
-    private final TypeMap typeMap;
-    private final OperatorMap operatorMap;
 
     private CompilerPass entryPass;
 
     private CompilerPassChain(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
 
-        symbolTable = new SymbolTable();
-        typeMap = new TypeMap();
-        operatorMap = new OperatorMap();
         entryPass = (eh, st, tm, om, node) -> {};
     }
 
@@ -54,6 +48,10 @@ public class CompilerPassChain {
     }
 
     public void applyTo(ASTNode node) {
+        SymbolTable symbolTable = new SymbolTable();
+        TypeMap typeMap = new TypeMap();
+        OperatorMap operatorMap = new OperatorMap();
+
         entryPass.accept(errorHandler, symbolTable, typeMap, operatorMap, node);
     }
 
