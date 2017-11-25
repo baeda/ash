@@ -18,57 +18,27 @@
 
 package org.ashlang.ash.symbol;
 
-import org.ashlang.ash.ast.ASTNode;
 import org.ashlang.ash.ast.DeclarationNode;
 import org.ashlang.ash.ast.FuncDeclarationNode;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class SymbolTable {
+public class SymbolTableSnapshot {
 
     private final Deque<Scope> scopeStack;
-    private final Map<ASTNode, SymbolTableSnapshot> snapshotMap;
 
-    public SymbolTable() {
-        scopeStack = new ArrayDeque<>();
-        snapshotMap = new HashMap<>();
+    SymbolTableSnapshot(Deque<Scope> scopeStack) {
+        List<Scope> stackCopy = scopeStack.stream()
+            .map(Scope::copy)
+            .collect(Collectors.toList());
+        this.scopeStack = new ArrayDeque<>(stackCopy);
     }
-
-    //region scope / memo
-
-    public SymbolTableSnapshot recall(ASTNode declaringScope) {
-        SymbolTableSnapshot snapshot = null;
-
-        while (snapshot == null) {
-            snapshot = snapshotMap.get(declaringScope);
-            declaringScope = declaringScope.getParent();
-        }
-
-        return snapshot;
-    }
-
-    public void pushScope() {
-        scopeStack.push(new Scope());
-    }
-
-    public void popScope(ASTNode declaringScope) {
-        if (snapshotMap.containsKey(declaringScope)) {
-            throw new IllegalArgumentException();
-        }
-
-        snapshotMap.put(declaringScope, new SymbolTableSnapshot(scopeStack));
-
-        scopeStack.pop();
-    }
-
-    //endregion scope / memo
 
     //region symbol
-
-    public Symbol declareSymbol(DeclarationNode declSite) {
-        return currentScope().declareSymbol(declSite);
-    }
 
     public Symbol getDeclaredSymbol(DeclarationNode declSite) {
         for (Scope scope : scopeStack) {
@@ -105,10 +75,6 @@ public class SymbolTable {
     //endregion symbol
 
     //region function
-
-    public Function declareFunction(FuncDeclarationNode declSite) {
-        return currentScope().declareFunction(declSite);
-    }
 
     public Function getDeclaredFunction(FuncDeclarationNode declSite) {
         for (Scope scope : scopeStack) {

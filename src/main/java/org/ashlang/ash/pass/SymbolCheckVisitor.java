@@ -44,12 +44,16 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
     @Override
     public Void
     visitFileNode(FileNode node, Function func) {
+        symbolTable.pushScope();
+
         visitChildren(node, func);
 
         checkSymbolUsage(symbolTable.getDeclaredSymbols());
         assertMainFunctionPresent(node.getStopToken(), symbolTable.getDeclaredFunctions());
 
         defer.runAll();
+
+        symbolTable.popScope(node);
         return null;
     }
 
@@ -72,7 +76,7 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
         visitChildren(node, function);
         checkSymbolUsage(symbolTable.getDeclaredSymbolsInCurrentScope());
 
-        symbolTable.popScope();
+        symbolTable.popScope(node);
 
         return null;
     }
@@ -137,7 +141,7 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Function> {
 
         checkSymbolUsage(symbolTable.getDeclaredSymbolsInCurrentScope());
 
-        symbolTable.popScope();
+        symbolTable.popScope(node);
 
         return null;
     }

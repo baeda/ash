@@ -36,6 +36,11 @@ class Scope {
         functionTable = new HashMap<>();
     }
 
+    private Scope(Scope other) {
+        this.symbolTable = new HashMap<>(other.symbolTable);
+        this.functionTable = new HashMap<>(other.functionTable);
+    }
+
     Symbol declareSymbol(DeclarationNode declSite) {
         String identifier = declSite.getIdentifierToken().getText();
         Symbol symbol = symbolTable.get(identifier);
@@ -84,6 +89,10 @@ class Scope {
 
     Collection<Function> getDeclaredFunctions() {
         return functionTable.values();
+    }
+
+    Scope copy() {
+        return new Scope(this);
     }
 
     @Override
