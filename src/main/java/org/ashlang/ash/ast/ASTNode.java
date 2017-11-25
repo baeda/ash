@@ -1,5 +1,7 @@
 package org.ashlang.ash.ast;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.ashlang.ash.ast.visitor.ASTVisitor;
 
 import java.lang.reflect.Field;
@@ -45,6 +47,10 @@ public abstract class ASTNode implements TokenRange {
         this.parent = parent;
     }
 
+    public ASTNode getParent() {
+        return parent;
+    }
+
     public void replaceWith(ASTNode newNode) {
         parent.replace(this, newNode);
     }
@@ -62,6 +68,14 @@ public abstract class ASTNode implements TokenRange {
     }
 
     public abstract <T, A> T accept(ASTVisitor<T, A> visitor, A argument);
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
+            .append("startToken", startToken)
+            .append("stopToken", stopToken)
+            .toString();
+    }
 
     static Token getFirstStartToken(List<? extends ASTNode> nodes) {
         if (nodes.isEmpty()) {

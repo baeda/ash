@@ -26,6 +26,7 @@ import java.util.List;
 
 public class FuncDeclarationNode extends ASTNode {
 
+    private final Token identifierToken;
     private final Token typeToken;
     private final List<ParamDeclarationNode> params;
     private final BlockNode body;
@@ -33,22 +34,23 @@ public class FuncDeclarationNode extends ASTNode {
     private Type type;
     private Function function;
 
-    public FuncDeclarationNode(Token identifier, Token typeToken,
+    public FuncDeclarationNode(Token startToken, Token identifierToken, Token typeToken,
                                List<ParamDeclarationNode> params, BlockNode body,
                                SourceProvider sourceProvider) {
         super(
-            identifier,
+            startToken,
             body.getStopToken(),
             sourceProvider
         );
 
+        this.identifierToken = identifierToken;
         this.typeToken = typeToken;
         this.params = params;
         this.body = body;
     }
 
     public Token getIdentifierToken() {
-        return getStartToken();
+        return identifierToken;
     }
 
     public Token getTypeToken() {

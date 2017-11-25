@@ -82,6 +82,7 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
         return setParent(
             new FuncDeclarationNode(
+                new Token(ctx.start),
                 new Token(ctx.id),
                 new Token(ctx.type),
                 params, body,

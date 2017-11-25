@@ -39,7 +39,7 @@ public interface Types {
 
     static boolean allValid(Type... types) {
         for (Type type : types) {
-            if (INVALID.equals(type)) {
+            if (type == null || INVALID.equals(type)) {
                 return false;
             }
         }

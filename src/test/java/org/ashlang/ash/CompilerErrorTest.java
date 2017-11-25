@@ -101,7 +101,7 @@ public class CompilerErrorTest {
     @Test
     public void typeMismatch_malformedEntryPoint_invalidReturnType() {
         assertThat("func main() : i32 {}")
-            .hasError(TYPE_MISMATCH).at(1, 6)
+            .hasError(TYPE_MISMATCH).at(1, 1)
             .hasNoMoreErrors();
     }
 
