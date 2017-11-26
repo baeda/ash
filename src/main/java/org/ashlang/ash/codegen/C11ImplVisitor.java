@@ -147,7 +147,7 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
         Type type = node.getExpression().getType();
         String fmt = typeMap.getFormat(type);
         String expr = typeMap.formatExpression(type, expression);
-        return "printf(\"" + fmt + "\", " + expr + ");\n";
+        return "printf(\"" + fmt + "\\n\", " + expr + ");\n";
     }
 
     @Override
