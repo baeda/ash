@@ -70,6 +70,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
         visitChildren(node);
     }
 
+    @Override
+    protected void
+    visitBranchNode(BranchNode node) {
+        visitChildren(node);
+    }
+
     //region statement nodes
 
     @Override
@@ -87,6 +93,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
     @Override
     protected void
     visitBlockStatementNode(BlockStatementNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
+    visitBranchStatementNode(BranchStatementNode node) {
         visitChildren(node);
     }
 

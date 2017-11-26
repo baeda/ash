@@ -180,6 +180,62 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         );
     }
 
+    @Override
+    public BranchNode
+    visitOneArmedBranch(OneArmedBranchContext ctx) {
+        ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
+        StatementNode onTrue = (StatementNode) visit(ctx.onTrue);
+
+        BlockNode blockNode = new BlockNode(
+            new Token(ctx.stop),
+            new Token(ctx.stop),
+            new ArrayList<>(),
+            sourceProvider
+        );
+        StatementNode onFalse = setParent(
+            new BlockStatementNode(
+                blockNode,
+                new Token(ctx.stop),
+                sourceProvider
+            ),
+            blockNode
+        );
+
+        return setParent(
+            new BranchNode(
+                new Token(ctx.start),
+                expression,
+                onTrue,
+                onFalse,
+                sourceProvider
+            ),
+            expression,
+            onTrue,
+            onFalse
+        );
+    }
+
+    @Override
+    public BranchNode
+    visitTwoArmedBranch(TwoArmedBranchContext ctx) {
+        ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
+        StatementNode onTrue = (StatementNode) visit(ctx.onTrue);
+        StatementNode onFalse = (StatementNode) visit(ctx.onFalse);
+
+        return setParent(
+            new BranchNode(
+                new Token(ctx.start),
+                expression,
+                onTrue,
+                onFalse,
+                sourceProvider
+            ),
+            expression,
+            onTrue,
+            onFalse
+        );
+    }
+
     //region statement nodes
 
     @Override
@@ -238,6 +294,19 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         );
     }
 
+    @Override
+    public BranchStatementNode
+    visitBranchStatement(BranchStatementContext ctx) {
+        BranchNode branch = (BranchNode) visit(ctx.ref);
+
+        return setParent(
+            new BranchStatementNode(
+                branch,
+                sourceProvider
+            ),
+            branch
+        );
+    }
 
     @Override
     public ReturnStatementNode

@@ -38,10 +38,12 @@ public interface ASTVisitor<T, A> {
     T visitBlockNode(BlockNode node, A argument);
     T visitFuncCallNode(FuncCallNode node, A argument);
     T visitArgumentNode(ArgumentNode node, A argument);
+    T visitBranchNode(BranchNode node, A argument);
 
     T visitVarDeclarationStatementNode(VarDeclarationStatementNode node, A argument);
     T visitVarAssignStatementNode(VarAssignStatementNode node, A argument);
     T visitBlockStatementNode(BlockStatementNode node, A argument);
+    T visitBranchStatementNode(BranchStatementNode node, A argument);
     T visitExpressionStatementNode(ExpressionStatementNode node, A argument);
     T visitReturnStatementNode(ReturnStatementNode node, A argument);
     T visitDumpStatementNode(DumpStatementNode node, A argument);

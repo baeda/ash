@@ -59,10 +59,17 @@ argument
     : expr=expression
     ;
 
+branch
+    : 'if' '(' expr=expression ')' onTrue=statement #OneArmedBranch
+    | 'if' '(' expr=expression ')' onTrue=statement
+                           'else' onFalse=statement #TwoArmedBranch
+    ;
+
 statement
     : ref=varDeclaration        ';' #VarDeclarationStatement
     | ref=varAssign             ';' #VarAssignStatement
     | ref=block                     #BlockStatement
+    | ref=branch                    #BranchStatement
     | expr=expression           ';' #ExpressionStatement
     | 'return' expr=expression? ';' #ReturnStatement
     | 'dump' expr=expression    ';' #DumpStatement
@@ -94,6 +101,8 @@ COLON     : ':' ;
 
 KW_FUNC   : 'func'   ;
 KW_RETURN : 'return' ;
+KW_IF     : 'if'     ;
+KW_ELSE   : 'else'   ;
 KW_DUMP   : 'dump'   ;
 KW_TRUE   : 'true'   ;
 KW_FALSE  : 'false'  ;

@@ -31,12 +31,14 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitBlockNode(BlockNode node);
     protected abstract T visitFuncCallNode(FuncCallNode node);
     protected abstract T visitArgumentNode(ArgumentNode node);
+    protected abstract T visitBranchNode(BranchNode node);
 
     //region statement nodes
 
     protected abstract T visitVarDeclarationStatementNode(VarDeclarationStatementNode node);
     protected abstract T visitVarAssignStatementNode(VarAssignStatementNode node);
     protected abstract T visitBlockStatementNode(BlockStatementNode node);
+    protected abstract T visitBranchStatementNode(BranchStatementNode node);
     protected abstract T visitExpressionStatementNode(ExpressionStatementNode node);
     protected abstract T visitDumpStatementNode(DumpStatementNode node);
     protected abstract T visitReturnStatementNode(ReturnStatementNode node);
@@ -57,7 +59,6 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitIntExpressionNode(IntExpressionNode node);
 
     //endregion expression nodes
-
 
     protected T visitChildren(ASTNode node) {
         return visitChildren(node, null);
@@ -117,6 +118,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
         return visitArgumentNode(node);
     }
 
+    @Override
+    public final T
+    visitBranchNode(BranchNode node, Void argument) {
+        return visitBranchNode(node);
+    }
+
     //region statement nodes
 
     @Override
@@ -135,6 +142,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     public final T
     visitBlockStatementNode(BlockStatementNode node, Void argument) {
         return visitBlockStatementNode(node);
+    }
+
+    @Override
+    public final T
+    visitBranchStatementNode(BranchStatementNode node, Void argument) {
+        return visitBranchStatementNode(node);
     }
 
     @Override

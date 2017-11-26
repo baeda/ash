@@ -110,6 +110,16 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
         return FUNC + func.getIdentifier() + "(" + args + ")";
     }
 
+    @Override
+    protected String
+    visitBranchNode(BranchNode node) {
+        String expression = visit(node.getExpression());
+        String onTrue = visit(node.getOnTrue());
+        String onFalse = visit(node.getOnFalse());
+
+        return "if(" + expression + ")" + onTrue + " else " + onFalse;
+    }
+
     //region statement nodes
 
     @Override
