@@ -251,6 +251,106 @@ public class CompilerErrorTest {
     }
 
     @Test
+    public void symbolNotInitialized_simpleOneArmedBranch_staticTrue() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    a : i32;",
+            "    if (true) {",
+            "        a = 0;",
+            "    }",
+            "    dump a;",
+            "}")
+            .hasError(SYMBOL_NOT_INITIALIZED).at(7, 10)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void symbolNotInitialized_simpleOneArmedBranch_staticFalse() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    a : i32;",
+            "    if (false) {",
+            "        a = 0;",
+            "    }",
+            "    dump a;",
+            "}")
+            .hasError(SYMBOL_NOT_INITIALIZED).at(7, 10)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void symbolNotInitialized_simpleTwoArmedBranch_staticTrue() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    a : i32;",
+            "    if (true) {",
+            "        a = 0;",
+            "    } else {",
+            "    }",
+            "    dump a;",
+            "}")
+            .hasError(SYMBOL_NOT_INITIALIZED).at(8, 10)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void symbolNotInitialized_simpleTwoArmedBranch_staticFalse() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    a : i32;",
+            "    if (false) {",
+            "        a = 0;",
+            "    } else {",
+            "    }",
+            "    dump a;",
+            "}")
+            .hasError(SYMBOL_NOT_INITIALIZED).at(8, 10)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void symbolNotInitialized_nestedBranch() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    a : i32;",
+            "    if (false) {",
+            "        if (true) {",
+            "            a = 0;",
+            "            dump a;",
+            "        } else {",
+            "            a = 1;",
+            "            dump a;",
+            "        }",
+            "    } else {",
+            "    }",
+            "    dump a;",
+            "}")
+            .hasError(SYMBOL_NOT_INITIALIZED).at(14, 10)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void symbolNotInitialized_nested_Banch_() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    a : i32;",
+            "    if (false) {",
+            "        a = 0;",
+            "    } else {",
+            "    }",
+            "    dump a;",
+            "}")
+            .hasError(SYMBOL_NOT_INITIALIZED).at(8, 10)
+            .hasNoMoreErrors();
+    }
+
+    @Test
     public void symbolNotUsed() {
         assertThat(
             "func main() : void",

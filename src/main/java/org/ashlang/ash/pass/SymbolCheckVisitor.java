@@ -26,9 +26,11 @@ import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.symbol.SymbolTable;
 import org.ashlang.ash.symbol.SymbolTableSnapshot;
 
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
+class SymbolCheckVisitor extends ASTBaseVisitor<Void, Set<Symbol>> {
 
     private final ErrorHandler errorHandler;
     private final SymbolTable symbolTable;
@@ -40,8 +42,8 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
 
     @Override
     public Void
-    visitFileNode(FileNode node, Void argument) {
-        visitChildren(node, argument);
+    visitFileNode(FileNode node, Set<Symbol> symbols) {
+        visitChildren(node, new HashSet<>());
 
         SymbolTableSnapshot snapshot = symbolTable.recall(node);
         checkSymbolUsage(snapshot.getDeclaredSymbols());
@@ -52,8 +54,8 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
 
     @Override
     public Void
-    visitFuncDeclarationNode(FuncDeclarationNode node, Void argument) {
-        visitChildren(node, argument);
+    visitFuncDeclarationNode(FuncDeclarationNode node, Set<Symbol> symbols) {
+        visitChildren(node, symbols);
 
         SymbolTableSnapshot snapshot = symbolTable.recall(node);
         checkSymbolUsage(snapshot.getDeclaredSymbolsInCurrentScope());
@@ -63,13 +65,17 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
 
     @Override
     public Void
-    visitVarAssignNode(VarAssignNode node, Void argument) {
-        visitChildren(node, argument);
+    visitVarAssignNode(VarAssignNode node, Set<Symbol> symbols) {
+        visitChildren(node, symbols);
 
         Symbol symbol = node.getSymbol();
         if (symbol == null) {
             // Symbol not declared.
             return null;
+        }
+
+        if (symbols != null) {
+            symbols.add(symbol);
         }
 
         symbol.initialize();
@@ -79,11 +85,49 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
 
     @Override
     public Void
-    visitBlockNode(BlockNode node, Void argument) {
-        visitChildren(node, argument);
+    visitBlockNode(BlockNode node, Set<Symbol> symbols) {
+        visitChildren(node, symbols);
 
         SymbolTableSnapshot snapshot = symbolTable.recall(node);
         checkSymbolUsage(snapshot.getDeclaredSymbolsInCurrentScope());
+
+        return null;
+    }
+
+    @Override
+    public Void
+    visitBranchNode(BranchNode node, Set<Symbol> symbols) {
+        // Algorithm overview:
+        // ----------------------|--------
+        // initialized on true:  | a,b,c
+        // initialized on false: | a,  c,d
+        // ----------------------|--------
+        // to initialize:        | a,  c
+        // to deinitialize:      |   b,  d
+
+        Set<Symbol> symbolsInitializedOnTrue = new HashSet<>();
+        symbolsInitializedOnTrue.addAll(symbols);
+        visit(node.getOnTrue(), symbolsInitializedOnTrue);
+
+        Set<Symbol> symbolsInitializedOnFalse = new HashSet<>();
+        symbolsInitializedOnFalse.addAll(symbols);
+        visit(node.getOnFalse(), symbolsInitializedOnFalse);
+
+        Set<Symbol> toInitialize = symbolsInitializedOnTrue.stream()
+            .filter(symbolsInitializedOnFalse::contains)
+            .collect(Collectors.toSet());
+
+        Set<Symbol> toDeinitialize = Stream.concat(
+            symbolsInitializedOnTrue.stream(),
+            symbolsInitializedOnFalse.stream()
+        )
+            .filter(symbol -> !toInitialize.contains(symbol))
+            .collect(Collectors.toSet());
+
+        toInitialize.forEach(Symbol::initialize);
+        toDeinitialize.forEach(Symbol::deinitialize);
+
+        symbols.addAll(toInitialize);
 
         return null;
     }
@@ -92,7 +136,7 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Void> {
 
     @Override
     public Void
-    visitIdExpressionNode(IdExpressionNode node, Void argument) {
+    visitIdExpressionNode(IdExpressionNode node, Set<Symbol> symbols) {
         Symbol symbol = node.getSymbol();
 
         if (symbol == null) {

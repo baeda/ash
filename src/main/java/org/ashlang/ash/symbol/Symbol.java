@@ -52,6 +52,10 @@ public class Symbol {
         isInitialized = true;
     }
 
+    public void deinitialize() {
+        isInitialized = false;
+    }
+
     public boolean isInitialized() {
         return isInitialized;
     }
@@ -62,28 +66,6 @@ public class Symbol {
 
     public boolean isUsed() {
         return isUsed;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-
-        Symbol symbol = (Symbol) obj;
-        return new EqualsBuilder()
-            .append(getIdentifier(), symbol.getIdentifier())
-            .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-            .append(getIdentifier())
-            .toHashCode();
     }
 
     @Override

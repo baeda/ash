@@ -144,6 +144,37 @@ public class CompilerSystemTest {
             {"func main() : void { dump add(2, 3); } func add(x : i32, y : i32) : i32 { return x+y; }", "5"},
             {"func main() : void { a:i32; a=2; dump add(a, 3); } func add(x : i32, y : i32) : i32 { return x+y; }", "5"},
             {"func main() : void { a:i32; b:i32; a=2; b=3; dump add(a, b); } func add(x : i32, y : i32) : i32 { return x+y; }", "5"},
+
+            {
+                String.join("\n",
+                    "func main() : void",
+                    "{",
+                    "    a : i32;",
+                    "    if (true) {",
+                    "        a = 1;",
+                    "    } else {",
+                    "        a = 0;",
+                    "    }",
+                    "    dump a;",
+                    "}"
+                ),
+                "1"
+            },
+            {
+                String.join("\n",
+                    "func main() : void",
+                    "{",
+                    "    a : i32;",
+                    "    if (false) {",
+                    "        a = 1;",
+                    "    } else {",
+                    "        a = 0;",
+                    "    }",
+                    "    dump a;",
+                    "}"
+                ),
+                "0"
+            },
         };
     }
 
