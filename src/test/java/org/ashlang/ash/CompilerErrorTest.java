@@ -144,6 +144,20 @@ public class CompilerErrorTest {
     }
 
     @Test
+    public void typeMismatch_branchCondition() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    a : i8;",
+            "    a = 1;",
+            "    if (a) {",
+            "    }",
+            "}")
+            .hasError(TYPE_MISMATCH).at(5, 9)
+            .hasNoMoreErrors();
+    }
+
+    @Test
     public void invalidOperator() {
         assertThat(
             "func main() : void",

@@ -26,7 +26,9 @@ import org.ashlang.ash.symbol.Symbol;
 import org.ashlang.ash.symbol.SymbolTable;
 import org.ashlang.ash.symbol.SymbolTableSnapshot;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -104,6 +106,8 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Set<Symbol>> {
         // ----------------------|--------
         // to initialize:        | a,  c
         // to deinitialize:      |   b,  d
+
+        visit(node.getExpression(), symbols);
 
         Set<Symbol> symbolsInitializedOnTrue = new HashSet<>();
         symbolsInitializedOnTrue.addAll(symbols);

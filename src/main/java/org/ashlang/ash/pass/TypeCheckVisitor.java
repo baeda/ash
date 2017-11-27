@@ -148,6 +148,18 @@ class TypeCheckVisitor extends ASTVoidBaseVisitor {
         }
     }
 
+    @Override
+    protected void
+    visitBranchNode(BranchNode node) {
+        visitChildren(node);
+
+        ExpressionNode expression = node.getExpression();
+        Type type = expression.getType();
+        if (Types.allValid(type) && !BOOL.equals(type)) {
+            errorHandler.emitTypeMismatch(expression, type, BOOL);
+        }
+    }
+
     //region statement nodes
 
     @Override
