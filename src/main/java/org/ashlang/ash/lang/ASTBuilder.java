@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.ashlang.gen.AshLexer.ASTERISK;
+import static org.ashlang.gen.AshLexer.DOUBLE_EQUALS;
 import static org.ashlang.gen.AshLexer.MINUS;
 import static org.ashlang.gen.AshLexer.PERCENT;
 import static org.ashlang.gen.AshLexer.PLUS;
@@ -358,11 +359,11 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
-    public ExpressionNode
+    public BinaryExpressionNode
     visitArithmeticExpression(ArithmeticExpressionContext ctx) {
         ExpressionNode lhs = (ExpressionNode) visit(ctx.lhs);
         ExpressionNode rhs = (ExpressionNode) visit(ctx.rhs);
-        ExpressionNode node;
+        BinaryExpressionNode node;
         switch (ctx.op.getType()) {
             case PLUS:
                 node = new AddExpressionNode(
@@ -398,6 +399,32 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
                 break;
             case PERCENT:
                 node = new ModExpressionNode(
+                    lhs,
+                    rhs,
+                    new Token(ctx.op),
+                    sourceProvider
+                );
+                break;
+            default:
+                throw new IllegalStateException();
+        }
+
+        return setParent(
+            node,
+            lhs,
+            rhs
+        );
+    }
+
+    @Override
+    public BinaryExpressionNode
+    visitBoolExpression(BoolExpressionContext ctx) {
+        ExpressionNode lhs = (ExpressionNode) visit(ctx.lhs);
+        ExpressionNode rhs = (ExpressionNode) visit(ctx.rhs);
+        BinaryExpressionNode node;
+        switch (ctx.op.getType()) {
+            case DOUBLE_EQUALS:
+                node = new EqualsExpressionNode(
                     lhs,
                     rhs,
                     new Token(ctx.op),

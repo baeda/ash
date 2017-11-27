@@ -20,24 +20,16 @@ package org.ashlang.ash.ast;
 
 import org.ashlang.ash.ast.visitor.ASTVisitor;
 
-public class IntExpressionNode extends ExpressionNode {
+public class EqualsExpressionNode extends BinaryExpressionNode {
 
-    public IntExpressionNode(Token startToken, Token stopToken,
-                             SourceProvider sourceProvider) {
-        super(startToken, stopToken, sourceProvider);
-    }
-
-    public IntExpressionNode(Token value, SourceProvider sourceProvider) {
-        this(value, value, sourceProvider);
-    }
-
-    public Token getValueToken() {
-        return getStartToken();
+    public EqualsExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op,
+                                SourceProvider sourceProvider) {
+        super(lhs, rhs, op, sourceProvider);
     }
 
     @Override
     public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
-        return visitor.visitIntExpressionNode(this, argument);
+        return visitor.visitEqualsExpressionNode(this, argument);
     }
 
 }

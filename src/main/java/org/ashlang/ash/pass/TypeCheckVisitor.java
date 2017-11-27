@@ -233,6 +233,11 @@ class TypeCheckVisitor extends ASTVoidBaseVisitor {
         setResultTypeOfOperation(node, MOD);
     }
 
+    @Override
+    protected void visitEqualsExpressionNode(EqualsExpressionNode node) {
+        setResultTypeOfOperation(node, EQUALS);
+    }
+
     //endregion expression nodes
 
     private void

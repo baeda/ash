@@ -208,6 +208,14 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
 
     @Override
     protected String
+    visitEqualsExpressionNode(EqualsExpressionNode node) {
+        String lhs = visit(node.getLhs());
+        String rhs = visit(node.getRhs());
+        return "(" + lhs + "==" + rhs + ")";
+    }
+
+    @Override
+    protected String
     visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node) {
         return node.getValue().toString();
     }

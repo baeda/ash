@@ -162,6 +162,12 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
 
     @Override
     protected T
+    visitEqualsExpressionNode(EqualsExpressionNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    protected T
     visitFuncCallExpressionNode(FuncCallExpressionNode node) {
         return visitChildren(node);
     }

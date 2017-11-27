@@ -79,6 +79,9 @@ expression
     : '(' expr=expression ')'                        #ParenExpression
     | lhs=expression op=('/'|'*'|'%') rhs=expression #ArithmeticExpression
     | lhs=expression op=('-'|'+')     rhs=expression #ArithmeticExpression
+    | lhs=expression
+      op='=='
+      rhs=expression                                 #BoolExpression
     | call=funcCall                                  #FuncCallExpression
     | value=('true'|'false')                         #BoolLiteralExpression
     | value=IDENTIFIER                               #IdExpression
@@ -98,6 +101,8 @@ R_PAREN   : ')' ;
 COMMA     : ',' ;
 SEMICOLON : ';' ;
 COLON     : ':' ;
+
+DOUBLE_EQUALS : '==' ;
 
 KW_FUNC   : 'func'   ;
 KW_RETURN : 'return' ;

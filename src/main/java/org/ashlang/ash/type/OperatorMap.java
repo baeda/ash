@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.ashlang.ash.type.Operator.*;
+import static org.ashlang.ash.type.Types.BOOL;
 import static org.ashlang.ash.type.Types.INVALID;
 
 public class OperatorMap {
@@ -39,6 +40,12 @@ public class OperatorMap {
                 operation(type, MUL, type).resultsIn(type);
                 operation(type, DIV, type).resultsIn(type);
                 operation(type, MOD, type).resultsIn(type);
+            });
+
+        Types.allTypes().stream()
+            .filter(Types::allValid)
+            .forEach(type -> {
+                operation(type, EQUALS, type).resultsIn(BOOL);
             });
     }
 

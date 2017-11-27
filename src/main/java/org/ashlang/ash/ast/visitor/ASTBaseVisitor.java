@@ -162,6 +162,12 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
 
     @Override
     public T
+    visitEqualsExpressionNode(EqualsExpressionNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
+    public T
     visitFuncCallExpressionNode(FuncCallExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }

@@ -24,6 +24,8 @@ public enum Operator {
     SUB,
     MUL,
     DIV,
-    MOD
+    MOD,
+
+    EQUALS
 
 }

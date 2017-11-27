@@ -183,6 +183,15 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
         );
     }
 
+    @Override
+    protected void visitEqualsExpressionNode(EqualsExpressionNode node) {
+        visitChildren(node);
+        solidifyUntypedInt(
+            node.getLhs(),
+            node.getRhs()
+        );
+    }
+
     //endregion expression nodes
 
     //region statement nodes

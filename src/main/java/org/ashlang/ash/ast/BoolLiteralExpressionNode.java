@@ -22,9 +22,14 @@ import org.ashlang.ash.ast.visitor.ASTVisitor;
 
 public class BoolLiteralExpressionNode extends ExpressionNode {
 
+    public BoolLiteralExpressionNode(Token startToken, Token stopToken,
+                                     SourceProvider sourceProvider) {
+        super(startToken, stopToken, sourceProvider);
+    }
+
     public BoolLiteralExpressionNode(Token valueToken,
                                      SourceProvider sourceProvider) {
-        super(valueToken, valueToken, sourceProvider);
+        this(valueToken, valueToken, sourceProvider);
     }
 
     public Token getValueToken() {
