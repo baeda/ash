@@ -174,6 +174,30 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
 
     @Override
     protected void
+    visitLtExpressionNode(LtExpressionNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
+    visitGtExpressionNode(GtExpressionNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
+    visitLtEqExpressionNode(LtEqExpressionNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
+    visitGtEqExpressionNode(GtEqExpressionNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
     visitFuncCallExpressionNode(FuncCallExpressionNode node) {
         visitChildren(node);
     }

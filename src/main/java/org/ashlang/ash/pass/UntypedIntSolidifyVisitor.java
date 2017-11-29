@@ -139,48 +139,71 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
     @Override
     protected void
     visitAddExpressionNode(AddExpressionNode node) {
-        visitChildren(node);
-        solidifyUntypedInt(node.getLhs(), node.getRhs());
+        visitBinaryExpressionNode(node);
     }
 
     @Override
     protected void
     visitSubExpressionNode(SubExpressionNode node) {
-        visitChildren(node);
-        solidifyUntypedInt(node.getLhs(), node.getRhs());
+        visitBinaryExpressionNode(node);
     }
 
     @Override
     protected void
     visitMulExpressionNode(MulExpressionNode node) {
-        visitChildren(node);
-        solidifyUntypedInt(node.getLhs(), node.getRhs());
+        visitBinaryExpressionNode(node);
     }
 
     @Override
     protected void
     visitDivExpressionNode(DivExpressionNode node) {
-        visitChildren(node);
-        solidifyUntypedInt(node.getLhs(), node.getRhs());
+        visitBinaryExpressionNode(node);
     }
 
     @Override
     protected void
     visitModExpressionNode(ModExpressionNode node) {
-        visitChildren(node);
-        solidifyUntypedInt(node.getLhs(), node.getRhs());
+        visitBinaryExpressionNode(node);
     }
 
     @Override
     protected void
     visitEqualsExpressionNode(EqualsExpressionNode node) {
-        visitChildren(node);
-        solidifyUntypedInt(node.getLhs(), node.getRhs());
+        visitBinaryExpressionNode(node);
     }
 
     @Override
     protected void
     visitNotEqualsExpressionNode(NotEqualsExpressionNode node) {
+        visitBinaryExpressionNode(node);
+    }
+
+    @Override
+    protected void
+    visitLtExpressionNode(LtExpressionNode node) {
+        visitBinaryExpressionNode(node);
+    }
+
+    @Override
+    protected void
+    visitGtExpressionNode(GtExpressionNode node) {
+        visitBinaryExpressionNode(node);
+    }
+
+    @Override
+    protected void
+    visitLtEqExpressionNode(LtEqExpressionNode node) {
+        visitBinaryExpressionNode(node);
+    }
+
+    @Override
+    protected void
+    visitGtEqExpressionNode(GtEqExpressionNode node) {
+        visitBinaryExpressionNode(node);
+    }
+
+    private void
+    visitBinaryExpressionNode(BinaryExpressionNode node) {
         visitChildren(node);
         solidifyUntypedInt(node.getLhs(), node.getRhs());
     }

@@ -33,9 +33,13 @@ import java.util.stream.Collectors;
 import static org.ashlang.gen.AshLexer.ASTERISK;
 import static org.ashlang.gen.AshLexer.BANG_EQUALS;
 import static org.ashlang.gen.AshLexer.DOUBLE_EQUALS;
+import static org.ashlang.gen.AshLexer.GT_EQ;
+import static org.ashlang.gen.AshLexer.LT_EQ;
+import static org.ashlang.gen.AshLexer.L_ANGLE;
 import static org.ashlang.gen.AshLexer.MINUS;
 import static org.ashlang.gen.AshLexer.PERCENT;
 import static org.ashlang.gen.AshLexer.PLUS;
+import static org.ashlang.gen.AshLexer.R_ANGLE;
 import static org.ashlang.gen.AshLexer.SLASH;
 
 public class ASTBuilder extends AshBaseVisitor<ASTNode> {
@@ -435,6 +439,38 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
                 break;
             case BANG_EQUALS:
                 node = new NotEqualsExpressionNode(
+                    lhs,
+                    rhs,
+                    new Token(ctx.op),
+                    sourceProvider
+                );
+                break;
+            case L_ANGLE:
+                node = new LtExpressionNode(
+                    lhs,
+                    rhs,
+                    new Token(ctx.op),
+                    sourceProvider
+                );
+                break;
+            case R_ANGLE:
+                node = new GtExpressionNode(
+                    lhs,
+                    rhs,
+                    new Token(ctx.op),
+                    sourceProvider
+                );
+                break;
+            case LT_EQ:
+                node = new LtEqExpressionNode(
+                    lhs,
+                    rhs,
+                    new Token(ctx.op),
+                    sourceProvider
+                );
+                break;
+            case GT_EQ:
+                node = new GtEqExpressionNode(
                     lhs,
                     rhs,
                     new Token(ctx.op),

@@ -110,6 +110,34 @@ class UntypedIntFoldVisitor extends ASTVoidBaseVisitor {
         resolveAndFoldTreeToBool(node, cmp -> cmp != 0);
     }
 
+    @Override
+    protected void
+    visitLtExpressionNode(LtExpressionNode node) {
+        visitChildren(node);
+        resolveAndFoldTreeToBool(node, cmp -> cmp < 0);
+    }
+
+    @Override
+    protected void
+    visitGtExpressionNode(GtExpressionNode node) {
+        visitChildren(node);
+        resolveAndFoldTreeToBool(node, cmp -> cmp > 0);
+    }
+
+    @Override
+    protected void
+    visitLtEqExpressionNode(LtEqExpressionNode node) {
+        visitChildren(node);
+        resolveAndFoldTreeToBool(node, cmp -> cmp <= 0);
+    }
+
+    @Override
+    protected void
+    visitGtEqExpressionNode(GtEqExpressionNode node) {
+        visitChildren(node);
+        resolveAndFoldTreeToBool(node, cmp -> cmp >= 0);
+    }
+
     //endregion expression nodes
 
     private void

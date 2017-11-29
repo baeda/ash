@@ -170,6 +170,7 @@ public final class AshMain {
             "-Werror",
             "-pedantic",
             "-Wno-pedantic-ms-format",
+            "-Wno-tautological-compare",
             "--save-temps",
             "-o",
             outFile.toAbsolutePath(),

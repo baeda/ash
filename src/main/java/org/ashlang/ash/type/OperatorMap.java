@@ -47,6 +47,10 @@ public class OperatorMap {
             .forEach(type -> {
                 operation(type, EQUALS, type).resultsIn(BOOL);
                 operation(type, NOT_EQUALS, type).resultsIn(BOOL);
+                operation(type, LT, type).resultsIn(BOOL);
+                operation(type, GT, type).resultsIn(BOOL);
+                operation(type, LT_EQ, type).resultsIn(BOOL);
+                operation(type, GT_EQ, type).resultsIn(BOOL);
             });
     }
 

@@ -49,6 +49,10 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitModExpressionNode(ModExpressionNode node);
     protected abstract T visitEqualsExpressionNode(EqualsExpressionNode node);
     protected abstract T visitNotEqualsExpressionNode(NotEqualsExpressionNode node);
+    protected abstract T visitLtExpressionNode(LtExpressionNode node);
+    protected abstract T visitGtExpressionNode(GtExpressionNode node);
+    protected abstract T visitLtEqExpressionNode(LtEqExpressionNode node);
+    protected abstract T visitGtEqExpressionNode(GtEqExpressionNode node);
     protected abstract T visitFuncCallExpressionNode(FuncCallExpressionNode node);
     protected abstract T visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node);
     protected abstract T visitIdExpressionNode(IdExpressionNode node);
@@ -214,6 +218,30 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     public final T
     visitNotEqualsExpressionNode(NotEqualsExpressionNode node, Void argument) {
         return visitNotEqualsExpressionNode(node);
+    }
+
+    @Override
+    public final T
+    visitLtExpressionNode(LtExpressionNode node, Void argument) {
+        return visitLtExpressionNode(node);
+    }
+
+    @Override
+    public final T
+    visitGtExpressionNode(GtExpressionNode node, Void argument) {
+        return visitGtExpressionNode(node);
+    }
+
+    @Override
+    public final T
+    visitLtEqExpressionNode(LtEqExpressionNode node, Void argument) {
+        return visitLtEqExpressionNode(node);
+    }
+
+    @Override
+    public final T
+    visitGtEqExpressionNode(GtEqExpressionNode node, Void argument) {
+        return visitGtEqExpressionNode(node);
     }
 
     @Override

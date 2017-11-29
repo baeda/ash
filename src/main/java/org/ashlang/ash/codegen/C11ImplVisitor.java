@@ -210,6 +210,30 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
 
     @Override
     protected String
+    visitLtExpressionNode(LtExpressionNode node) {
+        return visitBinaryExpression(node, "<");
+    }
+
+    @Override
+    protected String
+    visitGtExpressionNode(GtExpressionNode node) {
+        return visitBinaryExpression(node, ">");
+    }
+
+    @Override
+    protected String
+    visitLtEqExpressionNode(LtEqExpressionNode node) {
+        return visitBinaryExpression(node, "<=");
+    }
+
+    @Override
+    protected String
+    visitGtEqExpressionNode(GtEqExpressionNode node) {
+        return visitBinaryExpression(node, ">=");
+    }
+
+    @Override
+    protected String
     visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node) {
         return node.getValue().toString();
     }

@@ -49,6 +49,10 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     protected abstract void visitModExpressionNode(ModExpressionNode node);
     protected abstract void visitEqualsExpressionNode(EqualsExpressionNode node);
     protected abstract void visitNotEqualsExpressionNode(NotEqualsExpressionNode node);
+    protected abstract void visitLtExpressionNode(LtExpressionNode node);
+    protected abstract void visitGtExpressionNode(GtExpressionNode node);
+    protected abstract void visitLtEqExpressionNode(LtEqExpressionNode node);
+    protected abstract void visitGtEqExpressionNode(GtEqExpressionNode node);
     protected abstract void visitFuncCallExpressionNode(FuncCallExpressionNode node);
     protected abstract void visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node);
     protected abstract void visitIdExpressionNode(IdExpressionNode node);
@@ -237,6 +241,34 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     public final Void
     visitNotEqualsExpressionNode(NotEqualsExpressionNode node, Void argument) {
         visitNotEqualsExpressionNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
+    visitLtExpressionNode(LtExpressionNode node, Void argument) {
+        visitLtExpressionNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
+    visitGtExpressionNode(GtExpressionNode node, Void argument) {
+        visitGtExpressionNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
+    visitLtEqExpressionNode(LtEqExpressionNode node, Void argument) {
+        visitLtEqExpressionNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
+    visitGtEqExpressionNode(GtEqExpressionNode node, Void argument) {
+        visitGtEqExpressionNode(node);
         return null;
     }
 

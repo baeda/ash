@@ -56,6 +56,10 @@ public interface ASTVisitor<T, A> {
     T visitModExpressionNode(ModExpressionNode node, A argument);
     T visitEqualsExpressionNode(EqualsExpressionNode node, A argument);
     T visitNotEqualsExpressionNode(NotEqualsExpressionNode node, A argument);
+    T visitLtExpressionNode(LtExpressionNode node, A argument);
+    T visitGtExpressionNode(GtExpressionNode node, A argument);
+    T visitLtEqExpressionNode(LtEqExpressionNode node, A argument);
+    T visitGtEqExpressionNode(GtEqExpressionNode node, A argument);
     T visitFuncCallExpressionNode(FuncCallExpressionNode node, A argument);
     T visitBoolLiteralExpressionNode(BoolLiteralExpressionNode node, A argument);
     T visitIdExpressionNode(IdExpressionNode node, A argument);
