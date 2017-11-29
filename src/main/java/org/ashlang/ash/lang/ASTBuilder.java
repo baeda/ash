@@ -579,6 +579,10 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
             return parent;
         }
 
+        if (child == null) {
+            return parent;
+        }
+
         if (!(child instanceof ASTNode)) {
             throw new IllegalStateException();
         }

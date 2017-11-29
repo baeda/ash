@@ -32,6 +32,7 @@ public class Function {
     private final List<Symbol> parameters;
 
     private boolean isUsed;
+    private boolean returns;
 
     Function(FuncDeclarationNode declSite) {
         this.declSite = declSite;
@@ -67,6 +68,16 @@ public class Function {
     public boolean
     isUsed() {
         return isUsed;
+    }
+
+    public boolean
+    returns() {
+        return returns;
+    }
+
+    public void
+    setReturns(boolean returns) {
+        this.returns = returns;
     }
 
     @Override

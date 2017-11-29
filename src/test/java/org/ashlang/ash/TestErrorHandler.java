@@ -150,6 +150,18 @@ class TestErrorHandler implements ErrorHandler {
 
     @Override
     public void
+    emitMissingReturnStatement(Token pos) {
+        addError(MISSING_RETURN_STATEMENT, pos);
+    }
+
+    @Override
+    public void
+    emitUnreachableStatement(TokenRange pos) {
+        addError(UNREACHABLE_STATEMENT, pos.getStartToken());
+    }
+
+    @Override
+    public void
     emitDivisionByZero(TokenRange pos) {
         addError(DIV_BY_ZERO, pos.getStartToken());
     }

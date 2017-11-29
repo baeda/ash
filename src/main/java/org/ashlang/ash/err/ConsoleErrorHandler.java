@@ -195,6 +195,20 @@ public class ConsoleErrorHandler implements ErrorHandler {
 
     @Override
     public void
+    emitMissingReturnStatement(Token pos) {
+        emit(pos, "missing return statement");
+        numSemanticErrors++;
+    }
+
+    @Override
+    public void
+    emitUnreachableStatement(TokenRange pos) {
+        emit(pos, "unreachable statement");
+        numSemanticErrors++;
+    }
+
+    @Override
+    public void
     emitDivisionByZero(TokenRange pos) {
         emit(pos, "division by zero");
     }

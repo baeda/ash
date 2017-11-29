@@ -33,7 +33,9 @@ public interface CompilerPasses {
         new UntypedIntSolidifyVisitor(eh).visit(node);
     };
 
-    CompilerPass TYPE_CHECK_PASS = (eh, st, tm, om, node) ->
+    CompilerPass TYPE_CHECK_PASS = (eh, st, tm, om, node) -> {
         new TypeCheckVisitor(eh, om).visit(node);
+        new ReturnCheckVisitor(eh).visit(node, null);
+    };
 
 }

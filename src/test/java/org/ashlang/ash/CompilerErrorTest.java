@@ -107,7 +107,7 @@ public class CompilerErrorTest {
     @Test
     public void
     typeMismatch_malformedEntryPoint_invalidReturnType() {
-        assertThat("func main() : i32 {}")
+        assertThat("func main() : i32 { return 1; }")
             .hasError(TYPE_MISMATCH).at(1, 1)
             .hasNoMoreErrors();
     }
@@ -521,6 +521,42 @@ public class CompilerErrorTest {
             "    a;",
             "}")
             .hasError(ILLEGAL_STATEMENT).at(5, 5)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void missingReturnStatement() {
+        assertThat(
+            "func rnd() : i32 {}",
+            "func main() : void {}")
+            .hasError(MISSING_RETURN_STATEMENT).at(1, 19)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void missingReturnStatement_inBranch() {
+        assertThat(
+            "func rnd() : i32",
+            "{",
+            "    if (true) {",
+            "        return 1;",
+            "    }",
+            "}",
+            "func main() : void {}")
+            .hasError(MISSING_RETURN_STATEMENT).at(6, 1)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void unreachableStatement() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    return;",
+            "    dump 12;",
+            "    dump 12;",
+            "}")
+            .hasError(UNREACHABLE_STATEMENT).at(4, 5)
             .hasNoMoreErrors();
     }
 
