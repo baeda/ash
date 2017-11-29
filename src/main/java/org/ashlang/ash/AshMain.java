@@ -45,7 +45,8 @@ public final class AshMain {
 
     private AshMain() { /**/ }
 
-    public static void main(String[] args) throws IOException {
+    public static void
+    main(String[] args) throws IOException {
         if (args.length < 1) {
             System.err.println("Usage: ashc <file>");
             return;
@@ -86,7 +87,8 @@ public final class AshMain {
         LockSupport.parkNanos(1000000L);
     }
 
-    static ASTNode buildAST(String ashSrc, ErrorHandler errorHandler) {
+    static ASTNode
+    buildAST(String ashSrc, ErrorHandler errorHandler) {
         return buildAST(CharStreams.fromString(ashSrc), errorHandler);
     }
 
@@ -122,16 +124,19 @@ public final class AshMain {
         return rootNode;
     }
 
-    static void compileToNative(ASTNode rootNode, Path outFile) {
+    static void
+    compileToNative(ASTNode rootNode, Path outFile) {
         String c11Src = translateToC11(rootNode);
         compileToNative(c11Src, outFile);
     }
 
-    private static String translateToC11(ASTNode rootNode) {
+    private static String
+    translateToC11(ASTNode rootNode) {
         return CodeGenerators.C_11.generate(rootNode);
     }
 
-    private static void compileToNative(String c11Src, Path outFile) {
+    private static void
+    compileToNative(String c11Src, Path outFile) {
         compileToNative(c11Src, outFile, outFile.getParent());
     }
 

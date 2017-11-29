@@ -79,7 +79,6 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
 
     //region expression nodes
 
-
     @Override
     protected void
     visitFuncCallExpressionNode(FuncCallExpressionNode node) {

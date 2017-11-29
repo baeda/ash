@@ -35,19 +35,23 @@ public class Version {
         this.patch = patch;
     }
 
-    public int getMajor() {
+    public int
+    getMajor() {
         return major;
     }
 
-    public int getMinor() {
+    public int
+    getMinor() {
         return minor;
     }
 
-    public int getPatch() {
+    public int
+    getPatch() {
         return patch;
     }
 
-    public boolean greaterThan(int major, int minor, int patch) {
+    public boolean
+    greaterThan(int major, int minor, int patch) {
         if (this.major < major) {
             return false;
         }
@@ -67,12 +71,14 @@ public class Version {
         return this.patch >= patch;
     }
 
-    public boolean lessThan(int major, int minor, int patch) {
+    public boolean
+    lessThan(int major, int minor, int patch) {
         return !greaterThan(major, minor, patch);
     }
 
     @Override
-    public String toString() {
+    public String
+    toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
             .append("major", major)
             .append("minor", minor)
@@ -81,7 +87,8 @@ public class Version {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean
+    equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -100,7 +107,8 @@ public class Version {
     }
 
     @Override
-    public int hashCode() {
+    public int
+    hashCode() {
         return new HashCodeBuilder(17, 37)
             .append(major)
             .append(minor)

@@ -50,12 +50,14 @@ public class OperatorMap {
             });
     }
 
-    public Type getResultOf(Type left, Operator op, Type right) {
+    public Type
+    getResultOf(Type left, Operator op, Type right) {
         Triple<Type, Operator, Type> key = Triple.of(left, op, right);
         return opMap.getOrDefault(key, INVALID);
     }
 
-    private EntryBuilder operation(Type left, Operator op, Type right) {
+    private EntryBuilder
+    operation(Type left, Operator op, Type right) {
         return new EntryBuilder(opMap, left, op, right);
     }
 
@@ -73,7 +75,8 @@ public class OperatorMap {
             this.right = right;
         }
 
-        private void resultsIn(Type result) {
+        private void
+        resultsIn(Type result) {
             opMap.put(Triple.of(left, op, right), result);
         }
     }

@@ -18,8 +18,6 @@
 
 package org.ashlang.ash.symbol;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.ashlang.ash.ast.FuncDeclarationNode;
@@ -41,54 +39,39 @@ public class Function {
         parameters = new ArrayList<>();
     }
 
-    public FuncDeclarationNode getDeclSite() {
+    public FuncDeclarationNode
+    getDeclSite() {
         return declSite;
     }
 
-    public List<Symbol> getParameters() {
+    public List<Symbol>
+    getParameters() {
         return parameters;
     }
 
-    public String getIdentifier() {
+    public String
+    getIdentifier() {
         return declSite.getIdentifierToken().getText();
     }
 
-    public Type getType() {
+    public Type
+    getType() {
         return declSite.getType();
     }
 
-    public void use() {
+    public void
+    use() {
         isUsed = true;
     }
 
-    public boolean isUsed() {
+    public boolean
+    isUsed() {
         return isUsed;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-
-        Function function = (Function) obj;
-        return new EqualsBuilder()
-            .append(getIdentifier(), function.getIdentifier())
-            .isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-            .append(getIdentifier())
-            .toHashCode();
-    }
-
-    @Override
-    public String toString() {
+    public String
+    toString() {
         return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
             .append("identifier", getIdentifier())
             .append("parameters", getParameters())

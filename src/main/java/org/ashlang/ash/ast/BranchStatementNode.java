@@ -28,21 +28,18 @@ public class BranchStatementNode extends StatementNode {
         BranchNode branch,
         SourceProvider sourceProvider
     ) {
-        super(
-            branch.getStartToken(),
-            branch.getStopToken(),
-            sourceProvider
-        );
-
+        super(branch.getStartToken(), branch.getStopToken(), sourceProvider);
         this.branch = branch;
     }
 
-    public BranchNode getBranch() {
+    public BranchNode
+    getBranch() {
         return branch;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitBranchStatementNode(this, argument);
     }
 

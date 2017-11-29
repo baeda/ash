@@ -196,6 +196,6 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
         return visitChildren(node);
     }
 
-    //region expression nodes
+    //endregion expression nodes
 
 }

@@ -17,45 +17,58 @@ public abstract class ASTNode implements TokenRange {
 
     private ASTNode parent;
 
-    public ASTNode(Token startToken, Token stopToken,
-                   SourceProvider sourceProvider) {
+    public ASTNode(
+        Token startToken,
+        Token stopToken,
+        SourceProvider sourceProvider
+    ) {
         this.startToken = startToken;
         this.stopToken = stopToken;
         this.sourceProvider = sourceProvider;
     }
 
+    public abstract <T, A> T accept(ASTVisitor<T, A> visitor, A argument);
+
     @Override
-    public final Token getStartToken() {
+    public final Token
+    getStartToken() {
         return startToken;
     }
 
     @Override
-    public final Token getStopToken() {
+    public final Token
+    getStopToken() {
         return stopToken;
     }
 
     @Override
-    public String getText() {
+    public String
+    getText() {
         return sourceProvider.apply(startToken, stopToken);
     }
 
-    public SourceProvider getSourceProvider() {
+    public SourceProvider
+    getSourceProvider() {
         return sourceProvider;
     }
 
-    public void setParent(ASTNode parent) {
+    public void
+    setParent(ASTNode parent) {
         this.parent = parent;
     }
 
-    public ASTNode getParent() {
+    public ASTNode
+    getParent() {
         return parent;
     }
 
-    public void replaceWith(ASTNode newNode) {
+    public void
+    replaceWith(ASTNode newNode) {
         parent.replace(this, newNode);
     }
 
-    private void replace(ASTNode oldNode, ASTNode newNode) {
+    private void
+    replace(ASTNode oldNode, ASTNode newNode) {
         List<Class<?>> hierarchy = recordHierarchy(this.getClass());
         for (Class<?> clazz : hierarchy) {
             for (Field field : clazz.getDeclaredFields()) {
@@ -67,17 +80,17 @@ public abstract class ASTNode implements TokenRange {
         }
     }
 
-    public abstract <T, A> T accept(ASTVisitor<T, A> visitor, A argument);
-
     @Override
-    public String toString() {
+    public String
+    toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
             .append("startToken", startToken)
             .append("stopToken", stopToken)
             .toString();
     }
 
-    static Token getFirstStartToken(List<? extends ASTNode> nodes) {
+    static Token
+    getFirstStartToken(List<? extends ASTNode> nodes) {
         if (nodes.isEmpty()) {
             throw new IllegalStateException(
                 "Node list not expected to be empty");
@@ -86,7 +99,8 @@ public abstract class ASTNode implements TokenRange {
         return nodes.get(0).getStartToken();
     }
 
-    static Token getLastStopToken(List<? extends ASTNode> nodes) {
+    static Token
+    getLastStopToken(List<? extends ASTNode> nodes) {
         if (nodes.isEmpty()) {
             throw new IllegalStateException(
                 "Node list not expected to be empty");

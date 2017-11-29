@@ -34,40 +34,49 @@ public class Symbol {
         this.declSite = declSite;
     }
 
-    public DeclarationNode getDeclSite() {
+    public DeclarationNode
+    getDeclSite() {
         return declSite;
     }
 
-    public String getIdentifier() {
+    public String
+    getIdentifier() {
         return declSite.getIdentifierToken().getText();
     }
 
-    public Type getType() {
+    public Type
+    getType() {
         return declSite.getType();
     }
 
-    public void initialize() {
+    public void
+    initialize() {
         isInitialized = true;
     }
 
-    public void deinitialize() {
+    public void
+    deinitialize() {
         isInitialized = false;
     }
 
-    public boolean isInitialized() {
+    public boolean
+    isInitialized() {
         return isInitialized;
     }
 
-    public void use() {
+    public void
+    use() {
         isUsed = true;
     }
 
-    public boolean isUsed() {
+    public boolean
+    isUsed() {
         return isUsed;
     }
 
     @Override
-    public String toString() {
+    public String
+    toString() {
         return new ToStringBuilder(this, ToStringStyle.JSON_STYLE)
             .append("identifier", getIdentifier())
             .append("type", getType())

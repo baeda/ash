@@ -24,19 +24,23 @@ public class BlockStatementNode extends StatementNode {
 
     private final BlockNode block;
 
-    public BlockStatementNode(BlockNode block, Token stopToken,
-                              SourceProvider sourceProvider) {
+    public BlockStatementNode(
+        BlockNode block,
+        Token stopToken,
+        SourceProvider sourceProvider
+    ) {
         super(block.getStartToken(), stopToken, sourceProvider);
-
         this.block = block;
     }
 
-    public BlockNode getBlock() {
+    public BlockNode
+    getBlock() {
         return block;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitBlockStatementNode(this, argument);
     }
 

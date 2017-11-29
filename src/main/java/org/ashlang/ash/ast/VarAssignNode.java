@@ -27,35 +27,43 @@ public class VarAssignNode extends ASTNode {
 
     private Symbol symbol;
 
-    public VarAssignNode(Token identifier, ExpressionNode expression,
-                         SourceProvider sourceProvider) {
+    public VarAssignNode(
+        Token identifier,
+        ExpressionNode expression,
+        SourceProvider sourceProvider
+    ) {
         super(identifier, expression.getStopToken(), sourceProvider);
-
         this.expression = expression;
     }
 
-    public Token getIdentifierToken() {
+    public Token
+    getIdentifierToken() {
         return getStartToken();
     }
 
-    public Token getTypeToken() {
+    public Token
+    getTypeToken() {
         return getStopToken();
     }
 
-    public ExpressionNode getExpression() {
+    public ExpressionNode
+    getExpression() {
         return expression;
     }
 
-    public Symbol getSymbol() {
+    public Symbol
+    getSymbol() {
         return symbol;
     }
 
-    public void setSymbol(Symbol symbol) {
+    public void
+    setSymbol(Symbol symbol) {
         this.symbol = symbol;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitVarAssignNode(this, argument);
     }
 

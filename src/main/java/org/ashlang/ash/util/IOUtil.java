@@ -33,7 +33,8 @@ public final class IOUtil {
 
     private IOUtil() { /**/ }
 
-    public static Version gccVersion() {
+    public static Version
+    gccVersion() {
         ExecResult gccVersion = IOUtil.exec("gcc", "-dumpversion");
         if (gccVersion.isExceptional()) {
             System.err.println(gccVersion.getException().getMessage());
@@ -53,7 +54,8 @@ public final class IOUtil {
         );
     }
 
-    private static int safeToInt(String[] tokens, int index) {
+    private static int
+    safeToInt(String[] tokens, int index) {
         if (tokens.length <= index) {
             return 0;
         }
@@ -69,12 +71,14 @@ public final class IOUtil {
         }
     }
 
-    public static ExecResult exec(Path executable, Object... args) {
+    public static ExecResult
+    exec(Path executable, Object... args) {
         String command = executable.toAbsolutePath().toString();
         return exec(command, args);
     }
 
-    public static ExecResult exec(Object command, Object... args) {
+    public static ExecResult
+    exec(Object command, Object... args) {
         return execInDir(null, command, args);
     }
 
@@ -138,14 +142,16 @@ public final class IOUtil {
         }
     }
 
-    public static String exhaustiveReadStreamUTF8(InputStream in) {
+    public static String
+    exhaustiveReadStreamUTF8(InputStream in) {
         Scanner scanner = new Scanner(in, "UTF-8").useDelimiter("\\A+");
         return scanner.hasNext()
             ? scanner.next()
             : "";
     }
 
-    public static String readUTF8(Path file) {
+    public static String
+    readUTF8(Path file) {
         try {
             return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
         } catch (IOException e) {
@@ -153,7 +159,8 @@ public final class IOUtil {
         }
     }
 
-    public static void writeUTF8(Path path, String content) {
+    public static void
+    writeUTF8(Path path, String content) {
         try {
             Files.write(path, content.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
@@ -161,7 +168,8 @@ public final class IOUtil {
         }
     }
 
-    public static void deleteRecursive(Path dir) {
+    public static void
+    deleteRecursive(Path dir) {
         try {
             Files.walkFileTree(dir, RecursiveDeletingVisitor.INSTANCE);
         } catch (IOException e) {
@@ -169,7 +177,8 @@ public final class IOUtil {
         }
     }
 
-    public static String tryIndent(String c11Src) {
+    public static String
+    tryIndent(String c11Src) {
         return executeInTempDir(tmpDir -> {
             Path outFile = tmpDir.resolve("main.c");
             writeUTF8(outFile, c11Src);

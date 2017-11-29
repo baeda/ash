@@ -24,7 +24,10 @@ public class ArgumentNode extends ASTNode {
 
     private final ExpressionNode expression;
 
-    public ArgumentNode(ExpressionNode expression, SourceProvider sourceProvider) {
+    public ArgumentNode(
+        ExpressionNode expression,
+        SourceProvider sourceProvider
+    ) {
         super(
             expression.getStartToken(),
             expression.getStopToken(),
@@ -39,7 +42,8 @@ public class ArgumentNode extends ASTNode {
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitArgumentNode(this, argument);
     }
 

@@ -25,8 +25,14 @@ public class Token {
             token.getStopIndex());
     }
 
-    public Token(int line, int column, String text, String sourceName,
-                 int startIndex, int stopIndex) {
+    public Token(
+        int line,
+        int column,
+        String text,
+        String sourceName,
+        int startIndex,
+        int stopIndex
+    ) {
         this.line = line;
         this.column = column;
         this.text = text;
@@ -35,32 +41,39 @@ public class Token {
         this.stopIndex = stopIndex;
     }
 
-    public int getLine() {
+    public int
+    getLine() {
         return line;
     }
 
-    public int getColumn() {
+    public int
+    getColumn() {
         return column;
     }
 
-    public String getText() {
+    public String
+    getText() {
         return text;
     }
 
-    public String getSourceName() {
+    public String
+    getSourceName() {
         return sourceName;
     }
 
-    public int getStartIndex() {
+    public int
+    getStartIndex() {
         return startIndex;
     }
 
-    public int getStopIndex() {
+    public int
+    getStopIndex() {
         return stopIndex;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean
+    equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -82,7 +95,8 @@ public class Token {
     }
 
     @Override
-    public int hashCode() {
+    public int
+    hashCode() {
         return new HashCodeBuilder(17, 37)
             .append(line)
             .append(column)
@@ -94,7 +108,8 @@ public class Token {
     }
 
     @Override
-    public String toString() {
+    public String
+    toString() {
         return new ToStringBuilder(this, ToStringStyle.SIMPLE_STYLE)
             .append("line", line)
             .append("column", column)

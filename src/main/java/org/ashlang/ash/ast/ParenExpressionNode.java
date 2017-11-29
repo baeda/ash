@@ -24,20 +24,24 @@ public class ParenExpressionNode extends ExpressionNode {
 
     private final ExpressionNode expression;
 
-    public ParenExpressionNode(Token leftParenToken, Token rightParenToken,
-                               ExpressionNode expression,
-                               SourceProvider sourceProvider) {
+    public ParenExpressionNode(
+        Token leftParenToken,
+        Token rightParenToken,
+        ExpressionNode expression,
+        SourceProvider sourceProvider
+    ) {
         super(leftParenToken, rightParenToken, sourceProvider);
-
         this.expression = expression;
     }
 
-    public ExpressionNode getExpression() {
+    public ExpressionNode
+    getExpression() {
         return expression;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitParenExpressionNode(this, argument);
     }
 

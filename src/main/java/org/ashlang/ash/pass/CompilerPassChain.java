@@ -37,7 +37,6 @@ public class CompilerPassChain {
 
     private CompilerPassChain(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
-
         entryPass = (eh, st, tm, om, node) -> {};
     }
 
@@ -47,7 +46,8 @@ public class CompilerPassChain {
         return this;
     }
 
-    public void applyTo(ASTNode node) {
+    public void
+    applyTo(ASTNode node) {
         SymbolTable symbolTable = new SymbolTable();
         TypeMap typeMap = new TypeMap();
         OperatorMap operatorMap = new OperatorMap();

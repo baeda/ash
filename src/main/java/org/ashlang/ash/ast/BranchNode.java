@@ -44,20 +44,24 @@ public class BranchNode extends ASTNode {
         this.onFalse = onFalse;
     }
 
-    public ExpressionNode getExpression() {
+    public ExpressionNode
+    getExpression() {
         return expression;
     }
 
-    public StatementNode getOnTrue() {
+    public StatementNode
+    getOnTrue() {
         return onTrue;
     }
 
-    public StatementNode getOnFalse() {
+    public StatementNode
+    getOnFalse() {
         return onFalse;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitBranchNode(this, argument);
     }
 

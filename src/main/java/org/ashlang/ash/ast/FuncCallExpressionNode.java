@@ -33,16 +33,17 @@ public class FuncCallExpressionNode extends ExpressionNode {
             funcCall.getStopToken(),
             sourceProvider
         );
-
         this.funcCall = funcCall;
     }
 
-    public FuncCallNode getFuncCall() {
+    public FuncCallNode
+    getFuncCall() {
         return funcCall;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitFuncCallExpressionNode(this, argument);
     }
 

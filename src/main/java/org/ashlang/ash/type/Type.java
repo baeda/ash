@@ -33,16 +33,19 @@ public abstract class Type {
         this.bitSize = bitSize;
     }
 
-    public String getId() {
+    public String
+    getId() {
         return id;
     }
 
-    public int getBitSize() {
+    public int
+    getBitSize() {
         return bitSize;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean
+    equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -59,14 +62,16 @@ public abstract class Type {
     }
 
     @Override
-    public int hashCode() {
+    public int
+    hashCode() {
         return new HashCodeBuilder(17, 37)
             .append(bitSize)
             .toHashCode();
     }
 
     @Override
-    public String toString() {
+    public String
+    toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("bitSize", bitSize)
             .toString();

@@ -40,7 +40,8 @@ import static org.ashlang.gen.AshLexer.SLASH;
 
 public class ASTBuilder extends AshBaseVisitor<ASTNode> {
 
-    public static ASTNode buildAST(ParseTree tree, Parser parser) {
+    public static ASTNode
+    buildAST(ParseTree tree, Parser parser) {
         return new ASTBuilder(parser).visit(tree);
     }
 

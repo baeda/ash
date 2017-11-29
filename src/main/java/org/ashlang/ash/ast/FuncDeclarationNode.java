@@ -34,55 +34,67 @@ public class FuncDeclarationNode extends ASTNode {
     private Type type;
     private Function function;
 
-    public FuncDeclarationNode(Token startToken, Token identifierToken, Token typeToken,
-                               List<ParamDeclarationNode> params, BlockNode body,
-                               SourceProvider sourceProvider) {
+    public FuncDeclarationNode(
+        Token startToken,
+        Token identifierToken,
+        Token typeToken,
+        List<ParamDeclarationNode> params, BlockNode body,
+        SourceProvider sourceProvider
+    ) {
         super(
             startToken,
             body.getStopToken(),
             sourceProvider
         );
-
         this.identifierToken = identifierToken;
         this.typeToken = typeToken;
         this.params = params;
         this.body = body;
     }
 
-    public Token getIdentifierToken() {
+    public Token
+    getIdentifierToken() {
         return identifierToken;
     }
 
-    public Token getTypeToken() {
+    public Token
+    getTypeToken() {
         return typeToken;
     }
 
-    public List<ParamDeclarationNode> getParams() {
+    public List<ParamDeclarationNode>
+    getParams() {
         return params;
     }
 
-    public BlockNode getBody() {
+    public BlockNode
+    getBody() {
         return body;
     }
 
-    public Type getType() {
+    public Type
+    getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void
+    setType(Type type) {
         this.type = type;
     }
 
-    public Function getFunction() {
+    public Function
+    getFunction() {
         return function;
     }
 
-    public void setFunction(Function function) {
+    public void
+    setFunction(Function function) {
         this.function = function;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitFuncDeclarationNode(this, argument);
     }
 

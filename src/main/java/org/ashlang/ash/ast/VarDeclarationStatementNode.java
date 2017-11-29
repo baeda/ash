@@ -24,20 +24,23 @@ public class VarDeclarationStatementNode extends StatementNode {
 
     private final VarDeclarationNode varDeclaration;
 
-    public VarDeclarationStatementNode(VarDeclarationNode varDeclaration,
-                                       Token stopToken,
-                                       SourceProvider sourceProvider) {
+    public VarDeclarationStatementNode(
+        VarDeclarationNode varDeclaration,
+        Token stopToken,
+        SourceProvider sourceProvider
+    ) {
         super(varDeclaration.getStartToken(), stopToken, sourceProvider);
-
         this.varDeclaration = varDeclaration;
     }
 
-    public VarDeclarationNode getVarDeclaration() {
+    public VarDeclarationNode
+    getVarDeclaration() {
         return varDeclaration;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitVarDeclarationStatementNode(this, argument);
     }
 

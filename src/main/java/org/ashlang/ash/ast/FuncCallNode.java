@@ -35,28 +35,32 @@ public class FuncCallNode extends ASTNode {
         SourceProvider sourceProvider
     ) {
         super(startToken, stopToken, sourceProvider);
-
         this.arguments = arguments;
     }
 
-    public Token getIdentifierToken() {
+    public Token
+    getIdentifierToken() {
         return getStartToken();
     }
 
-    public List<ArgumentNode> getArguments() {
+    public List<ArgumentNode>
+    getArguments() {
         return arguments;
     }
 
-    public Function getFunction() {
+    public Function
+    getFunction() {
         return function;
     }
 
-    public void setFunction(Function function) {
+    public void
+    setFunction(Function function) {
         this.function = function;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitFuncCallNode(this, argument);
     }
 

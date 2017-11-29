@@ -40,7 +40,8 @@ public class SymbolTableSnapshot {
 
     //region symbol
 
-    public Symbol getDeclaredSymbol(DeclarationNode declSite) {
+    public Symbol
+    getDeclaredSymbol(DeclarationNode declSite) {
         for (Scope scope : scopeStack) {
             Symbol declaredSymbol = scope.getDeclaredSymbol(declSite);
             if (declaredSymbol != null) {
@@ -51,7 +52,8 @@ public class SymbolTableSnapshot {
         return null;
     }
 
-    public Symbol getDeclaredSymbol(String identifier) {
+    public Symbol
+    getDeclaredSymbol(String identifier) {
         for (Scope scope : scopeStack) {
             Symbol declaredSymbol = scope.getDeclaredSymbol(identifier);
             if (declaredSymbol != null) {
@@ -62,11 +64,13 @@ public class SymbolTableSnapshot {
         return null;
     }
 
-    public Collection<Symbol> getDeclaredSymbolsInCurrentScope() {
+    public Collection<Symbol>
+    getDeclaredSymbolsInCurrentScope() {
         return currentScope().getDeclaredSymbols();
     }
 
-    public Collection<Symbol> getDeclaredSymbols() {
+    public Collection<Symbol>
+    getDeclaredSymbols() {
         return scopeStack.stream()
             .flatMap(scope -> scope.getDeclaredSymbols().stream())
             .collect(Collectors.toList());
@@ -76,7 +80,8 @@ public class SymbolTableSnapshot {
 
     //region function
 
-    public Function getDeclaredFunction(FuncDeclarationNode declSite) {
+    public Function
+    getDeclaredFunction(FuncDeclarationNode declSite) {
         for (Scope scope : scopeStack) {
             Function declaredFunction = scope.getDeclaredFunction(declSite);
             if (declaredFunction != null) {
@@ -87,7 +92,8 @@ public class SymbolTableSnapshot {
         return null;
     }
 
-    public Function getDeclaredFunction(String identifier) {
+    public Function
+    getDeclaredFunction(String identifier) {
         for (Scope scope : scopeStack) {
             Function declaredFunction = scope.getDeclaredFunction(identifier);
             if (declaredFunction != null) {
@@ -98,7 +104,8 @@ public class SymbolTableSnapshot {
         return null;
     }
 
-    public Collection<Function> getDeclaredFunctions() {
+    public Collection<Function>
+    getDeclaredFunctions() {
         return scopeStack.stream()
             .flatMap(scope -> scope.getDeclaredFunctions().stream())
             .collect(Collectors.toList());
@@ -106,7 +113,8 @@ public class SymbolTableSnapshot {
 
     //endregion function
 
-    private Scope currentScope() {
+    private Scope
+    currentScope() {
         return scopeStack.peek();
     }
 

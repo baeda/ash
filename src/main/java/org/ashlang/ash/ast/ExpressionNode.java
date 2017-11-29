@@ -25,24 +25,31 @@ public abstract class ExpressionNode extends ASTNode {
     private Type type = null;
     private Object value = null;
 
-    public ExpressionNode(Token startToken, Token stopToken,
-                          SourceProvider sourceProvider) {
+    public ExpressionNode(
+        Token startToken,
+        Token stopToken,
+        SourceProvider sourceProvider
+    ) {
         super(startToken, stopToken, sourceProvider);
     }
 
-    public Type getType() {
+    public Type
+    getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void
+    setType(Type type) {
         this.type = type;
     }
 
-    public Object getValue() {
+    public Object
+    getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void
+    setValue(Object value) {
         this.value = value;
     }
 

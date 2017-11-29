@@ -29,20 +29,24 @@ public class IdExpressionNode extends ExpressionNode {
         super(value, value, sourceProvider);
     }
 
-    public Token getValueToken() {
+    public Token
+    getValueToken() {
         return getStartToken();
     }
 
-    public Symbol getSymbol() {
+    public Symbol
+    getSymbol() {
         return symbol;
     }
 
-    public void setSymbol(Symbol symbol) {
+    public void
+    setSymbol(Symbol symbol) {
         this.symbol = symbol;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitIdExpressionNode(this, argument);
     }
 

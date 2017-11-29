@@ -46,7 +46,6 @@ public class ConsoleErrorHandler implements ErrorHandler {
 
     public ConsoleErrorHandler(PrintStream out) {
         this.out = out;
-
         numLexicalErrors = 0;
         numSyntacticErrors = 0;
         numSemanticErrors = 0;

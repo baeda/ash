@@ -24,19 +24,23 @@ public class VarAssignStatementNode extends StatementNode {
 
     private final VarAssignNode varAssign;
 
-    public VarAssignStatementNode(VarAssignNode varAssign, Token stopToken,
-                                  SourceProvider sourceProvider) {
+    public VarAssignStatementNode(
+        VarAssignNode varAssign,
+        Token stopToken,
+        SourceProvider sourceProvider
+    ) {
         super(varAssign.getStartToken(), stopToken, sourceProvider);
-
         this.varAssign = varAssign;
     }
 
-    public VarAssignNode getVarAssign() {
+    public VarAssignNode
+    getVarAssign() {
         return varAssign;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitVarAssignStatementNode(this, argument);
     }
 

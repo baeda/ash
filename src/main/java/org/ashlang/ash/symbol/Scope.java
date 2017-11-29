@@ -41,7 +41,8 @@ class Scope {
         this.functionTable = new HashMap<>(other.functionTable);
     }
 
-    Symbol declareSymbol(DeclarationNode declSite) {
+    Symbol
+    declareSymbol(DeclarationNode declSite) {
         String identifier = declSite.getIdentifierToken().getText();
         Symbol symbol = symbolTable.get(identifier);
         if (symbol != null) {
@@ -53,20 +54,24 @@ class Scope {
         return symbol;
     }
 
-    Symbol getDeclaredSymbol(DeclarationNode declSite) {
+    Symbol
+    getDeclaredSymbol(DeclarationNode declSite) {
         String identifier = declSite.getIdentifierToken().getText();
         return getDeclaredSymbol(identifier);
     }
 
-    Symbol getDeclaredSymbol(String identifier) {
+    Symbol
+    getDeclaredSymbol(String identifier) {
         return symbolTable.get(identifier);
     }
 
-    Collection<Symbol> getDeclaredSymbols() {
+    Collection<Symbol>
+    getDeclaredSymbols() {
         return symbolTable.values();
     }
 
-    Function declareFunction(FuncDeclarationNode declSite) {
+    Function
+    declareFunction(FuncDeclarationNode declSite) {
         String identifier = declSite.getIdentifierToken().getText();
         Function function = functionTable.get(identifier);
         if (function != null) {
@@ -78,25 +83,30 @@ class Scope {
         return function;
     }
 
-    Function getDeclaredFunction(FuncDeclarationNode declSite) {
+    Function
+    getDeclaredFunction(FuncDeclarationNode declSite) {
         String identifier = declSite.getIdentifierToken().getText();
         return getDeclaredFunction(identifier);
     }
 
-    Function getDeclaredFunction(String identifier) {
+    Function
+    getDeclaredFunction(String identifier) {
         return functionTable.get(identifier);
     }
 
-    Collection<Function> getDeclaredFunctions() {
+    Collection<Function>
+    getDeclaredFunctions() {
         return functionTable.values();
     }
 
-    Scope copy() {
+    Scope
+    copy() {
         return new Scope(this);
     }
 
     @Override
-    public String toString() {
+    public String
+    toString() {
         return new ToStringBuilder(this)
             .append("symbolTable", symbolTable)
             .append("functionTable", functionTable)

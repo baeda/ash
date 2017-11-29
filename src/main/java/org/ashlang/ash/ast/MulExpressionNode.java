@@ -22,13 +22,18 @@ import org.ashlang.ash.ast.visitor.ASTVisitor;
 
 public class MulExpressionNode extends BinaryExpressionNode {
 
-    public MulExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op,
-                             SourceProvider sourceProvider) {
+    public MulExpressionNode(
+        ExpressionNode lhs,
+        ExpressionNode rhs,
+        Token op,
+        SourceProvider sourceProvider
+    ) {
         super(lhs, rhs, op, sourceProvider);
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitMulExpressionNode(this, argument);
     }
 

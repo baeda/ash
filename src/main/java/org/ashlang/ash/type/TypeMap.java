@@ -37,7 +37,8 @@ public class TypeMap {
             ));
     }
 
-    public Type resolve(String typeString) {
+    public Type
+    resolve(String typeString) {
         return typeMap.getOrDefault(typeString, INVALID);
     }
 

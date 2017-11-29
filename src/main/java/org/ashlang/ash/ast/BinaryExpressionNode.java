@@ -24,23 +24,30 @@ public abstract class BinaryExpressionNode extends ExpressionNode {
     private final ExpressionNode rhs;
     private final Token op;
 
-    public BinaryExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op,
-                                SourceProvider sourceProvider) {
+    public BinaryExpressionNode(
+        ExpressionNode lhs,
+        ExpressionNode rhs,
+        Token op,
+        SourceProvider sourceProvider
+    ) {
         super(lhs.getStartToken(), rhs.getStopToken(), sourceProvider);
         this.lhs = lhs;
         this.rhs = rhs;
         this.op = op;
     }
 
-    public ExpressionNode getLhs() {
+    public ExpressionNode
+    getLhs() {
         return lhs;
     }
 
-    public ExpressionNode getRhs() {
+    public ExpressionNode
+    getRhs() {
         return rhs;
     }
 
-    public Token getOp() {
+    public Token
+    getOp() {
         return op;
     }
 

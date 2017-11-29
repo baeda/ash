@@ -37,7 +37,8 @@ public interface Types {
     Type U32 = new IntType(32, false);
     Type U64 = new IntType(64, false);
 
-    static boolean allValid(Type... types) {
+    static boolean
+    allValid(Type... types) {
         for (Type type : types) {
             if (type == null || INVALID.equals(type)) {
                 return false;
@@ -46,11 +47,13 @@ public interface Types {
         return true;
     }
 
-    static boolean anyInvalid(Type... types) {
+    static boolean
+    anyInvalid(Type... types) {
         return !allValid(types);
     }
 
-    static Collection<Type> allTypes() {
+    static Collection<Type>
+    allTypes() {
         return allSubTypes(Type.class);
     }
 

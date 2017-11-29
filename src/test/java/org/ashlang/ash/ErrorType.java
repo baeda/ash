@@ -19,6 +19,7 @@
 package org.ashlang.ash;
 
 enum ErrorType {
+
     UNKNOWN_TOKEN,
     MISSING_TOKEN,
     INPUT_MISMATCH,
@@ -38,4 +39,5 @@ enum ErrorType {
     INT_CONST_OVERFLOW,
     INT_CONST_UNDERFLOW,
     NO_ENTRY_POINT
+
 }

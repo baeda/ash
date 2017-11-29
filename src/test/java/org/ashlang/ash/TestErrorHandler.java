@@ -37,7 +37,8 @@ class TestErrorHandler implements ErrorHandler {
         this.errors = new ArrayList<>();
     }
 
-    List<Pair<ErrorType, Token>> getErrors() {
+    List<Pair<ErrorType, Token>>
+    getErrors() {
         return errors;
     }
 

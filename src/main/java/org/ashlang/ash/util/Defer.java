@@ -29,11 +29,13 @@ public class Defer {
         actions = new CopyOnWriteArrayList<>();
     }
 
-    public void record(Runnable action) {
+    public void
+    record(Runnable action) {
         actions.add(action);
     }
 
-    public void runAll() {
+    public void
+    runAll() {
         actions.forEach(Runnable::run);
         actions.clear();
     }

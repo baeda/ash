@@ -22,13 +22,17 @@ import org.ashlang.ash.ast.visitor.ASTVisitor;
 
 public class VarDeclarationNode extends DeclarationNode {
 
-    public VarDeclarationNode(Token identifier, Token type,
-                              SourceProvider sourceProvider) {
+    public VarDeclarationNode(
+        Token identifier,
+        Token type,
+        SourceProvider sourceProvider
+    ) {
         super(identifier, type, sourceProvider);
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitVarDeclarationNode(this, argument);
     }
 

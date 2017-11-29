@@ -28,13 +28,15 @@ import static org.ashlang.ash.util.ReflectionUtil.*;
 
 public final class ASTPrinter {
 
-    private ASTPrinter() { /**/ }
+    private ASTPrinter() { /* static utility */ }
 
-    public static void print(ASTNode node) {
+    public static void
+    print(ASTNode node) {
         print(node, 0);
     }
 
-    private static void print(ASTNode node, int level) {
+    private static void
+    print(ASTNode node, int level) {
         List<Class<?>> hierarchy = recordHierarchy(node.getClass());
         int longestFieldName = findLongestFieldName(hierarchy);
 
@@ -48,7 +50,8 @@ public final class ASTPrinter {
         });
     }
 
-    private static void printNode(ASTNode node, int level) {
+    private static void
+    printNode(ASTNode node, int level) {
         String nodeInfo = String.format(
             "%s [%s] -> [%s]",
             node.getClass().getSimpleName(),
@@ -91,7 +94,8 @@ public final class ASTPrinter {
         outln(padded + " :: " + value, level + 1);
     }
 
-    private static void printFieldRec(Field field, ASTNode node, int level) {
+    private static void
+    printFieldRec(Field field, ASTNode node, int level) {
         if ("parent".equals(field.getName())) {
             return;
         }
@@ -109,11 +113,13 @@ public final class ASTPrinter {
         }
     }
 
-    private static String indent(int level) {
+    private static String
+    indent(int level) {
         return StringUtils.repeat("    ", level);
     }
 
-    private static void outln(Object str, int level) {
+    private static void
+    outln(Object str, int level) {
         System.out.println(indent(level) + str);
     }
 

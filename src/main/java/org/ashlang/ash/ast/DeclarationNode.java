@@ -26,32 +26,41 @@ public abstract class DeclarationNode extends ASTNode {
     private Type type;
     private Symbol symbol;
 
-    public DeclarationNode(Token identifier, Token type,
-                           SourceProvider sourceProvider) {
+    DeclarationNode(
+        Token identifier,
+        Token type,
+        SourceProvider sourceProvider
+    ) {
         super(identifier, type, sourceProvider);
     }
 
-    public Token getIdentifierToken() {
+    public Token
+    getIdentifierToken() {
         return getStartToken();
     }
 
-    public Token getTypeToken() {
+    public Token
+    getTypeToken() {
         return getStopToken();
     }
 
-    public Type getType() {
+    public Type
+    getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void
+    setType(Type type) {
         this.type = type;
     }
 
-    public Symbol getSymbol() {
+    public Symbol
+    getSymbol() {
         return symbol;
     }
 
-    public void setSymbol(Symbol symbol) {
+    public void
+    setSymbol(Symbol symbol) {
         this.symbol = symbol;
     }
 

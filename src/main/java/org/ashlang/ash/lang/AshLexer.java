@@ -29,7 +29,8 @@ public class AshLexer extends org.ashlang.gen.AshLexer {
         super(input);
     }
 
-    public void notifyListeners(LexerNoViableAltException e) {
+    public void
+    notifyListeners(LexerNoViableAltException e) {
         Interval interval = Interval.of(_tokenStartCharIndex, _input.index());
         String text = _input.getText(interval);
         String offending = getErrorDisplay(text);

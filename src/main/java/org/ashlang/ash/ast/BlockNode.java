@@ -26,15 +26,13 @@ public class BlockNode extends ASTNode {
 
     private final List<StatementNode> statements;
 
-    public BlockNode(Token startToken, Token stopToken,
-                     List<StatementNode> statements,
-                     SourceProvider sourceProvider) {
-        super(
-            startToken,
-            stopToken,
-            sourceProvider
-        );
-
+    public BlockNode(
+        Token startToken,
+        Token stopToken,
+        List<StatementNode> statements,
+        SourceProvider sourceProvider
+    ) {
+        super(startToken, stopToken, sourceProvider);
         this.statements = statements;
     }
 
@@ -43,7 +41,8 @@ public class BlockNode extends ASTNode {
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitBlockNode(this, argument);
     }
 

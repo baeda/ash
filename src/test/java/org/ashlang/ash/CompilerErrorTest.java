@@ -28,7 +28,8 @@ import static org.ashlang.ash.ErrorType.*;
 public class CompilerErrorTest {
 
     @Test
-    public void unknownToken() {
+    public void
+    unknownToken() {
         assertThat(
             "func main() : void",
             "{",
@@ -39,7 +40,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void missingToken() {
+    public void
+    missingToken() {
         assertThat(
             "func main() : void",
             "{",
@@ -50,7 +52,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void inputMismatch() {
+    public void
+    inputMismatch() {
         assertThat(
             "func main() : void",
             "{",
@@ -61,7 +64,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void invalidType() {
+    public void
+    invalidType() {
         assertThat(
             "func main() : void",
             "{",
@@ -73,7 +77,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void typeMismatch() {
+    public void
+    typeMismatch() {
         assertThat(
             "func main() : void",
             "{",
@@ -88,7 +93,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void typeMismatch_returnType() {
+    public void
+    typeMismatch_returnType() {
         assertThat(
             "func main() : void",
             "{",
@@ -99,14 +105,16 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void typeMismatch_malformedEntryPoint_invalidReturnType() {
+    public void
+    typeMismatch_malformedEntryPoint_invalidReturnType() {
         assertThat("func main() : i32 {}")
             .hasError(TYPE_MISMATCH).at(1, 1)
             .hasNoMoreErrors();
     }
 
     @Test
-    public void typeMismatch_malformedEntryPoint_invalidParameters() {
+    public void
+    typeMismatch_malformedEntryPoint_invalidParameters() {
         assertThat("func main(x : i32) : void {}")
             .hasError(FUNCTION_ARGUMENT_COUNT_MISMATCH).at(1, 11)
             .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(1, 11)
@@ -114,7 +122,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void typeMismatch_functionParameter() {
+    public void
+    typeMismatch_functionParameter() {
         assertThat(
             "func main() : void {}",
             "func add(x : i32, y : i8) : i32",
@@ -127,7 +136,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void typeMismatch_functionArgument() {
+    public void
+    typeMismatch_functionArgument() {
         assertThat(
             "func add(x : i32, y : i32) : i32",
             "{",
@@ -144,7 +154,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void typeMismatch_branchCondition() {
+    public void
+    typeMismatch_branchCondition() {
         assertThat(
             "func main() : void",
             "{",
@@ -158,7 +169,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void invalidOperator() {
+    public void
+    invalidOperator() {
         assertThat(
             "func main() : void",
             "{",
@@ -173,7 +185,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolAlreadyDeclared() {
+    public void
+    symbolAlreadyDeclared() {
         assertThat(
             "func main() : void",
             "{",
@@ -186,7 +199,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolAlreadyDeclared_inNewScope() {
+    public void
+    symbolAlreadyDeclared_inNewScope() {
         assertThat(
             "func main() : void",
             "{",
@@ -201,7 +215,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolAlreadyDeclared_inParameterList() {
+    public void
+    symbolAlreadyDeclared_inParameterList() {
         assertThat(
             "func main() : void {}",
             "func two_i32(a : i32, a : i32) : void {}")
@@ -211,7 +226,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotDeclared() {
+    public void
+    symbolNotDeclared() {
         assertThat(
             "func main() : void",
             "{",
@@ -224,7 +240,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotDeclared_outsideScope() {
+    public void
+    symbolNotDeclared_outsideScope() {
         assertThat(
             "func main() : void",
             "{",
@@ -239,7 +256,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotInitialized() {
+    public void
+    symbolNotInitialized() {
         assertThat(
             "func main() : void",
             "{",
@@ -251,7 +269,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotInitialized_emittedOnScopeEnd() {
+    public void
+    symbolNotInitialized_emittedOnScopeEnd() {
         assertThat(
             "func main() : void",
             "{",
@@ -265,7 +284,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotInitialized_simpleOneArmedBranch_staticTrue() {
+    public void
+    symbolNotInitialized_simpleOneArmedBranch_staticTrue() {
         assertThat(
             "func main() : void",
             "{",
@@ -280,7 +300,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotInitialized_simpleOneArmedBranch_staticFalse() {
+    public void
+    symbolNotInitialized_simpleOneArmedBranch_staticFalse() {
         assertThat(
             "func main() : void",
             "{",
@@ -295,7 +316,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotInitialized_simpleTwoArmedBranch_staticTrue() {
+    public void
+    symbolNotInitialized_simpleTwoArmedBranch_staticTrue() {
         assertThat(
             "func main() : void",
             "{",
@@ -311,7 +333,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotInitialized_simpleTwoArmedBranch_staticFalse() {
+    public void
+    symbolNotInitialized_simpleTwoArmedBranch_staticFalse() {
         assertThat(
             "func main() : void",
             "{",
@@ -327,7 +350,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotInitialized_nestedBranch() {
+    public void
+    symbolNotInitialized_nestedBranch() {
         assertThat(
             "func main() : void",
             "{",
@@ -349,7 +373,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotInitialized_nested_Banch_() {
+    public void
+    symbolNotInitialized_nested_Banch_() {
         assertThat(
             "func main() : void",
             "{",
@@ -365,7 +390,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotUsed() {
+    public void
+    symbolNotUsed() {
         assertThat(
             "func main() : void",
             "{",
@@ -376,7 +402,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolNotUsed_emittedOnScopeEnd() {
+    public void
+    symbolNotUsed_emittedOnScopeEnd() {
         assertThat(
             "func main() : void",
             "{",
@@ -389,7 +416,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void symbolInitializedButNotUsed() {
+    public void
+    symbolInitializedButNotUsed() {
         assertThat(
             "func main() : void",
             "{",
@@ -401,7 +429,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void functionAlreadyDeclared() {
+    public void
+    functionAlreadyDeclared() {
         assertThat(
             "func main() : void {}",
             "func main() : void {}")
@@ -410,7 +439,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void functionNotDeclared() {
+    public void
+    functionNotDeclared() {
         assertThat(
             "func main() : void",
             "{",
@@ -421,7 +451,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void functionArgumentCountMismatch_have0_want2() {
+    public void
+    functionArgumentCountMismatch_have0_want2() {
         assertThat(
             "func add(x : i32, y : i32) : i32",
             "{",
@@ -436,7 +467,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void functionArgumentCountMismatch_have1_want2() {
+    public void
+    functionArgumentCountMismatch_have1_want2() {
         assertThat(
             "func add(x : i32, y : i32) : i32",
             "{",
@@ -451,7 +483,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void functionArgumentCountMismatch_have3_want2() {
+    public void
+    functionArgumentCountMismatch_have3_want2() {
         assertThat(
             "func add(x : i32, y : i32) : i32",
             "{",
@@ -466,7 +499,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void illegalStatement_arithmeticExpression() {
+    public void
+    illegalStatement_arithmeticExpression() {
         assertThat(
             "func main() : void",
             "{",
@@ -477,7 +511,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void illegalStatement_identifierExpression() {
+    public void
+    illegalStatement_identifierExpression() {
         assertThat(
             "func main() : void",
             "{",
@@ -490,7 +525,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void divisionByZero() {
+    public void
+    divisionByZero() {
         assertThat(
             "func main() : void",
             "{",
@@ -501,7 +537,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void intConstOverflow_i32Constant() {
+    public void
+    intConstOverflow_i32Constant() {
         assertThat(
             "func main() : void",
             "{",
@@ -514,7 +551,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void intConstOverflow_u32Constant() {
+    public void
+    intConstOverflow_u32Constant() {
         assertThat(
             "func main() : void",
             "{",
@@ -527,7 +565,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void intConstOverflow_i32Arithmetic() {
+    public void
+    intConstOverflow_i32Arithmetic() {
         assertThat(
             "func main() : void",
             "{",
@@ -540,7 +579,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void intConstOverflow_u32Arithmetic() {
+    public void
+    intConstOverflow_u32Arithmetic() {
         assertThat(
             "func main() : void",
             "{",
@@ -580,7 +620,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void intConstUnderflow_i32Arithmetic() {
+    public void
+    intConstUnderflow_i32Arithmetic() {
         assertThat(
             "func main() : void",
             "{",
@@ -593,7 +634,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void intConstUnderflow_u32Arithmetic() {
+    public void
+    intConstUnderflow_u32Arithmetic() {
         assertThat(
             "func main() : void",
             "{",

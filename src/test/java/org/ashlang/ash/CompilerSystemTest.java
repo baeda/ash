@@ -42,7 +42,8 @@ import static org.assertj.core.api.Assertions.fail;
 public class CompilerSystemTest {
 
     @DataProvider(parallel = true)
-    public Object[][] provideAshResourceBasePath() throws Exception {
+    public Object[][]
+    provideAshResourceBasePath() throws Exception {
         Set<String> basePaths = findTestResourceBasePaths();
         Object[][] result = new Object[basePaths.size()][];
 
@@ -55,7 +56,8 @@ public class CompilerSystemTest {
     }
 
     @Test(dataProvider = "provideAshResourceBasePath")
-    public void c11_target(String basePath) throws Exception {
+    public void
+    c11_target(String basePath) throws Exception {
         Path source = getResourcePath(basePath, ".ash");
         Path result = getResourcePath(basePath, ".ash.result");
         String sourceString = IOUtil.readUTF8(source);

@@ -35,32 +35,39 @@ public class ExecResult {
         this.exception = exception;
     }
 
-    public int getExitCode() {
+    public int
+    getExitCode() {
         return exitCode;
     }
 
-    public String getOut() {
+    public String
+    getOut() {
         return out;
     }
 
-    public String getErr() {
+    public String
+    getErr() {
         return err;
     }
 
-    public Exception getException() {
+    public Exception
+    getException() {
         return exception;
     }
 
-    public boolean hasErrors() {
+    public boolean
+    hasErrors() {
         return exitCode != 0 || !err.isEmpty();
     }
 
-    public boolean isExceptional() {
+    public boolean
+    isExceptional() {
         return exception != null;
     }
 
     @Override
-    public String toString() {
+    public String
+    toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
             .append("exitCode", exitCode)
             .append("out", out)

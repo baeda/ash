@@ -37,7 +37,8 @@ public class SymbolTable {
 
     //region scope / memo
 
-    public SymbolTableSnapshot recall(ASTNode declaringScope) {
+    public SymbolTableSnapshot
+    recall(ASTNode declaringScope) {
         SymbolTableSnapshot snapshot = null;
 
         while (snapshot == null) {
@@ -48,11 +49,13 @@ public class SymbolTable {
         return snapshot;
     }
 
-    public void pushScope() {
+    public void
+    pushScope() {
         scopeStack.push(new Scope());
     }
 
-    public void popScope(ASTNode declaringScope) {
+    public void
+    popScope(ASTNode declaringScope) {
         if (snapshotMap.containsKey(declaringScope)) {
             throw new IllegalArgumentException();
         }
@@ -66,11 +69,13 @@ public class SymbolTable {
 
     //region symbol
 
-    public Symbol declareSymbol(DeclarationNode declSite) {
+    public Symbol
+    declareSymbol(DeclarationNode declSite) {
         return currentScope().declareSymbol(declSite);
     }
 
-    public Symbol getDeclaredSymbol(DeclarationNode declSite) {
+    public Symbol
+    getDeclaredSymbol(DeclarationNode declSite) {
         for (Scope scope : scopeStack) {
             Symbol declaredSymbol = scope.getDeclaredSymbol(declSite);
             if (declaredSymbol != null) {
@@ -81,7 +86,8 @@ public class SymbolTable {
         return null;
     }
 
-    public Symbol getDeclaredSymbol(String identifier) {
+    public Symbol
+    getDeclaredSymbol(String identifier) {
         for (Scope scope : scopeStack) {
             Symbol declaredSymbol = scope.getDeclaredSymbol(identifier);
             if (declaredSymbol != null) {
@@ -92,11 +98,13 @@ public class SymbolTable {
         return null;
     }
 
-    public Collection<Symbol> getDeclaredSymbolsInCurrentScope() {
+    public Collection<Symbol>
+    getDeclaredSymbolsInCurrentScope() {
         return currentScope().getDeclaredSymbols();
     }
 
-    public Collection<Symbol> getDeclaredSymbols() {
+    public Collection<Symbol>
+    getDeclaredSymbols() {
         return scopeStack.stream()
             .flatMap(scope -> scope.getDeclaredSymbols().stream())
             .collect(Collectors.toList());
@@ -106,11 +114,13 @@ public class SymbolTable {
 
     //region function
 
-    public Function declareFunction(FuncDeclarationNode declSite) {
+    public Function
+    declareFunction(FuncDeclarationNode declSite) {
         return currentScope().declareFunction(declSite);
     }
 
-    public Function getDeclaredFunction(FuncDeclarationNode declSite) {
+    public Function
+    getDeclaredFunction(FuncDeclarationNode declSite) {
         for (Scope scope : scopeStack) {
             Function declaredFunction = scope.getDeclaredFunction(declSite);
             if (declaredFunction != null) {
@@ -121,7 +131,8 @@ public class SymbolTable {
         return null;
     }
 
-    public Function getDeclaredFunction(String identifier) {
+    public Function
+    getDeclaredFunction(String identifier) {
         for (Scope scope : scopeStack) {
             Function declaredFunction = scope.getDeclaredFunction(identifier);
             if (declaredFunction != null) {
@@ -132,7 +143,8 @@ public class SymbolTable {
         return null;
     }
 
-    public Collection<Function> getDeclaredFunctions() {
+    public Collection<Function>
+    getDeclaredFunctions() {
         return scopeStack.stream()
             .flatMap(scope -> scope.getDeclaredFunctions().stream())
             .collect(Collectors.toList());
@@ -140,7 +152,8 @@ public class SymbolTable {
 
     //endregion function
 
-    private Scope currentScope() {
+    private Scope
+    currentScope() {
         return scopeStack.peek();
     }
 

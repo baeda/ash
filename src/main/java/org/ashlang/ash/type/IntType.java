@@ -32,12 +32,14 @@ public class IntType extends Type {
         this.isSigned = isSigned;
     }
 
-    public boolean isSigned() {
+    public boolean
+    isSigned() {
         return isSigned;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean
+    equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -55,7 +57,8 @@ public class IntType extends Type {
     }
 
     @Override
-    public int hashCode() {
+    public int
+    hashCode() {
         return new HashCodeBuilder(17, 37)
             .appendSuper(super.hashCode())
             .append(isSigned)
@@ -63,14 +66,16 @@ public class IntType extends Type {
     }
 
     @Override
-    public String toString() {
+    public String
+    toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .appendSuper(super.toString())
             .append("isSigned", isSigned)
             .toString();
     }
 
-    private static String createId(int bitSize, boolean isSigned) {
+    private static String
+    createId(int bitSize, boolean isSigned) {
         String prefix = isSigned ? "i" : "u";
         return prefix + bitSize;
     }

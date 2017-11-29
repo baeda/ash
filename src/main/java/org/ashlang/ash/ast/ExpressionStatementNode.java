@@ -33,16 +33,17 @@ public class ExpressionStatementNode extends StatementNode {
             expression.getStopToken(),
             sourceProvider
         );
-
         this.expression = expression;
     }
 
-    public ExpressionNode getExpression() {
+    public ExpressionNode
+    getExpression() {
         return expression;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitExpressionStatementNode(this, argument);
     }
 

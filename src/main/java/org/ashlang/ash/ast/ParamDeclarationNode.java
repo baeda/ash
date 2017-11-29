@@ -22,13 +22,17 @@ import org.ashlang.ash.ast.visitor.ASTVisitor;
 
 public class ParamDeclarationNode extends DeclarationNode {
 
-    public ParamDeclarationNode(Token identifier, Token type,
-                                SourceProvider sourceProvider) {
+    public ParamDeclarationNode(
+        Token identifier,
+        Token type,
+        SourceProvider sourceProvider
+    ) {
         super(identifier, type, sourceProvider);
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitParamDeclarationNode(this, argument);
     }
 

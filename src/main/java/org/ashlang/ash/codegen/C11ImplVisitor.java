@@ -229,14 +229,14 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
         return "((" + cType + ")" + value.toString() + "ull)";
     }
 
-    //endregion expression nodes
-
     private String
     visitBinaryExpression(BinaryExpressionNode node, String op) {
         String lhs = visit(node.getLhs());
         String rhs = visit(node.getRhs());
         return "(" + lhs + op + rhs + ")";
     }
+
+    //endregion expression nodes
 
     @Override
     public String

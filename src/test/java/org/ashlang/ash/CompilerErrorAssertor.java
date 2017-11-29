@@ -45,7 +45,8 @@ class CompilerErrorAssertor {
         errors = null;
     }
 
-    ErrorHandler captureErrors() {
+    ErrorHandler
+    captureErrors() {
         if (errors != null) {
             throw new IllegalStateException("Assertion has already started. " +
                 "Cannot capture any more errors.");
@@ -54,11 +55,13 @@ class CompilerErrorAssertor {
         return errorHandler;
     }
 
-    OngoingAssertion hasError(ErrorType errorType) {
+    OngoingAssertion
+    hasError(ErrorType errorType) {
         return new OngoingAssertion(errorType);
     }
 
-    void hasNoMoreErrors() {
+    void
+    hasNoMoreErrors() {
         if (getErrors().isEmpty()) {
             return;
         }
@@ -75,7 +78,8 @@ class CompilerErrorAssertor {
             extraneousErrors);
     }
 
-    private List<Pair<ErrorType, Token>> getErrors() {
+    private List<Pair<ErrorType, Token>>
+    getErrors() {
         if (errors == null) {
             errors = new ArrayList<>(errorHandler.getErrors());
         }
@@ -90,7 +94,8 @@ class CompilerErrorAssertor {
             this.errorType = errorType;
         }
 
-        CompilerErrorAssertor at(int line, int column) {
+        CompilerErrorAssertor
+        at(int line, int column) {
             List<Pair<ErrorType, Token>> matches = getErrors().stream()
                 .filter(pair -> pair.getLeft() == errorType)
                 .filter(pair -> pair.getRight().getLine() + 1 == line)

@@ -39,24 +39,36 @@ class C11TypeMap {
                 type -> Triple.of(cType(type), cFormat(type), "{{expr}}")
             ));
 
-        typeMap.put(Types.VOID, Triple.of("void", "", "{{expr}}"));
-        typeMap.put(Types.BOOL, Triple.of("bool", "%s", "({{expr}} ? \"true\" : \"false\")"));
+        typeMap.put(Types.VOID, Triple.of(
+            "void",
+            "",
+            "{{expr}}"
+        ));
+        typeMap.put(Types.BOOL, Triple.of(
+            "bool",
+            "%s",
+            "({{expr}} ? \"true\" : \"false\")"
+        ));
     }
 
-    String getType(Type type) {
+    String
+    getType(Type type) {
         return typeMap.get(type).getLeft();
     }
 
-    String getFormat(Type type) {
+    String
+    getFormat(Type type) {
         return typeMap.get(type).getMiddle();
     }
 
-    String formatExpression(Type type, String expression) {
+    String
+    formatExpression(Type type, String expression) {
         String fmt = typeMap.get(type).getRight();
         return fmt.replace("{{expr}}", expression);
     }
 
-    private static String cType(IntType type) {
+    private static String
+    cType(IntType type) {
         String prefix = type.isSigned()
             ? ""
             : "u";
@@ -64,7 +76,8 @@ class C11TypeMap {
     }
 
 
-    private static String cFormat(IntType type) {
+    private static String
+    cFormat(IntType type) {
         String classifier = type.isSigned()
             ? "d"
             : "u";

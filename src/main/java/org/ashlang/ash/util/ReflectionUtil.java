@@ -32,7 +32,8 @@ public final class ReflectionUtil {
 
     private ReflectionUtil() { /**/ }
 
-    public static List<Class<?>> recordHierarchy(Class<?> startClass) {
+    public static List<Class<?>>
+    recordHierarchy(Class<?> startClass) {
         List<Class<?>> result = new ArrayList<>();
 
         Class<?> clazz = startClass;
@@ -44,7 +45,8 @@ public final class ReflectionUtil {
         return result;
     }
 
-    public static int findLongestFieldName(List<Class<?>> classes) {
+    public static int
+    findLongestFieldName(List<Class<?>> classes) {
         return classes.stream()
             .flatMap(clazz -> Stream.of(clazz.getDeclaredFields()))
             .map(Field::getName)
@@ -53,7 +55,8 @@ public final class ReflectionUtil {
             .orElse(0);
     }
 
-    public static void forAllFieldsIn(List<Class<?>> classes, Consumer<Field> action) {
+    public static void
+    forAllFieldsIn(List<Class<?>> classes, Consumer<Field> action) {
         for (Class<?> clazz : classes) {
             for (Field field : clazz.getDeclaredFields()) {
                 action.accept(field);
@@ -61,7 +64,8 @@ public final class ReflectionUtil {
         }
     }
 
-    public static Object getFieldValue(Field field, Object obj) {
+    public static Object
+    getFieldValue(Field field, Object obj) {
         try {
             AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
                 field.setAccessible(true);
@@ -73,7 +77,8 @@ public final class ReflectionUtil {
         }
     }
 
-    public static <T> T getFieldValue(Field field, Object obj, Class<T> targetClass) {
+    public static <T> T
+    getFieldValue(Field field, Object obj, Class<T> targetClass) {
         try {
             AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
                 field.setAccessible(true);
@@ -87,7 +92,8 @@ public final class ReflectionUtil {
         }
     }
 
-    public static void setFieldValue(Field field, Object obj, Object value) {
+    public static void
+    setFieldValue(Field field, Object obj, Object value) {
         try {
             AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
                 field.setAccessible(true);

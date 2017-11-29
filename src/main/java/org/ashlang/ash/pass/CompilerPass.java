@@ -29,13 +29,17 @@ import java.util.Objects;
 @FunctionalInterface
 public interface CompilerPass {
 
-    void accept(ErrorHandler errorHandler, SymbolTable symbolTable,
-                TypeMap typeMap, OperatorMap operatorMap,
-                ASTNode node);
+    void accept(
+        ErrorHandler errorHandler,
+        SymbolTable symbolTable,
+        TypeMap typeMap,
+        OperatorMap operatorMap,
+        ASTNode node
+    );
 
-    default CompilerPass andThen(CompilerPass after) {
+    default CompilerPass
+    andThen(CompilerPass after) {
         Objects.requireNonNull(after);
-
         return (eh, st, tm, om, node) -> {
             accept(eh, st, tm, om, node);
             after.accept(eh, st, tm, om, node);

@@ -22,8 +22,11 @@ import org.ashlang.ash.ast.visitor.ASTVisitor;
 
 public class IntExpressionNode extends ExpressionNode {
 
-    public IntExpressionNode(Token startToken, Token stopToken,
-                             SourceProvider sourceProvider) {
+    public IntExpressionNode(
+        Token startToken,
+        Token stopToken,
+        SourceProvider sourceProvider
+    ) {
         super(startToken, stopToken, sourceProvider);
     }
 
@@ -31,12 +34,14 @@ public class IntExpressionNode extends ExpressionNode {
         this(value, value, sourceProvider);
     }
 
-    public Token getValueToken() {
+    public Token
+    getValueToken() {
         return getStartToken();
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitIntExpressionNode(this, argument);
     }
 

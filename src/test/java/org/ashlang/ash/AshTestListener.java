@@ -26,16 +26,19 @@ import java.util.Arrays;
 public class AshTestListener extends TestListenerAdapter {
 
     @Override
-    public void onTestFailure(ITestResult testResult) {
+    public void
+    onTestFailure(ITestResult testResult) {
         log("FAILURE", testResult);
     }
 
     @Override
-    public void onTestSuccess(ITestResult testResult) {
+    public void
+    onTestSuccess(ITestResult testResult) {
         log("SUCCESS", testResult);
     }
 
-    private void log(String status, ITestResult tr) {
+    private void
+    log(String status, ITestResult tr) {
         long millis = tr.getEndMillis() - tr.getStartMillis();
         System.out.printf("  %s[%5dms]: %s%s\n",
             status, millis, tr.getName(), Arrays.toString(tr.getParameters()));

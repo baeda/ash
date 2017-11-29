@@ -33,8 +33,6 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitArgumentNode(ArgumentNode node);
     protected abstract T visitBranchNode(BranchNode node);
 
-    //region statement nodes
-
     protected abstract T visitVarDeclarationStatementNode(VarDeclarationStatementNode node);
     protected abstract T visitVarAssignStatementNode(VarAssignStatementNode node);
     protected abstract T visitBlockStatementNode(BlockStatementNode node);
@@ -42,10 +40,6 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitExpressionStatementNode(ExpressionStatementNode node);
     protected abstract T visitDumpStatementNode(DumpStatementNode node);
     protected abstract T visitReturnStatementNode(ReturnStatementNode node);
-
-    //endregion statement nodes
-
-    //region expression nodes
 
     protected abstract T visitParenExpressionNode(ParenExpressionNode node);
     protected abstract T visitAddExpressionNode(AddExpressionNode node);
@@ -60,13 +54,13 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitIdExpressionNode(IdExpressionNode node);
     protected abstract T visitIntExpressionNode(IntExpressionNode node);
 
-    //endregion expression nodes
-
-    protected T visitChildren(ASTNode node) {
+    protected T
+    visitChildren(ASTNode node) {
         return visitChildren(node, null);
     }
 
-    protected T visit(ASTNode node) {
+    protected T
+    visit(ASTNode node) {
         return visit(node, null);
     }
 

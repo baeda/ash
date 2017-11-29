@@ -27,28 +27,34 @@ public class ReturnStatementNode extends StatementNode {
 
     private Function function;
 
-    public ReturnStatementNode(Token startToken, Token stopToken,
-                               ExpressionNode expression,
-                               SourceProvider sourceProvider) {
+    public ReturnStatementNode(
+        Token startToken,
+        Token stopToken,
+        ExpressionNode expression,
+        SourceProvider sourceProvider
+    ) {
         super(startToken, stopToken, sourceProvider);
-
         this.expression = expression;
     }
 
-    public ExpressionNode getExpression() {
+    public ExpressionNode
+    getExpression() {
         return expression;
     }
 
-    public Function getFunction() {
+    public Function
+    getFunction() {
         return function;
     }
 
-    public void setFunction(Function function) {
+    public void
+    setFunction(Function function) {
         this.function = function;
     }
 
     @Override
-    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
         return visitor.visitReturnStatementNode(this, argument);
     }
 

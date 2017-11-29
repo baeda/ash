@@ -35,16 +35,19 @@ public class UntypedInt extends Type {
         this.value = value;
     }
 
-    public BigInteger getValue() {
+    public BigInteger
+    getValue() {
         return value;
     }
 
-    public boolean isNegative() {
+    public boolean
+    isNegative() {
         return value.signum() < 0;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean
+    equals(Object obj) {
         if (this == obj) {
             return true;
         }
@@ -62,7 +65,8 @@ public class UntypedInt extends Type {
     }
 
     @Override
-    public int hashCode() {
+    public int
+    hashCode() {
         return new HashCodeBuilder(17, 37)
             .appendSuper(super.hashCode())
             .append(value)
@@ -70,7 +74,8 @@ public class UntypedInt extends Type {
     }
 
     @Override
-    public String toString() {
+    public String
+    toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .appendSuper(super.toString())
             .append("value", value)
@@ -78,7 +83,8 @@ public class UntypedInt extends Type {
             .toString();
     }
 
-    private static String createId(BigInteger value) {
+    private static String
+    createId(BigInteger value) {
         String prefix = value.signum() < 0 ? "negative " : "";
         return "<" + prefix + value.bitLength() + "-bit integer>";
     }
