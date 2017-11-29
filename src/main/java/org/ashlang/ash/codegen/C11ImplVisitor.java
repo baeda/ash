@@ -169,49 +169,43 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
     @Override
     protected String
     visitAddExpressionNode(AddExpressionNode node) {
-        String lhs = visit(node.getLhs());
-        String rhs = visit(node.getRhs());
-        return "(" + lhs + "+" + rhs + ")";
+        return visitBinaryExpression(node, "+");
     }
 
     @Override
     protected String
     visitSubExpressionNode(SubExpressionNode node) {
-        String lhs = visit(node.getLhs());
-        String rhs = visit(node.getRhs());
-        return "(" + lhs + "-" + rhs + ")";
+        return visitBinaryExpression(node, "-");
     }
 
     @Override
     protected String
     visitMulExpressionNode(MulExpressionNode node) {
-        String lhs = visit(node.getLhs());
-        String rhs = visit(node.getRhs());
-        return "(" + lhs + "*" + rhs + ")";
+        return visitBinaryExpression(node, "*");
     }
 
     @Override
     protected String
     visitDivExpressionNode(DivExpressionNode node) {
-        String lhs = visit(node.getLhs());
-        String rhs = visit(node.getRhs());
-        return "(" + lhs + "/" + rhs + ")";
+        return visitBinaryExpression(node, "/");
     }
 
     @Override
     protected String
     visitModExpressionNode(ModExpressionNode node) {
-        String lhs = visit(node.getLhs());
-        String rhs = visit(node.getRhs());
-        return "(" + lhs + "%" + rhs + ")";
+        return visitBinaryExpression(node, "%");
     }
 
     @Override
     protected String
     visitEqualsExpressionNode(EqualsExpressionNode node) {
-        String lhs = visit(node.getLhs());
-        String rhs = visit(node.getRhs());
-        return "(" + lhs + "==" + rhs + ")";
+        return visitBinaryExpression(node, "==");
+    }
+
+    @Override
+    protected String
+    visitNotEqualsExpressionNode(NotEqualsExpressionNode node) {
+        return visitBinaryExpression(node, "!=");
     }
 
     @Override
@@ -236,6 +230,13 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
     }
 
     //endregion expression nodes
+
+    private String
+    visitBinaryExpression(BinaryExpressionNode node, String op) {
+        String lhs = visit(node.getLhs());
+        String rhs = visit(node.getRhs());
+        return "(" + lhs + op + rhs + ")";
+    }
 
     @Override
     public String

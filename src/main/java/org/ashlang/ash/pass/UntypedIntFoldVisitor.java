@@ -103,6 +103,13 @@ class UntypedIntFoldVisitor extends ASTVoidBaseVisitor {
         resolveAndFoldTreeToBool(node, cmp -> cmp == 0);
     }
 
+    @Override
+    protected void
+    visitNotEqualsExpressionNode(NotEqualsExpressionNode node) {
+        visitChildren(node);
+        resolveAndFoldTreeToBool(node, cmp -> cmp != 0);
+    }
+
     //endregion expression nodes
 
     private void

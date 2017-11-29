@@ -46,6 +46,7 @@ public class OperatorMap {
             .filter(Types::allValid)
             .forEach(type -> {
                 operation(type, EQUALS, type).resultsIn(BOOL);
+                operation(type, NOT_EQUALS, type).resultsIn(BOOL);
             });
     }
 

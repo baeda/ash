@@ -168,6 +168,12 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
 
     @Override
     public T
+    visitNotEqualsExpressionNode(NotEqualsExpressionNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
+    public T
     visitFuncCallExpressionNode(FuncCallExpressionNode node, A argument) {
         return visitChildren(node, argument);
     }

@@ -80,7 +80,7 @@ expression
     | lhs=expression op=('/'|'*'|'%') rhs=expression #ArithmeticExpression
     | lhs=expression op=('-'|'+')     rhs=expression #ArithmeticExpression
     | lhs=expression
-      op='=='
+      op=('=='|'!=')
       rhs=expression                                 #BoolExpression
     | call=funcCall                                  #FuncCallExpression
     | value=('true'|'false')                         #BoolLiteralExpression
@@ -103,6 +103,7 @@ SEMICOLON : ';' ;
 COLON     : ':' ;
 
 DOUBLE_EQUALS : '==' ;
+BANG_EQUALS   : '!=' ;
 
 KW_FUNC   : 'func'   ;
 KW_RETURN : 'return' ;

@@ -168,6 +168,12 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
 
     @Override
     protected T
+    visitNotEqualsExpressionNode(NotEqualsExpressionNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    protected T
     visitFuncCallExpressionNode(FuncCallExpressionNode node) {
         return visitChildren(node);
     }

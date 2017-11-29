@@ -168,6 +168,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
 
     @Override
     protected void
+    visitNotEqualsExpressionNode(NotEqualsExpressionNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
     visitFuncCallExpressionNode(FuncCallExpressionNode node) {
         visitChildren(node);
     }

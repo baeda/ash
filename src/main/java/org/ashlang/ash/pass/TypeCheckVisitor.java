@@ -234,8 +234,15 @@ class TypeCheckVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitEqualsExpressionNode(EqualsExpressionNode node) {
+    protected void
+    visitEqualsExpressionNode(EqualsExpressionNode node) {
         setResultTypeOfOperation(node, EQUALS);
+    }
+
+    @Override
+    protected void
+    visitNotEqualsExpressionNode(NotEqualsExpressionNode node) {
+        setResultTypeOfOperation(node, NOT_EQUALS);
     }
 
     //endregion expression nodes

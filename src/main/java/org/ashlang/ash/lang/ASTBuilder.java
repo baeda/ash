@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.ashlang.gen.AshLexer.ASTERISK;
+import static org.ashlang.gen.AshLexer.BANG_EQUALS;
 import static org.ashlang.gen.AshLexer.DOUBLE_EQUALS;
 import static org.ashlang.gen.AshLexer.MINUS;
 import static org.ashlang.gen.AshLexer.PERCENT;
@@ -425,6 +426,14 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         switch (ctx.op.getType()) {
             case DOUBLE_EQUALS:
                 node = new EqualsExpressionNode(
+                    lhs,
+                    rhs,
+                    new Token(ctx.op),
+                    sourceProvider
+                );
+                break;
+            case BANG_EQUALS:
+                node = new NotEqualsExpressionNode(
                     lhs,
                     rhs,
                     new Token(ctx.op),

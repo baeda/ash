@@ -39,7 +39,8 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitVarAssignNode(VarAssignNode node) {
+    protected void
+    visitVarAssignNode(VarAssignNode node) {
         visitChildren(node);
 
         if (node.getSymbol() == null) {
@@ -53,7 +54,8 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitFuncCallNode(FuncCallNode node) {
+    protected void
+    visitFuncCallNode(FuncCallNode node) {
         visitChildren(node);
 
         Function func = node.getFunction();
@@ -80,7 +82,8 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
     //region statement nodes
 
     @Override
-    protected void visitDumpStatementNode(DumpStatementNode node) {
+    protected void
+    visitDumpStatementNode(DumpStatementNode node) {
         visitChildren(node);
 
         // resolve parenthesized integer constants, i.e. dump (12);
@@ -139,7 +142,8 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitAddExpressionNode(AddExpressionNode node) {
+    protected void
+    visitAddExpressionNode(AddExpressionNode node) {
         visitChildren(node);
         solidifyUntypedInt(
             node.getLhs(),
@@ -148,7 +152,8 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitSubExpressionNode(SubExpressionNode node) {
+    protected void
+    visitSubExpressionNode(SubExpressionNode node) {
         visitChildren(node);
         solidifyUntypedInt(
             node.getLhs(),
@@ -157,7 +162,8 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitMulExpressionNode(MulExpressionNode node) {
+    protected void
+    visitMulExpressionNode(MulExpressionNode node) {
         visitChildren(node);
         solidifyUntypedInt(
             node.getLhs(),
@@ -166,7 +172,8 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitDivExpressionNode(DivExpressionNode node) {
+    protected void
+    visitDivExpressionNode(DivExpressionNode node) {
         visitChildren(node);
         solidifyUntypedInt(
             node.getLhs(),
@@ -175,7 +182,8 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitModExpressionNode(ModExpressionNode node) {
+    protected void
+    visitModExpressionNode(ModExpressionNode node) {
         visitChildren(node);
         solidifyUntypedInt(
             node.getLhs(),
@@ -184,7 +192,18 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
     }
 
     @Override
-    protected void visitEqualsExpressionNode(EqualsExpressionNode node) {
+    protected void
+    visitEqualsExpressionNode(EqualsExpressionNode node) {
+        visitChildren(node);
+        solidifyUntypedInt(
+            node.getLhs(),
+            node.getRhs()
+        );
+    }
+
+    @Override
+    protected void
+    visitNotEqualsExpressionNode(NotEqualsExpressionNode node) {
         visitChildren(node);
         solidifyUntypedInt(
             node.getLhs(),
@@ -216,7 +235,8 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
 
     //endregion statement nodes
 
-    private void solidifyUntypedInt(Type lhs, ExpressionNode rhsNode) {
+    private void
+    solidifyUntypedInt(Type lhs, ExpressionNode rhsNode) {
         solidifyUntypedIntRight(lhs, rhsNode);
     }
 
@@ -257,7 +277,8 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
         solidify(lhsNode, (UntypedInt) lhs, (IntType) rhs);
     }
 
-    private void solidify(ExpressionNode node, UntypedInt source, IntType target) {
+    private void
+    solidify(ExpressionNode node, UntypedInt source, IntType target) {
         if (source.isNegative()) {
             if (target.isSigned()) {
                 // a : i32 = -45;

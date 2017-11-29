@@ -16,17 +16,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash.type;
+package org.ashlang.ash.ast;
 
-public enum Operator {
+import org.ashlang.ash.ast.visitor.ASTVisitor;
 
-    ADD,
-    SUB,
-    MUL,
-    DIV,
-    MOD,
+public class NotEqualsExpressionNode extends BinaryExpressionNode {
 
-    EQUALS,
-    NOT_EQUALS
+    public NotEqualsExpressionNode(ExpressionNode lhs, ExpressionNode rhs, Token op,
+                                   SourceProvider sourceProvider) {
+        super(lhs, rhs, op, sourceProvider);
+    }
+
+    @Override
+    public <T, A> T accept(ASTVisitor<T, A> visitor, A argument) {
+        return visitor.visitNotEqualsExpressionNode(this, argument);
+    }
 
 }
