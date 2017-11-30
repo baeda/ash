@@ -32,11 +32,13 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitFuncCallNode(FuncCallNode node);
     protected abstract T visitArgumentNode(ArgumentNode node);
     protected abstract T visitBranchNode(BranchNode node);
+    protected abstract T visitWhileLoopNode(WhileLoopNode node);
 
     protected abstract T visitVarDeclarationStatementNode(VarDeclarationStatementNode node);
     protected abstract T visitVarAssignStatementNode(VarAssignStatementNode node);
     protected abstract T visitBlockStatementNode(BlockStatementNode node);
     protected abstract T visitBranchStatementNode(BranchStatementNode node);
+    protected abstract T visitWhileLoopStatementNode(WhileLoopStatementNode node);
     protected abstract T visitExpressionStatementNode(ExpressionStatementNode node);
     protected abstract T visitDumpStatementNode(DumpStatementNode node);
     protected abstract T visitReturnStatementNode(ReturnStatementNode node);
@@ -124,6 +126,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
         return visitBranchNode(node);
     }
 
+    @Override
+    public final T
+    visitWhileLoopNode(WhileLoopNode node, Void argument) {
+        return visitWhileLoopNode(node);
+    }
+
     //region statement nodes
 
     @Override
@@ -148,6 +156,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     public final T
     visitBranchStatementNode(BranchStatementNode node, Void argument) {
         return visitBranchStatementNode(node);
+    }
+
+    @Override
+    public final T
+    visitWhileLoopStatementNode(WhileLoopStatementNode node, Void argument) {
+        return visitWhileLoopStatementNode(node);
     }
 
     @Override

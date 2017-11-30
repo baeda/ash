@@ -22,6 +22,7 @@ public interface CompilerPasses {
 
     CompilerPass SYMBOL_CHECK_PASS = (eh, st, tm, om, node) -> {
         new SymbolRecordVisitor(eh, st).visit(node, null);
+        new StatementCheckPass(eh).visit(node);
         new SymbolCheckVisitor(eh, st).visit(node, null);
     };
 

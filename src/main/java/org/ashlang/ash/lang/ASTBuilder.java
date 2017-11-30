@@ -243,6 +243,25 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
         );
     }
 
+    @Override
+    public WhileLoopNode
+    visitWhileLoop(WhileLoopContext ctx) {
+        ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
+        StatementNode statement = (StatementNode) visit(ctx.stmt);
+
+        return setParent(
+            new WhileLoopNode(
+                new Token(ctx.start),
+                new Token(ctx.stop),
+                expression,
+                statement,
+                sourceProvider
+            ),
+            expression,
+            statement
+        );
+    }
+
     //region statement nodes
 
     @Override
@@ -312,6 +331,20 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
                 sourceProvider
             ),
             branch
+        );
+    }
+
+    @Override
+    public WhileLoopStatementNode
+    visitWhileLoopStatement(WhileLoopStatementContext ctx) {
+        WhileLoopNode whileLoop = visitWhileLoop(ctx.ref);
+
+        return setParent(
+            new WhileLoopStatementNode(
+                whileLoop,
+                sourceProvider
+            ),
+            whileLoop
         );
     }
 

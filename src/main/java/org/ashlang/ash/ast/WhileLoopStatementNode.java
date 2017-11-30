@@ -16,31 +16,34 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.ashlang.ash;
+package org.ashlang.ash.ast;
 
-enum ErrorType {
+import org.ashlang.ash.ast.visitor.ASTVisitor;
 
-    UNKNOWN_TOKEN,
-    MISSING_TOKEN,
-    INPUT_MISMATCH,
-    INVALID_TYPE,
-    TYPE_MISMATCH,
-    INVALID_OPERATOR,
-    SYMBOL_ALREADY_DECLARED,
-    SYMBOL_NOT_DECLARED,
-    SYMBOL_NOT_INITIALIZED,
-    SYMBOL_NOT_USED,
-    SYMBOL_INITIALIZED_BUT_NOT_USED,
-    FUNCTION_ALREADY_DECLARED,
-    FUNCTION_NOT_DECLARED,
-    FUNCTION_ARGUMENT_COUNT_MISMATCH,
-    ILLEGAL_STATEMENT,
-    DECLARATION_NOT_ALLOWED_HERE,
-    MISSING_RETURN_STATEMENT,
-    UNREACHABLE_STATEMENT,
-    DIV_BY_ZERO,
-    INT_CONST_OVERFLOW,
-    INT_CONST_UNDERFLOW,
-    NO_ENTRY_POINT
+public class WhileLoopStatementNode extends StatementNode {
+
+    private final WhileLoopNode whileLoop;
+
+    public WhileLoopStatementNode(
+        WhileLoopNode whileLoop,
+        SourceProvider sourceProvider
+    ) {
+        super(
+            whileLoop.getStartToken(),
+            whileLoop.getStopToken(),
+            sourceProvider
+        );
+        this.whileLoop = whileLoop;
+    }
+
+    public WhileLoopNode getWhileLoop() {
+        return whileLoop;
+    }
+
+    @Override
+    public <T, A> T
+    accept(ASTVisitor<T, A> visitor, A argument) {
+        return visitor.visitWhileLoopStatementNode(this, argument);
+    }
 
 }

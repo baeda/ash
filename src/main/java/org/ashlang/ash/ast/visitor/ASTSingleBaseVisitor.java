@@ -76,6 +76,12 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
         return visitChildren(node);
     }
 
+    @Override
+    protected T
+    visitWhileLoopNode(WhileLoopNode node) {
+        return visitChildren(node);
+    }
+
     //region statement nodes
 
     @Override
@@ -99,6 +105,12 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
     @Override
     protected T
     visitBranchStatementNode(BranchStatementNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    protected T
+    visitWhileLoopStatementNode(WhileLoopStatementNode node) {
         return visitChildren(node);
     }
 

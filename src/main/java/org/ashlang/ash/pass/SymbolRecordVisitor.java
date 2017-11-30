@@ -157,20 +157,52 @@ class SymbolRecordVisitor extends ASTBaseVisitor<Void, Function> {
         return null;
     }
 
-    //region statement nodes
-
     @Override
     public Void
-    visitExpressionStatementNode(ExpressionStatementNode node, Function func) {
-        visitChildren(node, func);
+    visitBranchNode(BranchNode node, Function func) {
+        visit(node.getExpression(), func);
 
-        ExpressionNode expression = node.getExpression();
-        if (!(expression instanceof FuncCallExpressionNode)) {
-            errorHandler.emitIllegalStatement(node);
-        }
+        visitInExtraScopeIfNotBlockStatement(node.getOnTrue(), func);
+        visitInExtraScopeIfNotBlockStatement(node.getOnFalse(), func);
 
         return null;
     }
+
+    @Override
+    public Void
+    visitWhileLoopNode(WhileLoopNode node, Function func) {
+        visit(node.getExpression(), func);
+
+        visitInExtraScopeIfNotBlockStatement(node.getBody(), func);
+
+        return null;
+    }
+
+    private void visitInExtraScopeIfNotBlockStatement(StatementNode body, Function func) {
+        //
+        // We create an explicit scope here, to be able to generate
+        // reliable and meaningful error messages for situations like:
+        //
+        // while (true)
+        //     i : i32; // <--- 'declaration not allowed here' error
+        // dump i;      // <--- 'symbol not declared' error
+        //
+        // Without the extra scope for the loop-body, we would not produce the
+        // 'symbol not declared' error in a natural way.
+        //
+        // Scopes are only generated for statement nodes that are not blocks,
+        // since block statements declare their own scope in the symbol-table.
+        //
+        if (!(body instanceof BlockStatementNode)) {
+            symbolTable.pushScope();
+        }
+        visit(body, func);
+        if (!(body instanceof BlockStatementNode)) {
+            symbolTable.popScope(body);
+        }
+    }
+
+    //region statement nodes
 
     @Override
     public Void
@@ -181,7 +213,6 @@ class SymbolRecordVisitor extends ASTBaseVisitor<Void, Function> {
 
         return null;
     }
-
 
     //endregion statement nodes
 

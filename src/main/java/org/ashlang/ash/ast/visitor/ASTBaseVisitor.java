@@ -76,6 +76,12 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
         return visitChildren(node, argument);
     }
 
+    @Override
+    public T
+    visitWhileLoopNode(WhileLoopNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
     //region statement nodes
 
     @Override
@@ -99,6 +105,12 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
     @Override
     public T
     visitBranchStatementNode(BranchStatementNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
+    public T
+    visitWhileLoopStatementNode(WhileLoopStatementNode node, A argument) {
         return visitChildren(node, argument);
     }
 

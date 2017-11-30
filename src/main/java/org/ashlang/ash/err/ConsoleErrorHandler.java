@@ -195,6 +195,13 @@ public class ConsoleErrorHandler implements ErrorHandler {
 
     @Override
     public void
+    emitDeclarationNotAllowed(TokenRange pos) {
+        emit(pos, "declaration not allowed here");
+        numSemanticErrors++;
+    }
+
+    @Override
+    public void
     emitMissingReturnStatement(Token pos) {
         emit(pos, "missing return statement");
         numSemanticErrors++;

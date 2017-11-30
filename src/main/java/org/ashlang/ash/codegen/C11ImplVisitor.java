@@ -120,6 +120,15 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
         return "if(" + expression + ")" + onTrue + " else " + onFalse;
     }
 
+    @Override
+    protected String
+    visitWhileLoopNode(WhileLoopNode node) {
+        String expression = visit(node.getExpression());
+        String body = visit(node.getBody());
+
+        return "while (" + expression + ")" + body;
+    }
+
     //region statement nodes
 
     @Override

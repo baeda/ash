@@ -525,7 +525,49 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void missingReturnStatement() {
+    public void
+    declarationNotAllowedHere_branch() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    if (true)",
+            "        i : i32;",
+            "}")
+            .hasError(DECLARATION_NOT_ALLOWED_HERE).at(4, 9)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void
+    declarationNotAllowedHere_whileLoop() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    while (true)",
+            "        i : i32;",
+            "}")
+            .hasError(DECLARATION_NOT_ALLOWED_HERE).at(4, 9)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void
+    declarationNotAllowedHere_symbolNotDeclared() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    while (true)",
+            "        i : i32;",
+            "    dump i;",
+            "}")
+            .hasError(DECLARATION_NOT_ALLOWED_HERE).at(4, 9)
+            .hasError(SYMBOL_NOT_DECLARED).at(5, 10)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void
+    missingReturnStatement() {
         assertThat(
             "func rnd() : i32 {}",
             "func main() : void {}")
@@ -534,7 +576,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void missingReturnStatement_inBranch() {
+    public void
+    missingReturnStatement_inBranch() {
         assertThat(
             "func rnd() : i32",
             "{",
@@ -548,7 +591,8 @@ public class CompilerErrorTest {
     }
 
     @Test
-    public void unreachableStatement() {
+    public void
+    unreachableStatement() {
         assertThat(
             "func main() : void",
             "{",
@@ -629,7 +673,8 @@ public class CompilerErrorTest {
     }
 
     @Test(enabled = false) /* negative integer constants not yet implemented */
-    public void intConstUnderflow_i32Constant() {
+    public void
+    intConstUnderflow_i32Constant() {
         assertThat(
             "func main() : void",
             "{",
@@ -643,7 +688,8 @@ public class CompilerErrorTest {
 
 
     @Test(enabled = false) /* negative integer constants not yet implemented */
-    public void intConstUnderflow_u32Constant() {
+    public void
+    intConstUnderflow_u32Constant() {
         assertThat(
             "func main() : void",
             "{",

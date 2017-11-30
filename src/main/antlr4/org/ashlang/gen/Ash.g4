@@ -65,11 +65,16 @@ branch
                            'else' onFalse=statement #TwoArmedBranch
     ;
 
+whileLoop
+    : 'while' '(' expr=expression ')' stmt=statement
+    ;
+
 statement
     : ref=varDeclaration        ';' #VarDeclarationStatement
     | ref=varAssign             ';' #VarAssignStatement
     | ref=block                     #BlockStatement
     | ref=branch                    #BranchStatement
+    | ref=whileLoop                 #WhileLoopStatement
     | expr=expression           ';' #ExpressionStatement
     | 'return' expr=expression? ';' #ReturnStatement
     | 'dump' expr=expression    ';' #DumpStatement
@@ -113,6 +118,7 @@ KW_FUNC   : 'func'   ;
 KW_RETURN : 'return' ;
 KW_IF     : 'if'     ;
 KW_ELSE   : 'else'   ;
+KW_WHILE  : 'while'  ;
 KW_DUMP   : 'dump'   ;
 KW_TRUE   : 'true'   ;
 KW_FALSE  : 'false'  ;

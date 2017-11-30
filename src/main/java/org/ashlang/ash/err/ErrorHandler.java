@@ -44,6 +44,7 @@ public interface ErrorHandler {
     void emitFunctionArgumentCountMismatch(TokenRange pos, int have, int want);
 
     void emitIllegalStatement(TokenRange pos);
+    void emitDeclarationNotAllowed(TokenRange pos);
     void emitMissingReturnStatement(Token pos);
     void emitUnreachableStatement(TokenRange pos);
 

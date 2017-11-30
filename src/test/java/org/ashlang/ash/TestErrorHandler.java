@@ -150,6 +150,12 @@ class TestErrorHandler implements ErrorHandler {
 
     @Override
     public void
+    emitDeclarationNotAllowed(TokenRange pos) {
+        addError(DECLARATION_NOT_ALLOWED_HERE, pos.getStartToken());
+    }
+
+    @Override
+    public void
     emitMissingReturnStatement(Token pos) {
         addError(MISSING_RETURN_STATEMENT, pos);
     }
