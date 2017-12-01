@@ -34,6 +34,8 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitArgumentNode(ArgumentNode node);
     protected abstract T visitBranchNode(BranchNode node);
     protected abstract T visitWhileLoopNode(WhileLoopNode node);
+    protected abstract T visitForLoopNode(ForLoopNode node);
+    protected abstract T visitForLoopActionNode(ForLoopActionNode node);
 
     protected abstract T visitVarDeclarationStatementNode(VarDeclarationStatementNode node);
     protected abstract T visitVarAssignStatementNode(VarAssignStatementNode node);
@@ -41,6 +43,7 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitBlockStatementNode(BlockStatementNode node);
     protected abstract T visitBranchStatementNode(BranchStatementNode node);
     protected abstract T visitWhileLoopStatementNode(WhileLoopStatementNode node);
+    protected abstract T visitForLoopStatementNode(ForLoopStatementNode node);
     protected abstract T visitExpressionStatementNode(ExpressionStatementNode node);
     protected abstract T visitDumpStatementNode(DumpStatementNode node);
     protected abstract T visitReturnStatementNode(ReturnStatementNode node);
@@ -140,6 +143,18 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
         return visitWhileLoopNode(node);
     }
 
+    @Override
+    public final T
+    visitForLoopNode(ForLoopNode node, Void argument) {
+        return visitForLoopNode(node);
+    }
+
+    @Override
+    public final T
+    visitForLoopActionNode(ForLoopActionNode node, Void argument) {
+        return visitForLoopActionNode(node);
+    }
+
     //region statement nodes
 
     @Override
@@ -176,6 +191,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     public final T
     visitWhileLoopStatementNode(WhileLoopStatementNode node, Void argument) {
         return visitWhileLoopStatementNode(node);
+    }
+
+    @Override
+    public final T
+    visitForLoopStatementNode(ForLoopStatementNode node, Void argument) {
+        return visitForLoopStatementNode(node);
     }
 
     @Override

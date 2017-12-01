@@ -47,6 +47,11 @@ varDeclAssign
     : id=IDENTIFIER ':' type=IDENTIFIER '=' value=expression
     ;
 
+varDecl
+    : varDeclaration
+    | varDeclAssign
+    ;
+
 block
     : '{' statements+=statement* '}'
     ;
@@ -70,7 +75,17 @@ branch
     ;
 
 whileLoop
-    : 'while' '(' expr=expression ')' stmt=statement
+    : 'while' '(' expr=expression ')' body=statement
+    ;
+
+forLoop
+    : 'for' '(' decl=varDecl ';' cond=expression ';' action=forLoopAction ')'
+      body=statement
+    ;
+
+forLoopAction
+    : expr=expression
+    | assign=varAssign
     ;
 
 statement
@@ -80,6 +95,7 @@ statement
     | ref=block                     #BlockStatement
     | ref=branch                    #BranchStatement
     | ref=whileLoop                 #WhileLoopStatement
+    | ref=forLoop                   #ForLoopStatement
     | expr=expression           ';' #ExpressionStatement
     | 'return' expr=expression? ';' #ReturnStatement
     | 'dump' expr=expression    ';' #DumpStatement
@@ -124,6 +140,7 @@ KW_RETURN : 'return' ;
 KW_IF     : 'if'     ;
 KW_ELSE   : 'else'   ;
 KW_WHILE  : 'while'  ;
+KW_FOR    : 'for'    ;
 KW_DUMP   : 'dump'   ;
 KW_TRUE   : 'true'   ;
 KW_FALSE  : 'false'  ;

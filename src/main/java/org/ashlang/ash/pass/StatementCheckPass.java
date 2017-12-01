@@ -57,6 +57,18 @@ class StatementCheckPass extends ASTVoidBaseVisitor {
         }
     }
 
+    @Override
+    protected void visitForLoopActionNode(ForLoopActionNode node) {
+        ExpressionNode expression = node.getExpression();
+        if (expression == null) {
+            return;
+        }
+
+        if (!(expression instanceof FuncCallExpressionNode)) {
+            errorHandler.emitIllegalStatement(expression);
+        }
+    }
+
     private void
     markSymbolAsValidAndEmitError(StatementNode onTrue) {
         VarDeclarationStatementNode varDeclStmt =

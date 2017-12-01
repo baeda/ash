@@ -34,6 +34,8 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     protected abstract void visitArgumentNode(ArgumentNode node);
     protected abstract void visitBranchNode(BranchNode node);
     protected abstract void visitWhileLoopNode(WhileLoopNode node);
+    protected abstract void visitForLoopNode(ForLoopNode node);
+    protected abstract void visitForLoopActionNode(ForLoopActionNode node);
 
     protected abstract void visitVarDeclarationStatementNode(VarDeclarationStatementNode node);
     protected abstract void visitVarAssignStatementNode(VarAssignStatementNode node);
@@ -41,6 +43,7 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     protected abstract void visitBlockStatementNode(BlockStatementNode node);
     protected abstract void visitBranchStatementNode(BranchStatementNode node);
     protected abstract void visitWhileLoopStatementNode(WhileLoopStatementNode node);
+    protected abstract void visitForLoopStatementNode(ForLoopStatementNode node);
     protected abstract void visitExpressionStatementNode(ExpressionStatementNode node);
     protected abstract void visitDumpStatementNode(DumpStatementNode node);
     protected abstract void visitReturnStatementNode(ReturnStatementNode node);
@@ -151,6 +154,20 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
         return null;
     }
 
+    @Override
+    public final Void
+    visitForLoopNode(ForLoopNode node, Void argument) {
+        visitForLoopNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
+    visitForLoopActionNode(ForLoopActionNode node, Void argument) {
+        visitForLoopActionNode(node);
+        return null;
+    }
+
     //region statement nodes
 
     @Override
@@ -192,6 +209,13 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     public final Void
     visitWhileLoopStatementNode(WhileLoopStatementNode node, Void argument) {
         visitWhileLoopStatementNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
+    visitForLoopStatementNode(ForLoopStatementNode node, Void argument) {
+        visitForLoopStatementNode(node);
         return null;
     }
 

@@ -6,15 +6,12 @@ func fibonacci(n : u64) : u64
 
     res  : u64 = 1;
     prev : u64 = 1;
-    i    : u64 = 2;
 
-    while (i < n) {
+    for (i : u64 = 2; i < n; i = i + 1) {
         tmp : u64 = res;
 
         res = res + prev;
         prev = tmp;
-
-        i = i + 1;
     }
 
     return res;

@@ -41,6 +41,8 @@ public interface ASTVisitor<T, A> {
     T visitArgumentNode(ArgumentNode node, A argument);
     T visitBranchNode(BranchNode node, A argument);
     T visitWhileLoopNode(WhileLoopNode node, A argument);
+    T visitForLoopNode(ForLoopNode node, A argument);
+    T visitForLoopActionNode(ForLoopActionNode node, A argument);
 
     T visitVarDeclarationStatementNode(VarDeclarationStatementNode node, A argument);
     T visitVarAssignStatementNode(VarAssignStatementNode node, A argument);
@@ -48,6 +50,7 @@ public interface ASTVisitor<T, A> {
     T visitBlockStatementNode(BlockStatementNode node, A argument);
     T visitBranchStatementNode(BranchStatementNode node, A argument);
     T visitWhileLoopStatementNode(WhileLoopStatementNode node, A argument);
+    T visitForLoopStatementNode(ForLoopStatementNode node, A argument);
     T visitExpressionStatementNode(ExpressionStatementNode node, A argument);
     T visitReturnStatementNode(ReturnStatementNode node, A argument);
     T visitDumpStatementNode(DumpStatementNode node, A argument);

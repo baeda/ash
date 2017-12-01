@@ -262,18 +262,59 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     public WhileLoopNode
     visitWhileLoop(WhileLoopContext ctx) {
         ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
-        StatementNode statement = (StatementNode) visit(ctx.stmt);
+        StatementNode body = (StatementNode) visit(ctx.body);
 
         return setParent(
             new WhileLoopNode(
                 new Token(ctx.start),
                 new Token(ctx.stop),
                 expression,
-                statement,
+                body,
                 sourceProvider
             ),
             expression,
-            statement
+            body
+        );
+    }
+
+    @Override
+    public ForLoopNode
+    visitForLoop(ForLoopContext ctx) {
+        DeclarationNode declaration = (DeclarationNode) visit(ctx.decl);
+        ExpressionNode condition = (ExpressionNode) visit(ctx.cond);
+        ForLoopActionNode action = (ForLoopActionNode) visit(ctx.action);
+        StatementNode body = (StatementNode) visit(ctx.body);
+
+        return setParent(
+            new ForLoopNode(
+                new Token(ctx.start),
+                declaration,
+                condition,
+                action,
+                body,
+                sourceProvider
+            ),
+            declaration,
+            condition,
+            action,
+            body
+        );
+    }
+
+    @Override
+    public ForLoopActionNode
+    visitForLoopAction(ForLoopActionContext ctx) {
+        VarAssignNode varAssign = (VarAssignNode) visit(ctx.assign);
+        ExpressionNode expression = (ExpressionNode) visit(ctx.expr);
+
+        return setParent(
+            new ForLoopActionNode(
+                varAssign,
+                expression,
+                sourceProvider
+            ),
+            varAssign,
+            expression
         );
     }
 
@@ -374,6 +415,20 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
                 sourceProvider
             ),
             whileLoop
+        );
+    }
+
+    @Override
+    public ForLoopStatementNode
+    visitForLoopStatement(ForLoopStatementContext ctx) {
+        ForLoopNode forLoop = visitForLoop(ctx.ref);
+
+        return setParent(
+            new ForLoopStatementNode(
+                forLoop,
+                sourceProvider
+            ),
+            forLoop
         );
     }
 

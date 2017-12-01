@@ -540,6 +540,30 @@ public class CompilerErrorTest {
 
     @Test
     public void
+    illegalStatement_forAction_arithmeticExpression() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    for (i : i32 = 0; i < 1; i + 1) {}",
+            "}")
+            .hasError(ILLEGAL_STATEMENT).at(3, 30)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void
+    illegalStatement_forAction_identifierExpression() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    for (i : i32 = 0; i < 1; i) {}",
+            "}")
+            .hasError(ILLEGAL_STATEMENT).at(3, 30)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void
     declarationNotAllowedHere_branch() {
         assertThat(
             "func main() : void",
