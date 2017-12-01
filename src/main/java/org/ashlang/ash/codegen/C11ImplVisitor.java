@@ -96,6 +96,15 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
 
     @Override
     protected String
+    visitVarDeclAssignNode(VarDeclAssignNode node) {
+        Symbol symbol = node.getSymbol();
+        String cType = typeMap.getType(symbol.getType());
+        String expression = visit(node.getExpression());
+        return cType + " " + symbol.getIdentifier() + " = " + expression;
+    }
+
+    @Override
+    protected String
     visitBlockNode(BlockNode node) {
         return "{\n" + visitChildren(node) + "}\n";
     }
@@ -140,6 +149,12 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
     @Override
     protected String
     visitVarAssignStatementNode(VarAssignStatementNode node) {
+        return visitChildren(node) + ";\n";
+    }
+
+    @Override
+    protected String
+    visitVarDeclAssignStatementNode(VarDeclAssignStatementNode node) {
         return visitChildren(node) + ";\n";
     }
 

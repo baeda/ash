@@ -54,6 +54,12 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
 
     @Override
     protected T
+    visitVarDeclAssignNode(VarDeclAssignNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    protected T
     visitBlockNode(BlockNode node) {
         return visitChildren(node);
     }
@@ -93,6 +99,12 @@ public class ASTSingleBaseVisitor<T> extends ASTSingleVisitor<T> {
     @Override
     protected T
     visitVarAssignStatementNode(VarAssignStatementNode node) {
+        return visitChildren(node);
+    }
+
+    @Override
+    protected T
+    visitVarDeclAssignStatementNode(VarDeclAssignStatementNode node) {
         return visitChildren(node);
     }
 

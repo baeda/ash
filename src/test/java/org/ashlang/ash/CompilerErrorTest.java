@@ -200,6 +200,20 @@ public class CompilerErrorTest {
 
     @Test
     public void
+    symbolAlreadyDeclared_declAssign() {
+        assertThat(
+            "func main() : void",
+            "{",
+            "    a : i32 = 0;",
+            "    a : i32 = 0;",
+            "}")
+            .hasError(SYMBOL_ALREADY_DECLARED).at(4, 5)
+            .hasError(SYMBOL_INITIALIZED_BUT_NOT_USED).at(3, 5)
+            .hasNoMoreErrors();
+    }
+
+    @Test
+    public void
     symbolAlreadyDeclared_inNewScope() {
         assertThat(
             "func main() : void",

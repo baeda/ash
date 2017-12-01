@@ -43,6 +43,10 @@ varAssign
     : id=IDENTIFIER '=' value=expression
     ;
 
+varDeclAssign
+    : id=IDENTIFIER ':' type=IDENTIFIER '=' value=expression
+    ;
+
 block
     : '{' statements+=statement* '}'
     ;
@@ -72,6 +76,7 @@ whileLoop
 statement
     : ref=varDeclaration        ';' #VarDeclarationStatement
     | ref=varAssign             ';' #VarAssignStatement
+    | ref=varDeclAssign         ';' #VarDeclAssignStatement
     | ref=block                     #BlockStatement
     | ref=branch                    #BranchStatement
     | ref=whileLoop                 #WhileLoopStatement

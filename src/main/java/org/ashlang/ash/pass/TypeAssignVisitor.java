@@ -77,6 +77,16 @@ class TypeAssignVisitor extends ASTVoidBaseVisitor {
         node.setType(type);
     }
 
+    @Override
+    protected void
+    visitVarDeclAssignNode(VarDeclAssignNode node) {
+        visitChildren(node);
+
+        String typeString = node.getTypeToken().getText();
+        Type type = typeMap.resolve(typeString);
+        node.setType(type);
+    }
+
     //region expression nodes
 
     @Override

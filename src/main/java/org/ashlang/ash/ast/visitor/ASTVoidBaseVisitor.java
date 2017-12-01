@@ -54,6 +54,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
 
     @Override
     protected void
+    visitVarDeclAssignNode(VarDeclAssignNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
     visitBlockNode(BlockNode node) {
         visitChildren(node);
     }
@@ -93,6 +99,12 @@ public class ASTVoidBaseVisitor extends ASTVoidVisitor {
     @Override
     protected void
     visitVarAssignStatementNode(VarAssignStatementNode node) {
+        visitChildren(node);
+    }
+
+    @Override
+    protected void
+    visitVarDeclAssignStatementNode(VarDeclAssignStatementNode node) {
         visitChildren(node);
     }
 

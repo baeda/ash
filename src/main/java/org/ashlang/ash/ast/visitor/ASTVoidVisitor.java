@@ -28,6 +28,7 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     protected abstract void visitParamDeclarationNode(ParamDeclarationNode node);
     protected abstract void visitVarDeclarationNode(VarDeclarationNode node);
     protected abstract void visitVarAssignNode(VarAssignNode node);
+    protected abstract void visitVarDeclAssignNode(VarDeclAssignNode node);
     protected abstract void visitBlockNode(BlockNode node);
     protected abstract void visitFuncCallNode(FuncCallNode node);
     protected abstract void visitArgumentNode(ArgumentNode node);
@@ -36,6 +37,7 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
 
     protected abstract void visitVarDeclarationStatementNode(VarDeclarationStatementNode node);
     protected abstract void visitVarAssignStatementNode(VarAssignStatementNode node);
+    protected abstract void visitVarDeclAssignStatementNode(VarDeclAssignStatementNode node);
     protected abstract void visitBlockStatementNode(BlockStatementNode node);
     protected abstract void visitBranchStatementNode(BranchStatementNode node);
     protected abstract void visitWhileLoopStatementNode(WhileLoopStatementNode node);
@@ -109,6 +111,13 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
 
     @Override
     public final Void
+    visitVarDeclAssignNode(VarDeclAssignNode node, Void argument) {
+        visitVarDeclAssignNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
     visitBlockNode(BlockNode node, Void argument) {
         visitBlockNode(node);
         return null;
@@ -155,6 +164,13 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void, Void> {
     public final Void
     visitVarAssignStatementNode(VarAssignStatementNode node, Void argument) {
         visitVarAssignStatementNode(node);
+        return null;
+    }
+
+    @Override
+    public final Void
+    visitVarDeclAssignStatementNode(VarDeclAssignStatementNode node, Void argument) {
+        visitVarDeclAssignStatementNode(node);
         return null;
     }
 

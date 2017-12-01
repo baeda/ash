@@ -135,6 +135,21 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
     }
 
     @Override
+    public VarDeclAssignNode
+    visitVarDeclAssign(VarDeclAssignContext ctx) {
+        ExpressionNode expression = (ExpressionNode) visit(ctx.value);
+        return setParent(
+            new VarDeclAssignNode(
+                new Token(ctx.id),
+                new Token(ctx.type),
+                expression,
+                sourceProvider
+            ),
+            expression
+        );
+    }
+
+    @Override
     public BlockNode
     visitBlock(BlockContext ctx) {
         List<StatementNode> statements = ctx.statements.stream()
@@ -303,6 +318,20 @@ public class ASTBuilder extends AshBaseVisitor<ASTNode> {
                 sourceProvider
             ),
             varAssign
+        );
+    }
+
+    @Override
+    public VarDeclAssignStatementNode
+    visitVarDeclAssignStatement(VarDeclAssignStatementContext ctx) {
+        VarDeclAssignNode varDeclAssign = visitVarDeclAssign(ctx.ref);
+        return setParent(
+            new VarDeclAssignStatementNode(
+                varDeclAssign,
+                new Token(ctx.stop),
+                sourceProvider
+            ),
+            varDeclAssign
         );
     }
 

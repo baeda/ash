@@ -28,6 +28,7 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     protected abstract T visitParamDeclarationNode(ParamDeclarationNode node);
     protected abstract T visitVarDeclarationNode(VarDeclarationNode node);
     protected abstract T visitVarAssignNode(VarAssignNode node);
+    protected abstract T visitVarDeclAssignNode(VarDeclAssignNode node);
     protected abstract T visitBlockNode(BlockNode node);
     protected abstract T visitFuncCallNode(FuncCallNode node);
     protected abstract T visitArgumentNode(ArgumentNode node);
@@ -36,6 +37,7 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
 
     protected abstract T visitVarDeclarationStatementNode(VarDeclarationStatementNode node);
     protected abstract T visitVarAssignStatementNode(VarAssignStatementNode node);
+    protected abstract T visitVarDeclAssignStatementNode(VarDeclAssignStatementNode node);
     protected abstract T visitBlockStatementNode(BlockStatementNode node);
     protected abstract T visitBranchStatementNode(BranchStatementNode node);
     protected abstract T visitWhileLoopStatementNode(WhileLoopStatementNode node);
@@ -104,6 +106,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
 
     @Override
     public final T
+    visitVarDeclAssignNode(VarDeclAssignNode node, Void argument) {
+        return visitVarDeclAssignNode(node);
+    }
+
+    @Override
+    public final T
     visitBlockNode(BlockNode node, Void argument) {
         return visitBlockNode(node);
     }
@@ -144,6 +152,12 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
     public final T
     visitVarAssignStatementNode(VarAssignStatementNode node, Void argument) {
         return visitVarAssignStatementNode(node);
+    }
+
+    @Override
+    public final T
+    visitVarDeclAssignStatementNode(VarDeclAssignStatementNode node, Void argument) {
+        return visitVarDeclAssignStatementNode(node);
     }
 
     @Override

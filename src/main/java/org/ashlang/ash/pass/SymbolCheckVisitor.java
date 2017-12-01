@@ -87,6 +87,21 @@ class SymbolCheckVisitor extends ASTBaseVisitor<Void, Set<Symbol>> {
 
     @Override
     public Void
+    visitVarDeclAssignNode(VarDeclAssignNode node, Set<Symbol> symbols) {
+        visitChildren(node, symbols);
+
+        Symbol symbol = node.getSymbol();
+        if (symbols != null) {
+            symbols.add(symbol);
+        }
+
+        symbol.initialize();
+
+        return null;
+    }
+
+    @Override
+    public Void
     visitBlockNode(BlockNode node, Set<Symbol> symbols) {
         visitChildren(node, symbols);
 

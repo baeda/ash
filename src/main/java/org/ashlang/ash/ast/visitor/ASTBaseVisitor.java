@@ -54,6 +54,12 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
 
     @Override
     public T
+    visitVarDeclAssignNode(VarDeclAssignNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
+    public T
     visitBlockNode(BlockNode node, A argument) {
         return visitChildren(node, argument);
     }
@@ -93,6 +99,12 @@ public class ASTBaseVisitor<T, A> implements ASTVisitor<T, A> {
     @Override
     public T
     visitVarAssignStatementNode(VarAssignStatementNode node, A argument) {
+        return visitChildren(node, argument);
+    }
+
+    @Override
+    public T
+    visitVarDeclAssignStatementNode(VarDeclAssignStatementNode node, A argument) {
         return visitChildren(node, argument);
     }
 

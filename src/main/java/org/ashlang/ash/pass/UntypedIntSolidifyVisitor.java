@@ -53,6 +53,15 @@ class UntypedIntSolidifyVisitor extends ASTVoidBaseVisitor {
 
     @Override
     protected void
+    visitVarDeclAssignNode(VarDeclAssignNode node) {
+        visitChildren(node);
+
+        Symbol symbol = node.getSymbol();
+        solidifyUntypedInt(symbol.getType(), node.getExpression());
+    }
+
+    @Override
+    protected void
     visitFuncCallNode(FuncCallNode node) {
         visitChildren(node);
 

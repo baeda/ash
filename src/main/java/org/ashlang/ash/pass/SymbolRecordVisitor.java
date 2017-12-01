@@ -126,6 +126,24 @@ class SymbolRecordVisitor extends ASTBaseVisitor<Void, Function> {
 
     @Override
     public Void
+    visitVarDeclAssignNode(VarDeclAssignNode node, Function func) {
+        visitChildren(node, func);
+
+        Symbol symbol = symbolTable.getDeclaredSymbol(node);
+        if (symbol != null) {
+            errorHandler.emitSymbolAlreadyDeclared(
+                node.getIdentifierToken(),
+                symbol.getDeclSite().getIdentifierToken());
+        } else {
+            symbol = symbolTable.declareSymbol(node);
+        }
+
+        node.setSymbol(symbol);
+        return null;
+    }
+
+    @Override
+    public Void
     visitBlockNode(BlockNode node, Function func) {
         symbolTable.pushScope();
 
