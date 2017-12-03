@@ -28,6 +28,9 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Scanner;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public final class IOUtil {
 
@@ -46,6 +49,24 @@ public final class IOUtil {
         }
 
         String[] versionStrings = gccVersion.getOut().split("\\.");
+
+        return new Version(
+            safeToInt(versionStrings, 0),
+            safeToInt(versionStrings, 1),
+            safeToInt(versionStrings, 2)
+        );
+    }
+
+    public static Version
+    javacVersion() {
+        ExecResult javacVersion = IOUtil.exec("javac", "-version");
+        if (javacVersion.isExceptional()) {
+            System.err.println(javacVersion.getException().getMessage());
+            return null;
+        }
+        String combinedOut = javacVersion.getOut() + javacVersion.getErr();
+        String rawVersion = combinedOut.replaceAll("javac", "").trim();
+        String[] versionStrings = rawVersion.split("\\.");
 
         return new Version(
             safeToInt(versionStrings, 0),
@@ -97,11 +118,17 @@ public final class IOUtil {
         Process process = null;
         try {
             process = Runtime.getRuntime().exec(cmd, null, dir);
+
+            Future<String> fOut
+                = IOUtil.asyncExhaustiveReadStreamUTF8(process.getInputStream());
+            Future<String> fErr
+                = IOUtil.asyncExhaustiveReadStreamUTF8(process.getErrorStream());
+
             int exitCode = process.waitFor();
-            String out = IOUtil.exhaustiveReadStreamUTF8(process.getInputStream());
-            String err = IOUtil.exhaustiveReadStreamUTF8(process.getErrorStream());
+            String out = fOut.get();
+            String err = fErr.get();
             return new ExecResult(exitCode, out, err, null);
-        } catch (InterruptedException | IOException e) {
+        } catch (ExecutionException | InterruptedException | IOException e) {
             return new ExecResult(0xFFFFFFFF, "", "", e);
         } finally {
             if (process != null) {
@@ -144,10 +171,19 @@ public final class IOUtil {
 
     public static String
     exhaustiveReadStreamUTF8(InputStream in) {
-        Scanner scanner = new Scanner(in, "UTF-8").useDelimiter("\\A+");
+        Scanner scanner = new Scanner(in, StandardCharsets.UTF_8.name())
+            .useDelimiter("\\A+");
         return scanner.hasNext()
             ? scanner.next()
             : "";
+    }
+
+
+    public static Future<String>
+    asyncExhaustiveReadStreamUTF8(InputStream in) {
+        CompletableFuture<String> f = new CompletableFuture<>();
+        new Thread(() -> f.complete(exhaustiveReadStreamUTF8(in))).start();
+        return f;
     }
 
     public static String
