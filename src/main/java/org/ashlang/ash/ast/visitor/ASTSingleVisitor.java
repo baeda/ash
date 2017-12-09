@@ -70,7 +70,7 @@ public abstract class ASTSingleVisitor<T> implements ASTVisitor<T, Void> {
         return visitChildren(node, null);
     }
 
-    protected T
+    public T
     visit(ASTNode node) {
         return visit(node, null);
     }

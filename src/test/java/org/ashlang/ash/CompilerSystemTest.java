@@ -91,7 +91,7 @@ public class CompilerSystemTest {
 
             // [bin execution] Assert
             assertThat(run.getErr()).isEmpty();
-            assertThat(run.getOut()).isEqualTo(resultString);
+            assertThat(run.getOut()).isEqualToIgnoringWhitespace(resultString);
             assertThat(run.getExitCode()).isZero();
         });
     }
