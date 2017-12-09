@@ -31,11 +31,11 @@ public interface CompilerPasses {
 
     CompilerPass CONSTANT_RESOLVE_PASS = (eh, st, tm, om, node) -> {
         new UntypedIntFoldVisitor(eh).visit(node);
-        new UntypedIntSolidifyVisitor(eh).visit(node);
+        new UntypedIntSolidifyVisitor(eh, om).visit(node);
     };
 
     CompilerPass TYPE_CHECK_PASS = (eh, st, tm, om, node) -> {
-        new TypeCheckVisitor(eh, om).visit(node);
+        new TypeCheckVisitor(eh).visit(node);
         new ReturnCheckVisitor(eh).visit(node, null);
     };
 
