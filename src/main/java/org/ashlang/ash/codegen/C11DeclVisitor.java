@@ -26,9 +26,9 @@ import org.ashlang.ash.symbol.Symbol;
 
 import java.util.stream.Collectors;
 
-class C11DeclVisitor extends ASTSingleBaseVisitor<String> {
+import static org.ashlang.ash.codegen.CommonValues.FUNC_PREFIX;
 
-    static final String FUNC = "_a$h_";
+class C11DeclVisitor extends ASTSingleBaseVisitor<String> {
 
     private final C11TypeMap typeMap;
 
@@ -64,7 +64,7 @@ class C11DeclVisitor extends ASTSingleBaseVisitor<String> {
             .map(this::visit)
             .collect(Collectors.joining(","));
 
-        return cType + " " + FUNC + identifier + "(" + params + ");\n ";
+        return cType + " " + FUNC_PREFIX + identifier + "(" + params + ");\n ";
     }
 
     @Override

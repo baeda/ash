@@ -34,19 +34,17 @@ import org.ashlang.ash.util.IOUtil;
 import org.ashlang.ash.util.Version;
 import org.ashlang.gen.AshParser.FileContext;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.locks.LockSupport;
 
 public final class AshMain {
 
     private AshMain() { /**/ }
 
     public static void
-    main(String[] args) throws IOException {
+    main(String[] args) throws Exception {
         if (args.length < 1) {
             System.err.println("Usage: ashc <file>");
             return;
@@ -68,6 +66,13 @@ public final class AshMain {
         }
         ASTPrinter.print(rootNode);
 
+        compileAndRunC11Target(inFile, rootNode);
+        Thread.sleep(100L);
+        compileAndRunJava8Target(inFile, rootNode);
+        Thread.sleep(100L);
+    }
+
+    private static void compileAndRunC11Target(Path inFile, ASTNode rootNode) {
         String c11Src = translateToC11(rootNode);
         c11Src = IOUtil.tryIndent(c11Src);
         System.out.println("C11 source:\n==============");
@@ -83,8 +88,24 @@ public final class AshMain {
         System.out.println(exec.getOut());
         System.out.println("C11 error:\n==============");
         System.out.println(exec.getErr());
+    }
 
-        LockSupport.parkNanos(1000000L);
+    private static void compileAndRunJava8Target(Path inFile, ASTNode rootNode) {
+        String java8Src = translateToJava8(rootNode);
+        System.out.println("Java8 source:\n==============");
+        System.out.println(java8Src);
+        Path dir = inFile.getParent();
+        if (dir == null) {
+            throw new IllegalStateException();
+        }
+
+        Path out = dir.resolve("Main.class");
+        compileToJVM(java8Src, out, dir);
+        ExecResult exec = IOUtil.execInDir(dir, "java", "Main");
+        System.out.println("Java8 output:\n==============");
+        System.out.println(exec.getOut());
+        System.out.println("Java8 error:\n==============");
+        System.out.println(exec.getErr());
     }
 
     static ASTNode
@@ -123,6 +144,8 @@ public final class AshMain {
 
         return rootNode;
     }
+
+    //region compile to native (C11)
 
     static void
     compileToNative(ASTNode rootNode, Path outFile) {
@@ -182,5 +205,71 @@ public final class AshMain {
                 "ASH -> Native(C11) Compilation failed!\n" + gcc.getErr());
         }
     }
+
+    //endregion compile to native (C11)
+
+    //region compile to JVM (Java8)
+
+    static void
+    compileToJVM(ASTNode rootNode, Path outFile) {
+        String java8Src = translateToJava8(rootNode);
+        compileToJVM(java8Src, outFile);
+    }
+
+    private static String
+    translateToJava8(ASTNode rootNode) {
+        return CodeGenerators.JAVA_8.generate(rootNode);
+    }
+
+    private static void
+    compileToJVM(String java8Src, Path outFile) {
+        compileToJVM(java8Src, outFile, outFile.getParent());
+    }
+
+    private static void
+    compileToJVM(String java8Src, Path classFile, Path workDir) {
+        Path outDir = classFile.getParent();
+        if (outDir == null) {
+            throw new IllegalArgumentException(String.format(
+                "Could not get parent directory of file %s",
+                classFile.toAbsolutePath()));
+        }
+
+        Path fileName = classFile.getFileName();
+        if (fileName == null) {
+            throw new IllegalArgumentException(String.format(
+                "Could not get file name from file %s",
+                classFile.toAbsolutePath()
+            ));
+        }
+        String classFileName = fileName.toString();
+        String javaFileName = classFileName.replaceAll(".class", ".java");
+
+        Path tmpFile = outDir.resolve(javaFileName);
+        IOUtil.writeUTF8(tmpFile, java8Src);
+
+        Version javacVersion = IOUtil.javacVersion();
+        if (javacVersion == null) {
+            throw new IllegalStateException("javac not found in path.");
+        }
+        if (javacVersion.lessThan(1, 8, 0)) {
+            throw new IllegalStateException(
+                "javac version 1.8 or greater required."
+            );
+        }
+
+        ExecResult javc = IOUtil.execInDir(
+            workDir,
+            "javac",
+            tmpFile.toAbsolutePath()
+        );
+
+        if (javc.getExitCode() != 0) {
+            throw new IllegalStateException(
+                "ASH -> JVM(Java8) Compilation failed!\n" + javc.getErr());
+        }
+    }
+
+    //endregion compile to JVM (Java8)
 
 }

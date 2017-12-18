@@ -22,26 +22,40 @@ import org.ashlang.ash.ast.*;
 import org.ashlang.ash.ast.visitor.ASTSingleBaseVisitor;
 import org.ashlang.ash.symbol.Function;
 import org.ashlang.ash.symbol.Symbol;
+import org.ashlang.ash.type.Operator;
 import org.ashlang.ash.type.Type;
 
 import java.math.BigInteger;
 import java.util.stream.Collectors;
 
 import static org.ashlang.ash.codegen.CommonValues.FUNC_PREFIX;
+import static org.ashlang.ash.type.Operator.*;
 
-class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
+class Java8Visitor extends ASTSingleBaseVisitor<String> {
 
-    private final C11TypeMap typeMap;
+    private final Java8TypeMap typeMap;
+    private final Java8OperatorMap opMap;
 
-    C11ImplVisitor(C11TypeMap typeMap) {
+    Java8Visitor(Java8TypeMap typeMap, Java8OperatorMap opMap) {
         this.typeMap = typeMap;
+        this.opMap = opMap;
+    }
+
+    @Override
+    protected String
+    visitFileNode(FileNode node) {
+        return String.join("\n",
+            "class Main {",
+            visitChildren(node),
+            "}"
+        );
     }
 
     @Override
     protected String
     visitFuncDeclarationNode(FuncDeclarationNode node) {
         String body = visit(node.getBody());
-        String cType = typeMap.getType(node.getType());
+        String jType = typeMap.getType(node.getType());
         String identifier = node.getIdentifierToken().getText();
 
         String params = node.getParams().stream()
@@ -49,20 +63,15 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
             .collect(Collectors.joining(","));
 
         String func = String.format(
-            "%s %s%s(%s)%s",
-            cType, FUNC_PREFIX, identifier, params, body
+            "static %s %s%s(%s)%s",
+            jType, FUNC_PREFIX, identifier, params, body
         );
 
         if ("main".equals(identifier)) {
             return String.join("\n",
-                "static inline " + func,
-                "int main(int argc, char **argv) {",
-                "    (void) argc;",
-                "    (void) argv;",
-                "",
+                func,
+                "public static void main(String[] args) {",
                 "    " + FUNC_PREFIX + "main();",
-                "",
-                "    return 0;",
                 "}"
             );
         }
@@ -74,16 +83,16 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
     protected String
     visitParamDeclarationNode(ParamDeclarationNode node) {
         Symbol symbol = node.getSymbol();
-        String cType = typeMap.getType(symbol.getType());
-        return cType + " " + symbol.getIdentifier();
+        String jType = typeMap.getType(symbol.getType());
+        return jType + " " + symbol.getIdentifier();
     }
 
     @Override
     protected String
     visitVarDeclarationNode(VarDeclarationNode node) {
         Symbol symbol = node.getSymbol();
-        String cType = typeMap.getType(symbol.getType());
-        return cType + " " + symbol.getIdentifier();
+        String jType = typeMap.getType(symbol.getType());
+        return jType + " " + symbol.getIdentifier();
     }
 
     @Override
@@ -98,9 +107,9 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
     protected String
     visitVarDeclAssignNode(VarDeclAssignNode node) {
         Symbol symbol = node.getSymbol();
-        String cType = typeMap.getType(symbol.getType());
+        String jType = typeMap.getType(symbol.getType());
         String expression = visit(node.getExpression());
-        return cType + " " + symbol.getIdentifier() + " = " + expression;
+        return jType + " " + symbol.getIdentifier() + " = " + expression;
     }
 
     @Override
@@ -182,7 +191,7 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
         Type type = node.getExpression().getType();
         String fmt = typeMap.getFormat(type);
         String expr = typeMap.formatExpression(type, expression);
-        return "printf(\"" + fmt + "\\n\", " + expr + ");\n";
+        return "System.out.printf(\"" + fmt + "\\n\", " + expr + ");\n";
     }
 
     @Override
@@ -204,67 +213,67 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
     @Override
     protected String
     visitAddExpressionNode(AddExpressionNode node) {
-        return visitBinaryExpression(node, "+");
+        return visitBinaryExpression(node, ADD);
     }
 
     @Override
     protected String
     visitSubExpressionNode(SubExpressionNode node) {
-        return visitBinaryExpression(node, "-");
+        return visitBinaryExpression(node, SUB);
     }
 
     @Override
     protected String
     visitMulExpressionNode(MulExpressionNode node) {
-        return visitBinaryExpression(node, "*");
+        return visitBinaryExpression(node, MUL);
     }
 
     @Override
     protected String
     visitDivExpressionNode(DivExpressionNode node) {
-        return visitBinaryExpression(node, "/");
+        return visitBinaryExpression(node, DIV);
     }
 
     @Override
     protected String
     visitModExpressionNode(ModExpressionNode node) {
-        return visitBinaryExpression(node, "%");
+        return visitBinaryExpression(node, MOD);
     }
 
     @Override
     protected String
     visitEqualsExpressionNode(EqualsExpressionNode node) {
-        return visitBinaryExpression(node, "==");
+        return visitBinaryExpression(node, EQUALS);
     }
 
     @Override
     protected String
     visitNotEqualsExpressionNode(NotEqualsExpressionNode node) {
-        return visitBinaryExpression(node, "!=");
+        return visitBinaryExpression(node, NOT_EQUALS);
     }
 
     @Override
     protected String
     visitLtExpressionNode(LtExpressionNode node) {
-        return visitBinaryExpression(node, "<");
+        return visitBinaryExpression(node, LT);
     }
 
     @Override
     protected String
     visitGtExpressionNode(GtExpressionNode node) {
-        return visitBinaryExpression(node, ">");
+        return visitBinaryExpression(node, GT);
     }
 
     @Override
     protected String
     visitLtEqExpressionNode(LtEqExpressionNode node) {
-        return visitBinaryExpression(node, "<=");
+        return visitBinaryExpression(node, LT_EQ);
     }
 
     @Override
     protected String
     visitGtEqExpressionNode(GtEqExpressionNode node) {
-        return visitBinaryExpression(node, ">=");
+        return visitBinaryExpression(node, GT_EQ);
     }
 
     @Override
@@ -284,15 +293,16 @@ class C11ImplVisitor extends ASTSingleBaseVisitor<String> {
     visitIntExpressionNode(IntExpressionNode node) {
         BigInteger value = (BigInteger) node.getValue();
         Type type = node.getType();
-        String cType = typeMap.getType(type);
-        return "((" + cType + ")" + value.toString() + "ull)";
+        String jType = typeMap.getType(type);
+        return "((" + jType + ")" + value.longValue() + "L)";
     }
 
     private String
-    visitBinaryExpression(BinaryExpressionNode node, String op) {
+    visitBinaryExpression(BinaryExpressionNode node, Operator op) {
         String lhs = visit(node.getLhs());
         String rhs = visit(node.getRhs());
-        return "(" + lhs + op + rhs + ")";
+
+        return "(" + opMap.op(node.getLhs().getType(), op, node.getRhs().getType(), lhs, rhs) + ")";
     }
 
     //endregion expression nodes

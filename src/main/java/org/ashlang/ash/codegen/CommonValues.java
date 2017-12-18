@@ -18,22 +18,8 @@
 
 package org.ashlang.ash.codegen;
 
-public interface CodeGenerators {
+interface CommonValues {
 
-    CodeGenerator<String> C_11 = root -> {
-        C11TypeMap typeMap = new C11TypeMap();
-        return String.join("\n",
-            "/* INCLUDES & DECLARATIONS */",
-            new C11DeclVisitor(typeMap).visit(root),
-            "/* IMPLEMENTATION */",
-            new C11ImplVisitor(typeMap).visit(root)
-        );
-    };
-
-    CodeGenerator<String> JAVA_8 = root -> {
-        Java8TypeMap typeMap = new Java8TypeMap();
-        Java8OperatorMap opMap = new Java8OperatorMap(typeMap);
-        return new Java8Visitor(typeMap, opMap).visit(root);
-    };
+    String FUNC_PREFIX = "_a$h_";
 
 }

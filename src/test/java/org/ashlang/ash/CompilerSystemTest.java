@@ -96,6 +96,47 @@ public class CompilerSystemTest {
         });
     }
 
+    @Test(dataProvider = "provideAshResourceBasePath")
+    public void
+    java8_target(String basePath) throws Exception {
+        Path source = getResourcePath(basePath, ".ash");
+        Path result = getResourcePath(basePath, ".ash.result");
+        String sourceString = IOUtil.readUTF8(source);
+        String resultString = IOUtil.readUTF8(result);
+
+        IOUtil.executeInTempDir(tmpDir -> {
+            // [ash compiler] Arrange
+            ByteArrayOutputStream errStream = new ByteArrayOutputStream();
+            ErrorHandler errorHandler = new ConsoleErrorHandler(errStream);
+
+            // [ash compiler] Act
+            ASTNode rootNode = AshMain.buildAST(sourceString, errorHandler);
+
+            // [ash compiler] Assert
+            assertThat(errorHandler.hasErrors())
+                .as(errStream.toString("UTF-8").trim())
+                .isFalse();
+
+            // [java8 compiler] Arrange
+            Path outFile = tmpDir.resolve("Main.class");
+
+            // [java8 compiler] Act
+            AshMain.compileToJVM(rootNode, outFile);
+
+            // [java8 compiler] Assert
+            // asserted by thrown exception on failure
+
+            // [bin execution] Arrange
+            // [bin execution] Act
+            ExecResult run = IOUtil.execInDir(tmpDir, "java", "Main");
+
+            // [bin execution] Assert
+            assertThat(run.getErr()).isEmpty();
+            assertThat(run.getOut()).isEqualToIgnoringWhitespace(resultString);
+            assertThat(run.getExitCode()).isZero();
+        });
+    }
+
     //region helpers
 
     private static Path

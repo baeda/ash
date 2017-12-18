@@ -33,56 +33,36 @@ public class OperatorMap {
 
     public OperatorMap() {
         opMap = new HashMap<>();
+
         Types.allExactTypes(IntType.class)
             .forEach(type -> {
-                operation(type, ADD, type).resultsIn(type);
-                operation(type, SUB, type).resultsIn(type);
-                operation(type, MUL, type).resultsIn(type);
-                operation(type, DIV, type).resultsIn(type);
-                operation(type, MOD, type).resultsIn(type);
+                entry(type, ADD, type, type);
+                entry(type, SUB, type, type);
+                entry(type, MUL, type, type);
+                entry(type, DIV, type, type);
+                entry(type, MOD, type, type);
             });
 
         Types.allTypes().stream()
             .filter(Types::allValid)
             .forEach(type -> {
-                operation(type, EQUALS, type).resultsIn(BOOL);
-                operation(type, NOT_EQUALS, type).resultsIn(BOOL);
-                operation(type, LT, type).resultsIn(BOOL);
-                operation(type, GT, type).resultsIn(BOOL);
-                operation(type, LT_EQ, type).resultsIn(BOOL);
-                operation(type, GT_EQ, type).resultsIn(BOOL);
+                entry(type, EQUALS, type, BOOL);
+                entry(type, NOT_EQUALS, type, BOOL);
+                entry(type, LT, type, BOOL);
+                entry(type, GT, type, BOOL);
+                entry(type, LT_EQ, type, BOOL);
+                entry(type, GT_EQ, type, BOOL);
             });
+    }
+
+    private void entry(Type left, Operator op, Type right, Type result) {
+        opMap.put(Triple.of(left, op, right), result);
     }
 
     public Type
     getResultOf(Type left, Operator op, Type right) {
         Triple<Type, Operator, Type> key = Triple.of(left, op, right);
         return opMap.getOrDefault(key, INVALID);
-    }
-
-    private EntryBuilder
-    operation(Type left, Operator op, Type right) {
-        return new EntryBuilder(opMap, left, op, right);
-    }
-
-    private static class EntryBuilder {
-        private final Map<Triple<Type, Operator, Type>, Type> opMap;
-        private final Type left;
-        private final Operator op;
-        private final Type right;
-
-        private EntryBuilder(Map<Triple<Type, Operator, Type>, Type> opMap,
-                             Type left, Operator op, Type right) {
-            this.opMap = opMap;
-            this.left = left;
-            this.op = op;
-            this.right = right;
-        }
-
-        private void
-        resultsIn(Type result) {
-            opMap.put(Triple.of(left, op, right), result);
-        }
     }
 
 }
